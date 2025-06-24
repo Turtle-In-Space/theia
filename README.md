@@ -11,6 +11,8 @@ Automates disovery phase of CTF
 - [ ] Tab autocomplete
 - [ ] change file names to port-scan, web-dirs...
 
+https://github.com/DannyBen/bashly
+
 https://john-miller.dev/posts/cli-tool-with-bash/
 
 https://github.com/shadawck/awesome-cli-frameworks?tab=readme-ov-file#bashshell
