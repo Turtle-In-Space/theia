@@ -11,5 +11,7 @@ Automates disovery phase of CTF
 - [ ] Color
 - [ ] Tab autocomplete
 - [ ] change file names to port-scan, web-dirs...
+- [ ] man page
+- [ ] github readme
 
 https://github.com/DannyBen/bashly
