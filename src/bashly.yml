@@ -1,0 +1,62 @@
+name: theia
+help: Automatic recon 
+version: 0.1.0
+
+# environment_variables:
+# - name: api_key
+#   help: Set your API key
+
+commands:
+- name: init
+  help: Perform inital scan and create .env file
+
+  args:
+  - name: ipaddr
+    required: true
+    help: IP address of target
+
+  flags:
+  - long: --name
+    short: -n
+    arg: name
+    help: Name of target
+    required: true
+  - long: --hostname
+    short: -h
+    arg: hostname
+    help: Hostname of target
+  - long: --extension
+    short: -e
+    arg: extension
+    help: URL extension of target
+
+  examples:
+  - theia init 127.0.0.1 --name anthem --hostname anthemvm --extension thm
+  - theia init 10.13.202.203
+
+  # environment_variables:
+  # - name: default_target_location
+  #   help: Set the default location to download to
+
+- name: set
+  help: Create .env file
+
+  args:
+  - name: ipaddr
+    required: true
+    help: IP address of target
+
+  flags:
+  - long: --hostname
+    short: -h
+    arg: hostname
+    help: Hostname of target
+  - long: --extension
+    short: -e
+    arg: extension
+    help: URL extension of target
+
+- name: completions
+  help: |-
+    Generate bash completions
+    Usage: eval "\$(cli completions)"
