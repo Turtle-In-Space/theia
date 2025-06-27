@@ -47,6 +47,11 @@ commands:
     help: IP address of target
 
   flags:
+  - long: --name
+    short: -n
+    arg: name
+    help: Name of target
+    required: true
   - long: --hostname
     short: -h
     arg: hostname

@@ -112,6 +112,11 @@ theia_set_usage() {
 
     # :command.usage_flags
     # :flag.usage
+    printf "  %s\n" "$(magenta "--name, -n NAME (required)")"
+    printf "    Name of target\n"
+    echo
+
+    # :flag.usage
     printf "  %s\n" "$(magenta "--hostname, -h HOSTNAME")"
     printf "    Hostname of target\n"
     echo
@@ -627,6 +632,20 @@ theia_set_parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
+      --name | -n)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--name']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--name requires an argument: --name, -n NAME" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
       --hostname | -h)
 
         # :flag.case_arg
@@ -680,6 +699,12 @@ theia_set_parse_requirements() {
   if [[ -z ${args['ipaddr']+x} ]]; then
     printf "missing required argument: IPADDR\nusage: theia set IPADDR [OPTIONS]\n" >&2
 
+    exit 1
+  fi
+
+  # :command.required_flags_filter
+  if [[ -z ${args['--name']+x} ]]; then
+    printf "missing required flag: --name, -n NAME\n" >&2
     exit 1
   fi
 
