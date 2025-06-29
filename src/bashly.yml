@@ -1,12 +1,10 @@
 name: theia
-help: Automatic recon 
+help: Automatic discovery of a given IP address 
 version: 0.1.0
 
-# environment_variables:
-# - name: api_key
-#   help: Set your API key
-
 commands:
+# ----- Inital command ----- #
+#  creates .env file + runs discovery
 - name: init
   help: Perform inital scan and create .env file
 
@@ -27,10 +25,12 @@ commands:
     arg: name
     help: Name of target
     required: true
+    
   - long: --hostname
     short: -h
     arg: hostname
     help: Hostname of target
+    
   - long: --extension
     short: -e
     arg: extension
@@ -38,12 +38,11 @@ commands:
 
   examples:
   - theia init 127.0.0.1 --name anthem --hostname anthemvm --extension thm
-  - theia init 10.13.202.203
+  - theia init 10.13.202.203 -n lazarus
+# ----- #
 
-  # environment_variables:
-  # - name: default_target_location
-  #   help: Set the default location to download to
-
+# ----- Set command ----- #
+#  creates .env file
 - name: set
   help: Create .env file
 
@@ -58,15 +57,20 @@ commands:
     arg: name
     help: Name of target
     required: true
+    
   - long: --hostname
     short: -h
     arg: hostname
     help: Hostname of target
+    
   - long: --extension
     short: -e
     arg: extension
     help: URL extension of target
+# ----- #
 
+# ----- Completions command ----- #
+#  needed for compatablilty
 - name: completions
   help: |-
     Generate bash completions
