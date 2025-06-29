@@ -5,9 +5,13 @@ Automates disovery phase of CTF
 - [ ] Tools
     - Nikito
     - ffuf - vhost, subdirs
-    - enum4linux-ng
+    - ~~enum4linux-ng~~
 - [ ] Tab autocomplete
 - [ ] man page
 - [ ] github readme
-- [ ] dependency stop
+- [x] dependency stop
 - [ ] change color settings
+- [ ] add global vars to bashly config [https://github.com/DannyBen/bashly/tree/master/examples/variables#readme]
+    - dir
+    - .env file
+    - export dir
