@@ -9,3 +9,5 @@ Automates disovery phase of CTF
 - [ ] Tab autocomplete
 - [ ] man page
 - [ ] github readme
+- [ ] dependency stop
+- [ ] change color settings
