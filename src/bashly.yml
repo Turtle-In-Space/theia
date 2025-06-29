@@ -2,6 +2,10 @@ name: theia
 help: Automatic discovery of a given IP address 
 version: 0.1.0
 
+# Add help ASCII art
+help_header_override:  |
+  base64 -d <<<"H4sIADUnYWgA/4VN0Q2FQAj7Zwo2cCBz6QguwPDXFp4x0eQ1lUKpXMJIqkjM5MESJTuzqM2Dm2W31FNeGdonL7hnuZyBRiijlX/BujO+83tiKPt5R+1XZtZTOoN+DiI/okVVZOYvIjbgqoaBIQEAAA==" | gunzip
+
 commands:
 # ----- Inital command ----- #
 #  creates .env file + runs discovery
