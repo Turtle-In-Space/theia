@@ -10,6 +10,12 @@ commands:
 - name: init
   help: Perform inital scan and create .env file
 
+  dependencies:
+  - nmap
+  - ffuf
+  - enum4linux-ng
+  - firefox
+  
   args:
   - name: ipaddr
     required: true
