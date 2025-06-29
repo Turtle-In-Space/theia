@@ -17,6 +17,8 @@ commands:
   - ffuf
   - enum4linux-ng
   - firefox
+  - gunzip
+  - base64
   
   args:
   - name: ipaddr
