@@ -15,3 +15,7 @@ Automates disovery phase of CTF
     - dir
     - .env file
     - export dir
+- [ ] split config [https://github.com/DannyBen/bashly/tree/master/examples/split-config#readme]
+    - put instructions in command file
+    - common flags
+    - common args
