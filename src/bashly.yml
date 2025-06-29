@@ -30,11 +30,13 @@ commands:
     short: -h
     arg: hostname
     help: Hostname of target
+    needs: [--extension]
     
   - long: --extension
     short: -e
     arg: extension
     help: URL extension of target
+    needs: [--hostname]
 
   examples:
   - theia init 127.0.0.1 --name anthem --hostname anthemvm --extension thm
