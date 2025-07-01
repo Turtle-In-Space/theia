@@ -2,6 +2,14 @@ print_info() {
   echo "$(blue [*])" "$1"
 }
 
+print_warn() {
+  echo "$(orange [!])" "$1"
+}
+
+print_ok() {
+  echo "$(green [!])" "$1"
+}
+
 has_match() {
   local pattern="$1"
   local file="$2"
@@ -13,41 +21,47 @@ has_match() {
   fi
 }
 
+# service name | command
+run_script() {
+  if has_match "$1" $port_scan ; then
+    print_info "starting $1 scan..."
+    $3
+  else
+    print_warn "did not find port for: $1 scan"
+  fi
+}
+
+# create vars
 name=${args[--name]}
+env_file=$name.env
+port_scan=export/port-scan.xml
 
+# Create dir
 print_info "creating $name/..."
-mkdir $name
-
-print_info "creating .env file"
-# Create .env
+mkdir -p $name/export
 cd $name
+
+# Create .env
+print_info "creating .env file"
 theia_set_command
-cd ..
+source $env_file
 
-source $name/$name.env
-
+# scan target
 print_info "starting nmap scan..."
-nmap -sC -sV -T4 -p- $ip -oX $name/port-scan.xml -oN $name/port-scan.nmap
+nmap -sC -sV -T4 -p- $ip -oX $port_scan -oN port-scan.nmap
 
-# enum web service shares
-if has_match "http" $name/port-scan.nmap ; then
-  print_info "starting ffuf scan..."
-  ffuf -u $url/FUZZ -w /usr/share/seclists/Discovery/Web-Content/big.txt -recursion -recursion-depth 2 -t 100 -of md -o $name/web-dir.md
-  firefox $url
-else
-  print_info "found no web port"
-fi
+# script commands
+http_scan_command="ffuf -u $url/FUZZ -w /usr/share/seclists/Discovery/Web-Content/big.txt -recursion -recursion-depth 1 -t 100 -of md -o web-dir.md"
+smb_scan_command="enum4linux-ng -As $ip -oJ smb-enum"
 
-# enum smb shares
-if has_match "netbios-ssn" $name/port-scan.nmap ; then
-  print_info "startig enum4linux-ng scan..."
-  enum4linux-ng -As $ip -oJ smb-enum
-else
-  print_info "found no smb ports"
-fi
+# run enum scripts
+run_script "http" $http_scan_command
+run_script "netbios-ssn" $smb_scan_command
 
-print_info "all scans complete."
+print_ok "all scans complete."
+
 if [ -z $host ] ; then
+  echo ""
   print_info "add the following to /etc/hosts"
   echo $ip $host.$ext
 else
