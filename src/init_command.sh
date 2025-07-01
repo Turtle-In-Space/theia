@@ -47,5 +47,7 @@ else
 fi
 
 print_info "all scans complete."
-print_info "add the following to /etc/hosts"
-echo $ip $host.$ext
+if [ -z $host ] ; then
+  print_info "add the following to /etc/hosts"
+  echo $ip $host.$ext
+else
