@@ -26,23 +26,7 @@ commands:
     help: IP address of target
 
   flags:
-  - long: --name
-    short: -n
-    arg: name
-    help: Name of target
-    required: true
-    
-  - long: --hostname
-    short: -h
-    arg: hostname
-    help: Hostname of target
-    needs: [--extension]
-    
-  - long: --extension
-    short: -e
-    arg: extension
-    help: URL extension of target
-    needs: [--hostname]
+  - import: src/flags.yml
 
   examples:
   - theia init 127.0.0.1 --name anthem --hostname anthemvm --extension thm
@@ -60,21 +44,7 @@ commands:
     help: IP address of target
 
   flags:
-  - long: --name
-    short: -n
-    arg: name
-    help: Name of target
-    required: true
-    
-  - long: --hostname
-    short: -h
-    arg: hostname
-    help: Hostname of target
-    
-  - long: --extension
-    short: -e
-    arg: extension
-    help: URL extension of target
+  - import: src/flags.yml
 # ----- #
 
 # ----- Completions command ----- #
