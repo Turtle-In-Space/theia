@@ -6,17 +6,19 @@ Automates disovery phase of CTF
     - Nikito
     - ffuf - vhost, subdirs
     - ~~enum4linux-ng~~
-- [ ] Tab autocomplete
+- [ ] Tab autocomplete [https://bashly.dev/advanced/bash-completion/]
 - [ ] man page
+```
+# man page
+bashly render :mandoc docs
+gzip [file].1
+cp [file].1.gz /usr/man/man1
+
+# create md  help
+bashly render :markdown docs
+
+```
 - [ ] github readme
 - [x] dependency stop
 - [ ] change color settings
-- [ ] add global vars to bashly config [https://github.com/DannyBen/bashly/tree/master/examples/variables#readme]
-    - dir
-    - .env file
-    - export dir
-- [ ] split config [https://github.com/DannyBen/bashly/tree/master/examples/split-config#readme]
-    - put instructions in yml file
-    - add all yml files in folder
-    - common flags
-    - common args
+- [x] split config [https://github.com/DannyBen/bashly/tree/master/examples/split-config#readme]
