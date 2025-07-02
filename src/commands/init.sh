@@ -64,4 +64,4 @@ if [ -z $host ] ; then
   echo ""
   print_info "add the following to /etc/hosts"
   echo $ip $host.$ext
-else
+fi
