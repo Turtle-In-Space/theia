@@ -327,11 +327,73 @@ send_completions() {
 theia_init_command() {
 
   # src/commands/init.sh
-  echo "# This file is located at 'src/commands/init.sh'."
-  echo "# It contains the implementation for the 'theia init' command."
-  echo "# The code you write here will be wrapped by a function named 'theia_init_command()'."
-  echo "# Feel free to edit this file; your changes will persist when regenerating."
-  inspect_args
+  print_info() {
+    echo "$(blue [*])" "$1"
+  }
+
+  print_warn() {
+    echo "$(orange [!])" "$1"
+  }
+
+  print_ok() {
+    echo "$(green [!])" "$1"
+  }
+
+  has_match() {
+    local pattern="$1"
+    local file="$2"
+
+    if  rg -q "$pattern" "$file" ; then
+      return 0
+    else
+      return 1
+    fi
+  }
+
+  # service name | command
+  run_script() {
+    if has_match "$1" $port_scan ; then
+      print_info "starting $1 scan..."
+      $3
+    else
+      print_warn "did not find port for: $1 scan"
+    fi
+  }
+
+  # create vars
+  name=${args[--name]}
+  env_file=$name.env
+  port_scan=export/port-scan.xml
+
+  # Create dir
+  print_info "creating $name/..."
+  mkdir -p $name/export
+  cd $name
+
+  # Create .env
+  print_info "creating .env file"
+  theia_set_command
+  source $env_file
+
+  # scan target
+  print_info "starting nmap scan..."
+  nmap -sC -sV -T4 -p- $ip -oX $port_scan -oN port-scan.nmap
+
+  # script commands
+  http_scan_command="ffuf -u $url/FUZZ -w /usr/share/seclists/Discovery/Web-Content/big.txt -recursion -recursion-depth 1 -t 100 -of md -o web-dir.md"
+  smb_scan_command="enum4linux-ng -As $ip -oJ smb-enum"
+
+  # run enum scripts
+  run_script "http" $http_scan_command
+  run_script "netbios-ssn" $smb_scan_command
+
+  print_ok "all scans complete."
+
+  if [ -z $host ] ; then
+    echo ""
+    print_info "add the following to /etc/hosts"
+    echo $ip $host.$ext
+  else
 
 }
 
@@ -339,11 +401,23 @@ theia_init_command() {
 theia_set_command() {
 
   # src/commands/set.sh
-  echo "# This file is located at 'src/commands/set.sh'."
-  echo "# It contains the implementation for the 'theia set' command."
-  echo "# The code you write here will be wrapped by a function named 'theia_set_command()'."
-  echo "# Feel free to edit this file; your changes will persist when regenerating."
-  inspect_args
+  ip=${args[ipaddr]}
+  name=${args[--name]}
+  host=${args[--hostname]}
+  ext=${args[--extension]}
+  env_file="$name.env"
+
+  echo "# Created by Theia" >> $env_file
+
+  echo "ip=$ip" >> $env_file
+  if [ -z $host ] ; then
+    url="http://$ip"
+  else
+    url="http://$host.$ext"
+    echo "host=$host" >> $env_file
+  fi
+
+  echo "url=$url" >> $env_file
 
 }
 
@@ -351,7 +425,7 @@ theia_set_command() {
 theia_completions_command() {
 
   # src/commands/completions.sh
-  echo "# This file is located at 'src/commands/completions.sh'."
+  echo "# This file is located at 'src/completions_command.sh'."
   echo "# It contains the implementation for the 'theia completions' command."
   echo "# The code you write here will be wrapped by a function named 'theia_completions_command()'."
   echo "# Feel free to edit this file; your changes will persist when regenerating."
