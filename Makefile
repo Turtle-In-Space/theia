@@ -7,16 +7,16 @@ VPATH := $(COMMAND_DIR)
 all: theia mandoc markdown
 
 # create cli
-theia: set.sh init.sh
+theia: set.sh init.sh 
 	bashly generate --upgrade
 
 # create man page
 mandoc: theia
-	$(COMP) render :mandoc $(DOC_DIR)
+	$(COMP) render :mandoc $(DOC_DIR)/man
 
 # create markdown help page
 markdown: theia
-	$(COMP) render :markdown $(DOC_DIR)
+	$(COMP) render :markdown $(DOC_DIR)/md
 
 .Phony := clean
 # clean
