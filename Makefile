@@ -1,24 +1,24 @@
 COMP := bashly
-VPATH := src
+COMMAND_DIR := src/commands
 DOC_DIR = docs
+VPATH := $(COMMAND_DIR)
 
-# phony targets
-.PHONY: all
+.Phony := all
 all: theia mandoc markdown
-
-# clean
-clean: 
-  rm -rvf $(DOC_DIR) theia
 
 # create cli
 theia: set.sh init.sh
-  $(COMP) generate --upgrade
+	bashly generate --upgrade
 
 # create man page
 mandoc: theia
-  # TODO move cp man to correct dir
-  $(COMP) render :mandoc $(DOC_DIR)
+	$(COMP) render :mandoc $(DOC_DIR)
 
 # create markdown help page
 markdown: theia
-  $(COMP) render :markdown $(DOC_DIR)
+	$(COMP) render :markdown $(DOC_DIR)
+
+.Phony := clean
+# clean
+clean: 
+	@rm -rvf $(DOC_DIR) theia

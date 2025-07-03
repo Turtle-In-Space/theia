@@ -267,6 +267,23 @@ cyan_underlined() { print_in_color "\e[4;36m" "$*"; }
 black_underlined() { print_in_color "\e[4;30m" "$*"; }
 white_underlined() { print_in_color "\e[4;37m" "$*"; }
 
+# src/lib/help_functions.sh
+print_ok() {
+  echo "$(green [+])" "$1"
+}
+
+print_info() {
+  echo "$(blue [*])" "$1"
+}
+
+print_warn() {
+  echo "$(orange [-])" "$1"
+}
+
+print_err() {
+  echo "$(red [!])" "$1"
+}
+
 # src/lib/send_completions.sh
 send_completions() {
   echo $'# theia completion                                         -*- shell-script -*-'
@@ -327,18 +344,6 @@ send_completions() {
 theia_init_command() {
 
   # src/commands/init.sh
-  print_info() {
-    echo "$(blue [*])" "$1"
-  }
-
-  print_warn() {
-    echo "$(orange [!])" "$1"
-  }
-
-  print_ok() {
-    echo "$(green [!])" "$1"
-  }
-
   has_match() {
     local pattern="$1"
     local file="$2"
@@ -419,6 +424,8 @@ theia_set_command() {
 
   echo "url=$url" >> $env_file
 
+  print_ok "Created $env_file"
+
 }
 
 # :command.function
@@ -456,6 +463,28 @@ parse_requirements() {
 
     esac
   done
+
+  # :command.dependencies_filter
+  missing_deps=
+  # :dependency.filter
+  if ! command -v gunzip >/dev/null 2>&1; then
+    printf "missing dependency: gunzip\n" >&2
+    missing_deps=1
+  else
+    deps['gunzip']="$(command -v gunzip | head -n1)"
+  fi
+
+  # :dependency.filter
+  if ! command -v base64 >/dev/null 2>&1; then
+    printf "missing dependency: base64\n" >&2
+    missing_deps=1
+  else
+    deps['base64']="$(command -v base64 | head -n1)"
+  fi
+
+  if [[ -n $missing_deps ]]; then
+    exit 1
+  fi
 
   # :command.command_filter
   action=${1:-}
@@ -563,30 +592,6 @@ theia_init_parse_requirements() {
     missing_deps=1
   else
     deps['enum4linux-ng']="$(command -v enum4linux-ng | head -n1)"
-  fi
-
-  # :dependency.filter
-  if ! command -v firefox >/dev/null 2>&1; then
-    printf "missing dependency: firefox\n" >&2
-    missing_deps=1
-  else
-    deps['firefox']="$(command -v firefox | head -n1)"
-  fi
-
-  # :dependency.filter
-  if ! command -v gunzip >/dev/null 2>&1; then
-    printf "missing dependency: gunzip\n" >&2
-    missing_deps=1
-  else
-    deps['gunzip']="$(command -v gunzip | head -n1)"
-  fi
-
-  # :dependency.filter
-  if ! command -v base64 >/dev/null 2>&1; then
-    printf "missing dependency: base64\n" >&2
-    missing_deps=1
-  else
-    deps['base64']="$(command -v base64 | head -n1)"
   fi
 
   if [[ -n $missing_deps ]]; then
