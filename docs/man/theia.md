@@ -51,7 +51,7 @@ base64
 SEE ALSO
 ==================================================
 
-**theia-init**(1), **theia-set**(1), **theia-completions**(1), **docker**(1), **docker-compose.yml**(5)
+**theia-init**(1), **theia-set**(1), **theia-completions**(1)
 
 # ISSUE TRACKER
-Report issues at \<https://github.com/Turtle-In-Space/theia\>
+Report issues at \<https://github.com/Turtle-In-Space/theia/\>
