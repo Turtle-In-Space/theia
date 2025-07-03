@@ -1,17 +1,17 @@
-long: --name
-short: -n
-arg: name
-help: Name of target
-required: true
+- long: --name
+  short: -n
+  arg: name
+  help: Name of target
+  required: true
 
-long: --hostname
-short: -h
-arg: hostname
-help: Hostname of target
-needs: [--extension]
+- long: --hostname
+  short: -h
+  arg: hostname
+  help: Hostname of target
+  needs: [--extension]
 
-long: --extension
-short: -e
-arg: extension
-help: URL extension of target
-needs: [--hostname]
+- long: --extension
+  short: -e
+  arg: extension
+  help: URL extension of target
+  needs: [--hostname]

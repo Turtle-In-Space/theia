@@ -6,6 +6,21 @@ version: 0.1.0
 help_header_override:  |
   base64 -d <<<"H4sIADUnYWgA/4VN0Q2FQAj7Zwo2cCBz6QguwPDXFp4x0eQ1lUKpXMJIqkjM5MESJTuzqM2Dm2W31FNeGdonL7hnuZyBRiijlX/BujO+83tiKPt5R+1XZtZTOoN+DiI/okVVZOYvIjbgqoaBIQEAAA==" | gunzip
 
+# Optional, custom properties that are used by the mandoc renderer
+x_mandoc_authors: Elias Svensson
+x_mandoc_footer: |-
+  # ISSUE TRACKER
+  Report issues at <https://github.com/Turtle-In-Space/theia>
+x_mandoc_see_also:
+  - docker
+  - docker-compose.yml(5)
+
+# Optional, custom properties that are used by the markdown renderer
+# Run `bashly render :markdown --about` for more info.
+x_markdown_footer: |-
+  # ISSUE TRACKER
+  Report issues at <https://github.com/Turtle-In-Space/theia>
+
 dependencies:  
 - gunzip
 - base64
@@ -27,7 +42,7 @@ commands:
     help: IP address of target
 
   flags:
-  - import: src/flags.yml
+    import: src/flags.yml
 
   examples:
   - theia init 127.0.0.1 --name anthem --hostname anthemvm --extension thm
@@ -45,7 +60,7 @@ commands:
     help: IP address of target
 
   flags:
-  - import: src/flags.yml
+    import: src/flags.yml
 # ----- #
 
 # ----- Completions command ----- #
