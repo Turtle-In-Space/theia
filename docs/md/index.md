@@ -29,4 +29,4 @@ theia COMMAND
 - [completions](theia%20completions) - Generate bash completions
 
 # ISSUE TRACKER
-Report issues at \<https://github.com/Turtle-In-Space/theia/\>
+Report issues at \<https://github.com/Turtle-In-Space/theia\>
