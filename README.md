@@ -22,5 +22,5 @@ bashly render :markdown docs
 - [x] dependency stop
 - [ ] change color settings
 - [x] split config [https://github.com/DannyBen/bashly/tree/master/examples/split-config#readme]
-- [ ] put help commands in lib
+- [x] put help commands in lib
 - [x] add make
