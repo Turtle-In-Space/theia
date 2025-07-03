@@ -15,3 +15,5 @@ else
 fi
 
 echo "url=$url" >> $env_file
+
+print_ok "Created $env_file"
