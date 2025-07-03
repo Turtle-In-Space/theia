@@ -10,13 +10,13 @@ help_header_override:  |
 x_mandoc_authors: Elias Svensson
 x_mandoc_footer: |-
   # ISSUE TRACKER
-  Report issues at <https://github.com/Turtle-In-Space/theia>
+  Report issues at https://github.com/Turtle-In-Space/theia
 
 # Optional, custom properties that are used by the markdown renderer
 x_markdown_authors: Elias Svensson
 x_markdown_footer: |-
   # ISSUE TRACKER
-  Report issues at <https://github.com/Turtle-In-Space/theia>
+  Report issues at https://github.com/Turtle-In-Space/theia
 
 dependencies:  
 - gunzip
