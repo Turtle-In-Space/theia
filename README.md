@@ -7,20 +7,10 @@ Automates disovery phase of CTF
     - ffuf - vhost, subdirs
     - ~~enum4linux-ng~~
 - [ ] Tab autocomplete [https://bashly.dev/advanced/bash-completion/]
-- [ ] man page
-```
-# man page
-bashly render :mandoc docs
-gzip [file].1
-cp [file].1.gz /usr/man/man1
-
-# create md  help
-bashly render :markdown docs
-
-```
+- [x] man page
 - [ ] github readme
 - [x] dependency stop
-- [ ] change color settings
+- [x] change color settings
 - [x] split config [https://github.com/DannyBen/bashly/tree/master/examples/split-config#readme]
 - [x] put help commands in lib
 - [x] add make
