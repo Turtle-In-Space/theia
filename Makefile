@@ -1,16 +1,17 @@
 COMP := bashly
-COMMAND_DIR := src/commands
 DOC_DIR = docs
+SRC_DIR = src
+COMMAND_DIR := $(SRC_DIR)/commands
+MANPATH = /usr/local/man/man1
 MD_DIR = $(DOC_DIR)/md
 MAN_DIR = $(DOC_DIR)/man
-MANPATH = /usr/local/man/man1
-VPATH := $(COMMAND_DIR):$(DOC_DIR)
+VPATH := $(COMMAND_DIR):$(DOC_DIR):$(SRC_DIR)
 
 .Phony := all
 all: theia mandoc markdown
 
 # create cli
-theia: set.sh init.sh 
+theia: set.sh init.sh bashly.yml
 	$(COMP) generate --upgrade
 
 # create man page
