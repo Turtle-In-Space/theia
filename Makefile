@@ -8,7 +8,7 @@ all: theia mandoc markdown
 
 # create cli
 theia: set.sh init.sh 
-	bashly generate --upgrade
+	$(COMP) generate --upgrade
 
 # create man page
 mandoc: theia
