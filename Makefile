@@ -11,15 +11,19 @@ theia: set.sh init.sh
 	$(COMP) generate --upgrade
 
 # create man page
-mandoc: theia
+mandoc: 
 	$(COMP) render :mandoc $(DOC_DIR)/man
+	sudo mkdir -p /usr/local/man/man1
+	gzip ./docs/man/*.1
+	sudo mv ./docs/man/*.gz /usr/local/man/man1
 
 # create markdown help page
-markdown: theia
+markdown: 
 	$(COMP) render :markdown $(DOC_DIR)/md
 	sed -i 's/)/.md)/' docs/md/index.md
 
-.Phony := clean
 # clean
+.Phony := clean
 clean: 
 	@rm -rvf $(DOC_DIR) theia
+	sudo rm /usr/local/man/man1/theia*
