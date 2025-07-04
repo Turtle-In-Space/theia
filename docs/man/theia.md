@@ -54,4 +54,4 @@ SEE ALSO
 **theia-init**(1), **theia-set**(1), **theia-completions**(1)
 
 # ISSUE TRACKER
-Report issues at https://github.com/Turtle-In-Space/theia
+Report issues at https://github.com/Turtle-In-Space/theia/issues

@@ -17,6 +17,7 @@ mandoc: theia
 # create markdown help page
 markdown: theia
 	$(COMP) render :markdown $(DOC_DIR)/md
+	sed -i 's/)/.md)/' docs/md/index.md
 
 .Phony := clean
 # clean
