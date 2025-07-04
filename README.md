@@ -6,7 +6,6 @@ Automates disovery phase of CTF
     - Nikito
     - ffuf - vhost, subdirs
     - ~~enum4linux-ng~~
-- [ ] Tab autocomplete [https://bashly.dev/advanced/bash-completion/]
 - [x] man page
 - [ ] github readme
 - [x] dependency stop
