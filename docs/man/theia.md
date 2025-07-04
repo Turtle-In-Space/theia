@@ -31,11 +31,6 @@ theia set
 
 Create .env file
 
-theia completions
---------------------------------------------------
-
-Generate bash completions
-
 
 DEPENDENCIES
 ==================================================
@@ -51,7 +46,7 @@ base64
 SEE ALSO
 ==================================================
 
-**theia-init**(1), **theia-set**(1), **theia-completions**(1)
+**theia-init**(1), **theia-set**(1)
 
 # ISSUE TRACKER
 Report issues at https://github.com/Turtle-In-Space/theia/issues

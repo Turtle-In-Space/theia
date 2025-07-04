@@ -26,7 +26,6 @@ theia COMMAND
 
 - [init](theia%20init.md) - Perform inital scan and create .env file
 - [set](theia%20set.md) - Create .env file
-- [completions](theia%20completions.md) - Generate bash completions
 
 # ISSUE TRACKER
 Report issues at https://github.com/Turtle-In-Space/theia/issues

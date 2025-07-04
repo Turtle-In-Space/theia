@@ -59,10 +59,3 @@ commands:
   flags:
     import: src/flags.yml
 # ----- #
-
-# ----- Completions command ----- #
-#  needed for compatablilty
-- name: completions
-  help: |-
-    Generate bash completions
-    Usage: eval "\$(cli completions)"
