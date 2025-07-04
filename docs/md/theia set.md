@@ -8,6 +8,16 @@ Create .env file
 theia set IPADDR [OPTIONS]
 ```
 
+## Examples
+
+```bash
+theia set 127.0.0.1 --name anthem --hostname anthemvm --extension thm
+```
+
+```bash
+theia set 10.13.202.203 -n lazarus
+```
+
 ## Arguments
 
 #### *IPADDR*

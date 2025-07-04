@@ -147,6 +147,12 @@ theia_set_usage() {
     printf "    IP address of target\n"
     echo
 
+    # :command.usage_examples
+    printf "%s\n" "$(bold "Examples:")"
+    printf "  theia set 127.0.0.1 --name anthem --hostname anthemvm --extension thm\n"
+    printf "  theia set 10.13.202.203 -n lazarus\n"
+    echo
+
   fi
 }
 
@@ -715,6 +721,10 @@ theia_set_parse_requirements() {
   # :command.required_args_filter
   if [[ -z ${args['ipaddr']+x} ]]; then
     printf "missing required argument: IPADDR\nusage: theia set IPADDR [OPTIONS]\n" >&2
+    # :command.examples_on_error
+    printf "examples:\n" >&2
+    printf "  theia set 127.0.0.1 --name anthem --hostname anthemvm --extension thm\n" >&2
+    printf "  theia set 10.13.202.203 -n lazarus\n" >&2
 
     exit 1
   fi

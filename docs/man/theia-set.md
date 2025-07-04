@@ -52,6 +52,16 @@ URL extension of target
 
 - Needs: **--hostname**
 
+EXAMPLES
+==================================================
+
+~~~
+theia set 127.0.0.1 --name anthem --hostname anthemvm --extension thm
+
+theia set 10.13.202.203 -n lazarus
+
+~~~
+
 SEE ALSO
 ==================================================
 
