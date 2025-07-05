@@ -3,7 +3,6 @@ DOC_DIR = docs
 SRC_DIR = src
 COMMAND_DIR := $(SRC_DIR)/commands
 MANPATH = /usr/local/man/man1
-MD_DIR = $(DOC_DIR)/md
 MAN_DIR = $(DOC_DIR)/man
 VPATH := $(COMMAND_DIR):$(DOC_DIR):$(SRC_DIR)
 
@@ -23,8 +22,10 @@ mandoc:
 
 # create markdown help page
 markdown: 
-	$(COMP) render :markdown $(MD_DIR)
-	sed -i 's/)/.md)/' $(MD_DIR)/index.md
+	# TODO change to :markdown_github when it drops
+	$(COMP) render :markdown $(DOC_DIR)
+	sed -i 's/)/.md)/' $(DOC_DIR)/index.md
+	mv $(DOC_DIR)/{index.md,README.md}
 
 # clean
 .Phony := clean
