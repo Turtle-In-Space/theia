@@ -25,7 +25,7 @@ markdown:
 	# TODO change to :markdown_github when it drops
 	$(COMP) render :markdown $(DOC_DIR)
 	sed -i 's/)/.md)/' $(DOC_DIR)/index.md
-	mv $(DOC_DIR)/{index.md,README.md}
+	mv $(DOC_DIR)/index.md $(DOC_DIR)/README.md
 
 # clean
 .Phony := clean
