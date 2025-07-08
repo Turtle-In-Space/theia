@@ -1,3 +1,3 @@
 # What does this folder contain?
 
-This folder contatins help scripts specific to `theia`
+This folder contains code and other informaiton specific to `theia`.
