@@ -6,9 +6,9 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 	"os/exec"
 
+	core "github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
 	helpers "github.com/Turtle-In-Space/theia/pkg"
 
@@ -48,6 +48,8 @@ func init() {
 func scanTarget() {
 	openPortScan()
 
+	outputPath := fmt.Sprintf("%s/ports.xml", xmlDir)
+	fmt.Println(core.GetServices(outputPath))
 }
 
 func initProject() {
@@ -64,9 +66,10 @@ func initProject() {
 
 func openPortScan() {
 
-	outputPath := fmt.Sprintf("%s/ports.xml", xmlDir)
+	xmlOut := fmt.Sprintf("%s/ports.xml", xmlDir)
+	txtOut := fmt.Sprintf("%s/ports.txt", resultDir)
 
-	cmd := exec.Command("nmap", ipAddr, "-oX", outputPath)
+	cmd := exec.Command("nmap", ipAddr, "-oX", xmlOut, "-oN", txtOut)
 	err := cmd.Run()
 
 	if err != nil {
