@@ -7,8 +7,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"log"
-	"os"
 
 	helpers "github.com/Turtle-In-Space/theia/pkg"
 )
