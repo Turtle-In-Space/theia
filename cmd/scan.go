@@ -30,10 +30,9 @@ var scanCmd = &cobra.Command{
 	Long:  msg.Long,
 	Args:  cobra.ExactArgs(1),
 
+	// Store args, create dirs then begin scan
 	Run: func(cmd *cobra.Command, args []string) {
-		ipAddr = args[0]
-		targetDir = targetName
-
+		getArgs(args)
 		initProject()
 		scanTarget()
 	},
@@ -45,14 +44,21 @@ func init() {
 	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
 }
 
+// store cmd args
+func getArgs(args []string) {
+	ipAddr = args[0]
+	targetDir = targetName
+}
+
+// begin the target scan
 func scanTarget() {
 	openPortScan()
 
-	outputPath := fmt.Sprintf("%s/ports.xml", xmlDir)
-	services := core.GetServices(outputPath)
+	portsFile := fmt.Sprintf("%s/ports.xml", xmlDir)
+	services := core.GetServices(portsFile)
 
 	for key, val := range services {
-		fmt.Printf("Key: %d \tService: %s\n", key, val)
+		fmt.Printf("[*] Found %s running on port %d\n", val, key)
 	}
 }
 
