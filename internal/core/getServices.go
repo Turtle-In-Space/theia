@@ -11,25 +11,25 @@ import (
 )
 
 // ----- Define xml sections ----- //
-type NmapRun struct {
-	Hosts []Host `xml:"host"`
+type nmapRun struct {
+	Hosts []host `xml:"host"`
 }
 
-type Host struct {
-	Ports Ports `xml:"ports"`
+type host struct {
+	Ports ports `xml:"ports"`
 }
 
-type Ports struct {
-	Ports []Port `xml:"port"`
+type ports struct {
+	Ports []port `xml:"port"`
 }
 
-type Port struct {
+type port struct {
 	Protocol string  `xml:"protocol,attr"`
 	PortID   int     `xml:"portid,attr"`
-	Service  Service `xml:"service"`
+	Service  service `xml:"service"`
 }
 
-type Service struct {
+type service struct {
 	Name string `xml:"name,attr"`
 }
 
@@ -41,7 +41,7 @@ func GetServices(xmlFilePath string) map[int]string {
 
 	byteValue, _ := io.ReadAll(xmlFile)
 
-	var results NmapRun
+	var results nmapRun
 	xml.Unmarshal(byteValue, &results)
 
 	return parseServices(results)
@@ -49,7 +49,7 @@ func GetServices(xmlFilePath string) map[int]string {
 
 // Stores all services in a map
 // [PORT-ID] : [SERVICE-NAME]
-func parseServices(results NmapRun) (services map[int]string) {
+func parseServices(results nmapRun) (services map[int]string) {
 	services = make(map[int]string)
 
 	for _, host := range results.Hosts {
