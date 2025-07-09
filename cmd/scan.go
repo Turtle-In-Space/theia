@@ -49,7 +49,11 @@ func scanTarget() {
 	openPortScan()
 
 	outputPath := fmt.Sprintf("%s/ports.xml", xmlDir)
-	fmt.Println(core.GetServices(outputPath))
+	services := core.GetServices(outputPath)
+
+	for key, val := range services {
+		fmt.Printf("Key: %d \tService: %s\n", key, val)
+	}
 }
 
 func initProject() {
@@ -65,7 +69,6 @@ func initProject() {
 }
 
 func openPortScan() {
-
 	xmlOut := fmt.Sprintf("%s/ports.xml", xmlDir)
 	txtOut := fmt.Sprintf("%s/ports.txt", resultDir)
 

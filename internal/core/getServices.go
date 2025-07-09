@@ -5,7 +5,6 @@ package core
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io"
 
 	helpers "github.com/Turtle-In-Space/theia/pkg"
@@ -36,8 +35,7 @@ type Service struct {
 
 // Parse all servies in `xmlFilePath`
 // Returns map of [port]service
-func GetServices(xmlFilePath string) []string {
-
+func GetServices(xmlFilePath string) map[int]string {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
@@ -46,23 +44,25 @@ func GetServices(xmlFilePath string) []string {
 	var results NmapRun
 	xml.Unmarshal(byteValue, &results)
 
-	printServices(results)
-
-	return nil
+	return parseServices(results)
 }
 
-// TODO redo as store serivces
-func printServices(results NmapRun) {
+// Stores all services in a map
+// [PORT-ID] : [SERVICE-NAME]
+func parseServices(results NmapRun) (services map[int]string) {
+	services = make(map[int]string)
+
 	for _, host := range results.Hosts {
 		for _, port := range host.Ports.Ports {
+			serviceName := port.Service.Name
 
-			var serviceName string
-			if port.Service.Name == "" {
+			if serviceName == "" {
 				serviceName = "unknown"
-			} else {
-				serviceName = port.Service.Name
 			}
-			fmt.Printf("Port: %d/%s - Service: %s\n", port.PortID, port.Protocol, serviceName)
+
+			services[port.PortID] = serviceName
 		}
 	}
+
+	return
 }
