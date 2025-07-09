@@ -9,8 +9,11 @@ import (
 	"io"
 	"log"
 	"os"
+
+	helpers "github.com/Turtle-In-Space/theia/pkg"
 )
 
+// ----- Define xml sections ----- //
 type NmapRun struct {
 	Hosts []Host `xml:"host"`
 }
@@ -33,14 +36,11 @@ type Service struct {
 	Name string `xml:"name,attr"`
 }
 
+// Parse all servies in `xmlFilePath`
+// Returns map of [port]service
 func GetServices(xmlFilePath string) []string {
 
-	xmlFile, err := os.Open(xmlFilePath)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
 	byteValue, _ := io.ReadAll(xmlFile)
@@ -48,6 +48,13 @@ func GetServices(xmlFilePath string) []string {
 	var results NmapRun
 	xml.Unmarshal(byteValue, &results)
 
+	printServices(results)
+
+	return nil
+}
+
+// TODO redo as store serivces
+func printServices(results NmapRun) {
 	for _, host := range results.Hosts {
 		for _, port := range host.Ports.Ports {
 
@@ -60,6 +67,4 @@ func GetServices(xmlFilePath string) []string {
 			fmt.Printf("Port: %d/%s - Service: %s\n", port.PortID, port.Protocol, serviceName)
 		}
 	}
-
-	return nil
 }
