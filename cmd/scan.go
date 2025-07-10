@@ -11,7 +11,7 @@ import (
 
 	core "github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
-	helpers "github.com/Turtle-In-Space/theia/pkg"
+	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
 
 	"github.com/spf13/cobra"
 )
