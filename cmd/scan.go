@@ -12,6 +12,7 @@ import (
 	core "github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
 	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
+	out "github.com/Turtle-In-Space/theia/pkg/output"
 
 	"github.com/spf13/cobra"
 )
@@ -59,7 +60,7 @@ func scanTarget() {
 	services := core.GetServices(portsFile)
 
 	for key, val := range services {
-		fmt.Printf("[*] Found %s running on port %d\n", val, key)
+		out.Info("Found %s running on port %d", val, key)
 	}
 }
 
