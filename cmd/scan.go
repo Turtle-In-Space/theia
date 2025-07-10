@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"path/filepath"
 
 	core "github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
@@ -54,7 +55,7 @@ func getArgs(args []string) {
 func scanTarget() {
 	openPortScan()
 
-	portsFile := fmt.Sprintf("%s/ports.xml", xmlDir)
+	portsFile := filepath.Join(xmlDir, "ports.xml")
 	services := core.GetServices(portsFile)
 
 	for key, val := range services {
@@ -64,8 +65,8 @@ func scanTarget() {
 
 func initProject() {
 	// create dir structure
-	xmlDir = fmt.Sprintf("%s/xml", targetDir)
-	resultDir = fmt.Sprintf("%s/results", targetDir)
+	xmlDir = filepath.Join(targetDir, "xml/")
+	resultDir = filepath.Join(targetDir, "results/")
 
 	helpers.CreateDir(targetDir)
 	helpers.CreateDir(xmlDir)
@@ -75,8 +76,8 @@ func initProject() {
 }
 
 func openPortScan() {
-	xmlOut := fmt.Sprintf("%s/ports.xml", xmlDir)
-	txtOut := fmt.Sprintf("%s/ports.txt", resultDir)
+	xmlOut := filepath.Join(xmlDir, "ports.xml")
+	txtOut := filepath.Join(resultDir, "ports.xml")
 
 	cmd := exec.Command("nmap", ipAddr, "-oX", xmlOut, "-oN", txtOut)
 	err := cmd.Run()
