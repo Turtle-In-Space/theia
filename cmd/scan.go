@@ -60,7 +60,7 @@ func scanTarget() {
 	services := core.GetServices(portsFile)
 
 	for key, val := range services {
-		out.Info("Found %s running on port %d", val, key)
+		out.Info("Found %s running on port %s", val, key)
 	}
 }
 
