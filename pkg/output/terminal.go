@@ -1,6 +1,9 @@
 package output
 
 import (
+	"fmt"
+	"regexp"
+
 	"github.com/pterm/pterm"
 )
 
@@ -11,35 +14,35 @@ func init() {
 
 func Info(msg string, args ...any) {
 	highlightedMsg := highlightArgs(msg, args...)
-	
+
 	// Print the final formatted message with styled args
-	pterm.Info.Printfln(highlightedMsg, styledArgs...)
+	pterm.Info.Println(highlightedMsg)
 }
 
 func Success(msg string, args ...any) {
 	highlightedMsg := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
-	pterm.Info.Printfln(highlightedMsg, styledArgs...)
+	pterm.Info.Println(highlightedMsg)
 }
 
 func Warn(msg string, args ...any) {
 	highlightedMsg := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
-	pterm.Warning.Printfln(highlightedMsg, styledArgs...)
+	pterm.Warning.Println(highlightedMsg)
 }
 
 func Error(msg string, args ...any) {
 	highlightedMsg := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
-	pterm.Error.Printfln(highlightedMsg, styledArgs...)
+	pterm.Error.Println(highlightedMsg)
 }
 
-func highlightArgs(msg string, args ...any) highlightedMsg string {
+func highlightArgs(msg string, args ...any) (highlightedMsg string) {
 	style := pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
-	
+
 	// Apply the style to each argument
 	styledArgs := make([]any, len(args))
 	for i, arg := range args {
@@ -49,8 +52,8 @@ func highlightArgs(msg string, args ...any) highlightedMsg string {
 	// As all args are now strings replace format to match
 	regEx := regexp.MustCompile(`%[a-zA-Z]`)
 	format := regEx.ReplaceAllString(msg, "%s")
-	
+
 	highlightedMsg = fmt.Sprintf(format, args...)
 
-	return 
+	return
 }
