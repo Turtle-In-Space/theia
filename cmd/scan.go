@@ -72,7 +72,7 @@ func initProject() {
 	helpers.CreateDir(xmlDir)
 	helpers.CreateDir(resultDir)
 
-	out.Info("creade dirs")
+	out.Info("created dirs")
 }
 
 func openPortScan() {
