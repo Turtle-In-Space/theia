@@ -4,10 +4,12 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func Info(msg string, args ...any) {
+func init() {
 	pterm.Info.Prefix = pterm.Prefix{Text: "INFO", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
 	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
+}
 
+func Info(msg string, args ...any) {
 	highlightedMsg := highlightArgs(msg, args...)
 	
 	// Print the final formatted message with styled args
