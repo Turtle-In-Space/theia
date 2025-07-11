@@ -4,7 +4,6 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os/exec"
 	"path/filepath"
@@ -60,7 +59,7 @@ func scanTarget() {
 	services := core.GetServices(portsFile)
 
 	for key, val := range services {
-		out.Info("Found %s running on port %s", val, key)
+		out.Info("found %s running on port %s", val, key)
 	}
 }
 
@@ -73,7 +72,7 @@ func initProject() {
 	helpers.CreateDir(xmlDir)
 	helpers.CreateDir(resultDir)
 
-	fmt.Println("[*] made dirs")
+	out.Info("creade dirs")
 }
 
 func openPortScan() {
