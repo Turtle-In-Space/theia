@@ -16,6 +16,10 @@ func Info(msg string, args ...any) {
 		styledArgs[i] = style.Sprint(arg)
 	}
 
+	// As all args are now strings replace format to match
+	regEx := regexp.MustCompile(`%[a-zA-Z]`)
+	format := regEx.ReplaceAllString(msg, "%s")
+
 	// Print the final formatted message with styled args
-	pterm.Info.Printfln(msg, styledArgs...)
+	pterm.Info.Printfln(format, styledArgs...)
 }
