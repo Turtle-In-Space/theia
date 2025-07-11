@@ -12,7 +12,7 @@ func CreateDir(name string) {
 	err := os.MkdirAll(name, 0766)
 
 	if err != nil {
-		log.Panic(err)
+		log.Fatal(err)
 	}
 }
 
