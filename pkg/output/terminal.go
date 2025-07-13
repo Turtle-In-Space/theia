@@ -13,7 +13,7 @@ var highlightedStyle *pterm.Style
 func init() {
 	highlightedStyle = pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
 
-	pterm.Info.Prefix = pterm.Prefix{Text: "INFO", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
+	pterm.Info.Prefix = pterm.Prefix{Text: " INFO  ", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
 	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
 
 	pterm.EnableDebugMessages()
@@ -30,7 +30,7 @@ func Success(msg string, args ...any) {
 	format, styledArgs := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
-	pterm.Info.Println(fmt.Sprintf(format, styledArgs...))
+	pterm.Success.Println(fmt.Sprintf(format, styledArgs...))
 }
 
 func Warn(msg string, args ...any) {
