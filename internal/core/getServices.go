@@ -7,7 +7,7 @@ import (
 	"encoding/xml"
 	"io"
 
-	helpers "github.com/Turtle-In-Space/theia/pkg"
+	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
 )
 
 // ----- Define xml sections ----- //

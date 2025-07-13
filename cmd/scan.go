@@ -4,14 +4,13 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os/exec"
 	"path/filepath"
 
 	core "github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
-	helpers "github.com/Turtle-In-Space/theia/pkg"
+	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
+	out "github.com/Turtle-In-Space/theia/pkg/output"
 
 	"github.com/spf13/cobra"
 )
@@ -59,7 +58,7 @@ func scanTarget() {
 	services := core.GetServices(portsFile)
 
 	for key, val := range services {
-		fmt.Printf("[*] Found %s running on port %d\n", val, key)
+		out.Info("found %s running on port %s", val, key)
 	}
 }
 
@@ -72,7 +71,7 @@ func initProject() {
 	helpers.CreateDir(xmlDir)
 	helpers.CreateDir(resultDir)
 
-	fmt.Println("[*] made dirs")
+	out.Info("created dirs")
 }
 
 func openPortScan() {
@@ -83,6 +82,6 @@ func openPortScan() {
 	err := cmd.Run()
 
 	if err != nil {
-		log.Fatal(err)
+		out.Error(err.Error())
 	}
 }
