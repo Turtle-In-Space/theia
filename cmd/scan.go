@@ -4,7 +4,6 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package cmd
 
 import (
-	"log"
 	"os/exec"
 	"path/filepath"
 
@@ -83,6 +82,6 @@ func openPortScan() {
 	err := cmd.Run()
 
 	if err != nil {
-		log.Fatal(err)
+		out.Error(err.Error())
 	}
 }

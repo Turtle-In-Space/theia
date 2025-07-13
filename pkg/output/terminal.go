@@ -2,6 +2,7 @@ package output
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
 	"github.com/pterm/pterm"
@@ -33,11 +34,9 @@ func Warn(msg string, args ...any) {
 	pterm.Warning.Println(highlightedMsg)
 }
 
-func Error(msg string, args ...any) {
-	highlightedMsg := highlightArgs(msg, args...)
-
-	// Print the final formatted message with styled args
-	pterm.Error.Println(highlightedMsg)
+func Error(msg string) {
+	pterm.Error.Println(msg)
+	os.Exit(1)
 }
 
 func highlightArgs(msg string, args ...any) (highlightedMsg string) {
