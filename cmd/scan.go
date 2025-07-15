@@ -17,6 +17,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type service struct {
+	name    string
+	port    int
+	scanner scanners.ServiceScanner
+}
+
 var (
 	targetName string
 	ipAddr     string
@@ -59,7 +65,8 @@ func scanTarget() {
 	portsFile := filepath.Join(xmlDir, "ports.xml")
 	services := core.GetServices(portsFile)
 
-	scannerQueue := queueScanners(services)
+	serviceWithScan := queueScanners(services)
+	runScanners(serviceWithScan)
 }
 
 func initProject() {
@@ -86,23 +93,34 @@ func openPortScan() {
 	}
 }
 
-func queueScanners(services map[int]string) (scannerQueue []scanners.ServiceScanner) {
+func queueScanners(services map[int]string) (servicesWithScan []service) {
 	var foundScanners []string
 
 	// find scan for each serivce
-	for port, service := range services {
-		scan, ok := scanners.ScannerBySericeName(service)
+	for port, serviceName := range services {
+		scan, ok := scanners.ScannerByServiceName(serviceName)
 
 		if ok {
-			out.Info("Found service %s on port %d - using scan %s", service, port, scan.Name())
+			out.Info("Found service %s on port %d - using scan %s", serviceName, port, scan.Name())
 			if !slices.Contains(foundScanners, scan.Name()) {
-				scannerQueue = append(scannerQueue, scan)
+				servicesWithScan = append(servicesWithScan,
+					service{
+						name:    serviceName,
+						port:    port,
+						scanner: scan,
+					})
 				foundScanners = append(foundScanners, scan.Name())
 			}
 		} else {
-			out.Warn("Found service %s on port %d - found no scan", service, port)
+			out.Warn("Found service %s on port %d - found no scan", serviceName, port)
 		}
 	}
 
 	return
+}
+
+func runScanners(serivces []service) {
+	for _, service := range serivces {
+		service.scanner.Run(ipAddr, service.port)
+	}
 }

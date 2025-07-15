@@ -18,7 +18,7 @@ func Register(name string, scanner ServiceScanner) {
 }
 
 // get the correct scanner from a service name
-func ScannerBySericeName(service string) (ServiceScanner, bool) {
+func ScannerByServiceName(service string) (ServiceScanner, bool) {
 	for _, scanner := range ServiceRegistry {
 		if slices.Contains(scanner.Aliases(), service) {
 			return scanner, true
