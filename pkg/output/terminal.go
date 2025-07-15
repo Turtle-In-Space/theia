@@ -45,6 +45,13 @@ func Error(msg string) {
 	os.Exit(1)
 }
 
+func Debug(msg string, args ...any) {
+	format, styledArgs := highlightArgs(msg, args...)
+
+	// Print the final formatted message with styled args
+	pterm.Debug.Println(fmt.Sprintf(format, styledArgs...))
+}
+
 func highlightArgs(msg string, args ...any) (string, []any) {
 	// Apply the style to each argument
 	styledArgs := make([]any, len(args))
