@@ -4,9 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
-	"fmt"
 	"os/exec"
-	"path/filepath"
 
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
@@ -18,7 +16,7 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
-	txtFile, outFile := s.fileNames(ipAddr, port)
+	txtFile, outFile := fileNames(s.name, ipAddr, port, "")
 
 	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFile, ">", txtFile)
 	err := cmd.Run()
@@ -45,14 +43,4 @@ func init() {
 	}
 
 	Register("smb", smbScanner)
-}
-
-func (s smbScanner) fileNames(ipAddr string, port int) (txtFile string, outFile string) {
-	txt := fmt.Sprintf("%d_%s.txt", port, s.name)
-	out := fmt.Sprintf("%d_%s.json", port, s.name)
-
-	txtFile = filepath.Join("results", ipAddr, txt)
-	outFile = filepath.Join("xml", ipAddr, out)
-
-	return
 }
