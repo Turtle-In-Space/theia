@@ -1,11 +1,29 @@
+/*
+Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
+*/
 package scanners
 
+import "slices"
+
 type ServiceScanner interface {
-	run()
+	Run(target string, port int)
+	Aliases() []string
+	Name() string
 }
 
 var ServiceRegistry = make(map[string]ServiceScanner)
 
 func Register(name string, scanner ServiceScanner) {
 	ServiceRegistry[name] = scanner
+}
+
+// get the correct scanner from a service name
+func ScannerBySericeName(service string) (ServiceScanner, bool) {
+	for _, scanner := range ServiceRegistry {
+		if slices.Contains(scanner.Aliases(), service) {
+			return scanner, true
+		}
+	}
+
+	return nil, false
 }
