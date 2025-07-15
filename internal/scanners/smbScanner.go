@@ -12,9 +12,9 @@ type SMBScanner struct {
 	name    string
 }
 
-// run the scan on a target for a port
-func (s SMBScanner) Run(target string, port int) {
-	out.Info("SMBScanner - %s:%d", target, port)
+// run the scan on a ipAddr for a port
+func (s SMBScanner) Run(ipAddr string, port int) {
+	out.Info("SMBScanner - %s:%d", ipAddr, port)
 }
 
 // get all aliases for service names

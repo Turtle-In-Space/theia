@@ -12,9 +12,9 @@ type TYPEScanner struct {
 	name    string
 }
 
-// run the scan on a target for a port
-func (s TYPEScanner) Run(target string, port int) {
-	out.Info("TYPEScanner - %s:%d", target, port)
+// run the scan on a ipAddr for a port
+func (s TYPEScanner) Run(ipAddr string, port int) {
+	out.Info("TYPEScanner - %s:%d", ipAddr, port)
 }
 
 // get all aliases for service names
