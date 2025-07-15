@@ -35,7 +35,7 @@ type xmlService struct {
 
 // Parse all servies in `xmlFilePath`
 // Returns map of [port]service
-func GetServices(xmlFilePath string) map[int]string {
+func GetServices(xmlFilePath string) []service {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
@@ -47,11 +47,8 @@ func GetServices(xmlFilePath string) map[int]string {
 	return parseServices(results)
 }
 
-// Stores all services in a map
-// [PORT-ID] : [SERVICE-NAME]
-func parseServices(results nmapRun) (services map[int]string) {
-	services = make(map[int]string)
-
+// Stores all services in a slice
+func parseServices(results nmapRun) (services []service) {
 	for _, host := range results.Hosts {
 		for _, port := range host.Ports.Ports {
 			serviceName := port.Service.Name
@@ -60,7 +57,10 @@ func parseServices(results nmapRun) (services map[int]string) {
 				serviceName = "unknown"
 			}
 
-			services[port.PortID] = serviceName
+			services = append(services, service{
+				name: serviceName,
+				port: port.PortID,
+			})
 		}
 	}
 

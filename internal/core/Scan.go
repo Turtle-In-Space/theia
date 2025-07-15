@@ -10,76 +10,118 @@ import (
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
-// TODO rename
+// ----- Structs ----- //
+
+// implemeted for future use
+type target struct {
+	name  string
+	hosts []host
+}
+
+type host struct {
+	ipAddr   string
+	services []service
+}
+
+type service struct {
+	name string
+	port int
+}
+
+// TODO rename, add ipAddr
 type validScanner struct {
 	scanner scanners.ServiceScanner
+	ipAddr  string
 	port    int
 }
 
+// ----- Variables ----- //
+
 var (
-	targetDir string
 	xmlDir    string
 	resultDir string
-	ipAddr    string
 )
+
+// ----- Functions ----- //
 
 // begin the target scan
 func ScanTarget(ip string, targetName string) {
-	targetDir = targetName
-	ipAddr = ip
-	initProject()
-	openPortScan()
+	target := createTarget(targetName)
+	initProject(target)
+	target.addHosts(ip)
 
-	portsFile := filepath.Join(xmlDir, "ports.xml")
-	services := GetServices(portsFile)
-
-	scannerQueue := queueScanners(services)
+	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
 }
 
-func initProject() {
-	// create dir structure
-	xmlDir = filepath.Join(targetDir, "xml/")
-	resultDir = filepath.Join(targetDir, "results/")
+func createTarget(name string) target {
 
-	helpers.CreateDir(targetDir)
+	return target{
+		name:  name,
+		hosts: nil,
+	}
+}
+
+func (t *target) addHosts(ip string) {
+	t.hosts = []host{createHost(ip)}
+}
+
+func createHost(ip string) host {
+	return host{
+		ipAddr:   ip,
+		services: scanAllPorts(ip),
+	}
+}
+
+func initProject(target target) {
+	// create dir structure
+	xmlDir = filepath.Join(target.name, "xml/")
+	resultDir = filepath.Join(target.name, "results/")
+
+	helpers.CreateDir(target.name)
 	helpers.CreateDir(xmlDir)
 	helpers.CreateDir(resultDir)
 
 	out.Info("created dirs")
 }
 
-func openPortScan() {
+func scanAllPorts(ip string) []service {
 	xmlOut := filepath.Join(xmlDir, "ports.xml")
-	txtOut := filepath.Join(resultDir, "ports.xml")
+	txtOut := filepath.Join(resultDir, "ports.txt")
 
-	cmd := exec.Command("nmap", ipAddr, "-oX", xmlOut, "-oN", txtOut)
+	cmd := exec.Command("nmap", ip, "-oX", xmlOut, "-oN", txtOut)
 	err := cmd.Run()
 
 	if err != nil {
 		out.Error(err.Error())
 	}
+
+	portsFile := filepath.Join(xmlDir, "ports.xml")
+	return GetServices(portsFile)
 }
 
-func queueScanners(services map[int]string) (servicesWithScan []validScanner) {
+func queueScanners(target target) (servicesWithScan []validScanner) {
 	var foundScanners []string
 
 	// find scan for each serivce
-	for port, serviceName := range services {
-		scan, ok := scanners.ScannerByServiceName(serviceName)
+	for _, host := range target.hosts {
+		for _, service := range host.services {
+			scan, ok := scanners.ScannerByServiceName(service.name)
 
-		if ok {
-			out.Info("Found service %s on port %d - using scan %s", serviceName, port, scan.Name())
-			if !slices.Contains(foundScanners, scan.Name()) {
-				servicesWithScan = append(servicesWithScan,
-					validScanner{
-						scanner: scan,
-						port:    port,
-					})
-				foundScanners = append(foundScanners, scan.Name())
+			if ok {
+				out.Info("Found service %s on port %d - using scan %s", service.name, service.port, scan.Name())
+				if !slices.Contains(foundScanners, scan.Name()) {
+					servicesWithScan = append(servicesWithScan,
+						validScanner{
+							scanner: scan,
+							ipAddr:  host.ipAddr,
+							port:    service.port,
+						})
+					foundScanners = append(foundScanners, scan.Name())
+				}
+			} else {
+				out.Warn("Found service %s on port %d - found no scan", service.name, service.port)
 			}
-		} else {
-			out.Warn("Found service %s on port %d - found no scan", serviceName, port)
 		}
 	}
 
@@ -88,6 +130,6 @@ func queueScanners(services map[int]string) (servicesWithScan []validScanner) {
 
 func runScanners(scannerQueue []validScanner) {
 	for _, scanner := range scannerQueue {
-		scanner.scanner.Run(ipAddr, scanner.port)
+		scanner.scanner.Run(scanner.ipAddr, scanner.port)
 	}
 }
