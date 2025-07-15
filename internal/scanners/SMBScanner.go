@@ -1,15 +1,37 @@
+/*
+Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
+*/
 package scanners
 
 import (
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
-type SMBScanner struct{}
+type SMBScanner struct {
+	aliases []string
+	name    string
+}
 
-func (s SMBScanner) Run() {
-	out.Info("SMBScanner")
+// run the scan on a target for a port
+func (s SMBScanner) Run(target string, port int) {
+	out.Info("SMBScanner - %s:%d", target, port)
+}
+
+// get all aliases for service names
+func (s SMBScanner) Aliases() (aliases []string) {
+	return s.aliases
+}
+
+// get the name of this scanner
+func (s SMBScanner) Name() (name string) {
+	return s.name
 }
 
 func init() {
-	Register("smb", SMBScanner{})
+	smbScanner := SMBScanner{
+		aliases: []string{"microsoft-ds", "netbios-ssn"},
+		name:    "SMBScanner",
+	}
+
+	Register("smb", smbScanner)
 }
