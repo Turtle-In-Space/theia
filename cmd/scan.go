@@ -6,8 +6,10 @@ package cmd
 import (
 	"os/exec"
 	"path/filepath"
+	"slices"
 
 	core "github.com/Turtle-In-Space/theia/internal/core"
+	"github.com/Turtle-In-Space/theia/internal/scanners"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
 	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
@@ -57,9 +59,7 @@ func scanTarget() {
 	portsFile := filepath.Join(xmlDir, "ports.xml")
 	services := core.GetServices(portsFile)
 
-	for key, val := range services {
-		out.Info("found %s running on port %s", val, key)
-	}
+	scannerQueue := queueScanners(services)
 }
 
 func initProject() {
@@ -84,4 +84,25 @@ func openPortScan() {
 	if err != nil {
 		out.Error(err.Error())
 	}
+}
+
+func queueScanners(services map[int]string) (scannerQueue []scanners.ServiceScanner) {
+	var foundScanners []string
+
+	// find scan for each serivce
+	for port, service := range services {
+		scan, ok := scanners.ScannerBySericeName(service)
+
+		if ok {
+			out.Info("Found service %s on port %d - using scan %s", service, port, scan.Name())
+			if !slices.Contains(foundScanners, scan.Name()) {
+				scannerQueue = append(scannerQueue, scan)
+				foundScanners = append(foundScanners, scan.Name())
+			}
+		} else {
+			out.Warn("Found service %s on port %d - found no scan", service, port)
+		}
+	}
+
+	return
 }
