@@ -63,11 +63,20 @@ func createTarget(name string) target {
 	}
 }
 
+// add all hosts to target
 func (t *target) addHosts(ip string) {
 	t.hosts = []host{createHost(ip)}
 }
 
+// create a host and dirs for host
 func createHost(ip string) host {
+	// create dirs for host
+	xml := filepath.Join(xmlDir, ip)
+	results := filepath.Join(resultDir, ip)
+
+	helpers.CreateDir(xml)
+	helpers.CreateDir(results)
+
 	return host{
 		ipAddr:   ip,
 		services: scanAllPorts(ip),
