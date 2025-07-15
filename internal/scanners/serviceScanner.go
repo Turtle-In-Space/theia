@@ -11,15 +11,15 @@ type ServiceScanner interface {
 	Name() string
 }
 
-var ServiceRegistry = make(map[string]ServiceScanner)
+var serviceRegistry = make(map[string]ServiceScanner)
 
 func Register(name string, scanner ServiceScanner) {
-	ServiceRegistry[name] = scanner
+	serviceRegistry[name] = scanner
 }
 
 // get the correct scanner from a service name
 func ScannerByServiceName(service string) (ServiceScanner, bool) {
-	for _, scanner := range ServiceRegistry {
+	for _, scanner := range serviceRegistry {
 		if slices.Contains(scanner.Aliases(), service) {
 			return scanner, true
 		}
