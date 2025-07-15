@@ -22,7 +22,7 @@ var scanCmd = &cobra.Command{
 	Long:  msg.Long,
 	Args:  cobra.ExactArgs(1),
 
-	// Store args, create dirs then begin scan
+	// Store args then start scan
 	Run: func(cmd *cobra.Command, args []string) {
 		getArgs(args)
 		startScan()
