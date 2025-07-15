@@ -12,24 +12,24 @@ import (
 
 // ----- Define xml sections ----- //
 type nmapRun struct {
-	Hosts []host `xml:"host"`
+	Hosts []xmlHost `xml:"host"`
 }
 
-type host struct {
-	Ports ports `xml:"ports"`
+type xmlHost struct {
+	Ports xmlPorts `xml:"ports"`
 }
 
-type ports struct {
-	Ports []port `xml:"port"`
+type xmlPorts struct {
+	Ports []xmlPort `xml:"port"`
 }
 
-type port struct {
-	Protocol string  `xml:"protocol,attr"`
-	PortID   int     `xml:"portid,attr"`
-	Service  service `xml:"service"`
+type xmlPort struct {
+	Protocol string     `xml:"protocol,attr"`
+	PortID   int        `xml:"portid,attr"`
+	Service  xmlService `xml:"service"`
 }
 
-type service struct {
+type xmlService struct {
 	Name string `xml:"name,attr"`
 }
 
