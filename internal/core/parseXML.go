@@ -12,25 +12,25 @@ import (
 
 // ----- Define xml sections ----- //
 type nmapRun struct {
-	hosts []xmlHost `xml:"host"`
+	Hosts []xmlHost `xml:"host"`
 }
 
 type xmlHost struct {
-	ports xmlPorts `xml:"ports"`
+	Ports xmlPorts `xml:"ports"`
 }
 
 type xmlPorts struct {
-	ports []xmlPort `xml:"port"`
+	Ports []xmlPort `xml:"port"`
 }
 
 type xmlPort struct {
-	protocol string     `xml:"protocol,attr"`
-	portID   int        `xml:"portid,attr"`
-	service  xmlService `xml:"service"`
+	Protocol string     `xml:"protocol,attr"`
+	PortID   int        `xml:"portid,attr"`
+	Service  xmlService `xml:"service"`
 }
 
 type xmlService struct {
-	name string `xml:"name,attr"`
+	Name string `xml:"name,attr"`
 }
 
 // Parse all servies in `xmlFilePath`
@@ -49,9 +49,9 @@ func GetServices(xmlFilePath string) []service {
 
 // Stores all services in a slice
 func parseServices(results nmapRun) (services []service) {
-	for _, host := range results.hosts {
-		for _, port := range host.ports.ports {
-			serviceName := port.service.name
+	for _, host := range results.Hosts {
+		for _, port := range host.Ports.Ports {
+			serviceName := port.Service.Name
 
 			if serviceName == "" {
 				serviceName = "unknown"
@@ -59,7 +59,7 @@ func parseServices(results nmapRun) (services []service) {
 
 			services = append(services, service{
 				name: serviceName,
-				port: port.portID,
+				port: port.PortID,
 			})
 		}
 	}
