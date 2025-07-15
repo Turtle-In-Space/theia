@@ -1,6 +1,7 @@
 package core
 
 import (
+	"os"
 	"os/exec"
 	"path/filepath"
 	"slices"
@@ -74,11 +75,13 @@ func createHost(ip string) host {
 }
 
 func initProject(target target) {
-	// create dir structure
-	xmlDir = filepath.Join(target.name, "xml/")
-	resultDir = filepath.Join(target.name, "results/")
-
 	helpers.CreateDir(target.name)
+	os.Chdir(target.name)
+
+	// create dir structure
+	xmlDir = filepath.Clean("xml/")
+	resultDir = filepath.Clean("results/")
+
 	helpers.CreateDir(xmlDir)
 	helpers.CreateDir(resultDir)
 
