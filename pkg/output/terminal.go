@@ -41,10 +41,7 @@ func Warn(msg string, args ...any) {
 }
 
 func Error(msg string, args ...any) {
-	format, styledArgs := highlightArgs(msg, args...)
-
-	// Print the final formatted message with styled args
-	pterm.Error.Println(fmt.Sprintf(format, styledArgs...))
+	pterm.Error.Println(fmt.Sprintf(msg, args...))
 	os.Exit(1)
 }
 
