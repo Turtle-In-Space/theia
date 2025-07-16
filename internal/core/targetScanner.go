@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"slices"
+	"sync"
 
 	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
@@ -142,8 +143,17 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 	return
 }
 
+// run all queued scanners and wait for them to finnish
 func runScanners(scannerQueue []validScanner) {
+	var wg sync.WaitGroup
+
 	for _, scanner := range scannerQueue {
-		scanner.scanner.Run(scanner.ipAddr, scanner.port)
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			scanner.scanner.Run(scanner.ipAddr, scanner.port)
+		}()
 	}
+
+	wg.Wait()
 }
