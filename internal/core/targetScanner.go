@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/Turtle-In-Space/theia/internal/scanners"
 	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
@@ -31,7 +30,7 @@ type service struct {
 
 // TODO rename, add ipAddr
 type validScanner struct {
-	scanner scanners.ServiceScanner
+	scanner ServiceScanner
 	ipAddr  string
 	port    int
 }
@@ -118,7 +117,7 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 	// find scan for each serivce
 	for _, host := range target.hosts {
 		for _, service := range host.services {
-			scan, ok := scanners.ScannerByServiceName(service.name)
+			scan, ok := ScannerByServiceName(service.name)
 
 			if ok {
 				out.Info("Found service %s on port %d - using scan %s", service.name, service.port, scan.Name())
