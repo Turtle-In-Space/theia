@@ -4,6 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
+	"os"
 	"os/exec"
 
 	out "github.com/Turtle-In-Space/theia/pkg/output"
@@ -16,13 +17,21 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
-	txtFile, outFile := fileNames(s.name, ipAddr, port, "")
+	_, outFileName := fileNames(s.name, ipAddr, port, "")
 
-	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFile, ">", txtFile)
-	err := cmd.Run()
-
+	txtFile, err := os.Create("for/rel")
 	if err != nil {
-		out.Error(err.Error())
+		out.Error("%s: create file error: %s", s.name, err.Error())
+	}
+	defer txtFile.Close()
+
+	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFileName)
+	cmd.Stdout = txtFile
+
+	out.Info("Running %s against %s", s.name, ipAddr)
+	err = cmd.Run()
+	if err != nil {
+		out.Error("%s: command error: %s", s.name, err.Error())
 	}
 }
 
