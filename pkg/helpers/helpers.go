@@ -28,3 +28,14 @@ func OpenFile(filePath string) *os.File {
 
 	return file
 }
+
+// create a file and handle errors
+func CreateFile(filePath string) *os.File {
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		out.Error("CreateFile: %s", err.Error())
+	}
+
+	return file
+}

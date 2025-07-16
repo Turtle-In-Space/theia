@@ -4,9 +4,9 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
-	"os"
 	"os/exec"
 
+	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
@@ -18,18 +18,13 @@ type smbScanner struct {
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
 	txtFileName, outFileName := fileNames(s.name, ipAddr, port, "")
-
-	txtFile, err := os.Create(txtFileName)
-	if err != nil {
-		out.Error("%s: create file error: %s", s.name, err.Error())
-	}
-	defer txtFile.Close()
+	txtFile := helpers.CreateFile(txtFileName)
 
 	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFileName)
 	cmd.Stdout = txtFile
 
 	out.Info("Running %s against %s", s.name, ipAddr)
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		out.Error("%s: command error: %s", s.name, err.Error())
 	}
