@@ -36,7 +36,7 @@ func ScannerByServiceName(service string) (ServiceScanner, bool) {
 // generate names for txt file and out file
 func fileNames(scanName string, ipAddr string, port int, outExtension string) (txtFile string, outFile string) {
 	txt := fmt.Sprintf("%d_%s.txt", port, scanName)
-	out := fmt.Sprintf("%d_%s.%s", port, scanName, outExtension)
+	out := fmt.Sprintf("%d_%s%s", port, scanName, outExtension)
 
 	txtFile = filepath.Join("results", ipAddr, txt)
 	outFile = filepath.Join("xml", ipAddr, out)
