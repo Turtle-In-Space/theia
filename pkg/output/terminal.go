@@ -40,8 +40,11 @@ func Warn(msg string, args ...any) {
 	pterm.Warning.Println(fmt.Sprintf(format, styledArgs...))
 }
 
-func Error(msg string) {
-	pterm.Error.Println(msg)
+func Error(msg string, args ...any) {
+	format, styledArgs := highlightArgs(msg, args...)
+
+	// Print the final formatted message with styled args
+	pterm.Error.Println(fmt.Sprintf(format, styledArgs...))
 	os.Exit(1)
 }
 
