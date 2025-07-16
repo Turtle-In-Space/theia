@@ -105,7 +105,7 @@ func scanAllPorts(ip string) []service {
 	err := cmd.Run()
 
 	if err != nil {
-		out.Error(err.Error())
+		out.Error("scanAllPorts: %s", err.Error())
 	}
 
 	portsFile := filepath.Join(xmlDir, "ports.xml")

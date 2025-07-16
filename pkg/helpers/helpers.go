@@ -14,7 +14,7 @@ func CreateDir(name string) {
 	err := os.MkdirAll(name, 0766)
 
 	if err != nil {
-		out.Error(err.Error())
+		out.Error("CreateDir: %s", err.Error())
 	}
 }
 
@@ -23,7 +23,7 @@ func OpenFile(filePath string) *os.File {
 	file, err := os.Open(filePath)
 
 	if err != nil {
-		out.Error(err.Error())
+		out.Error("OpenFile: %s", err.Error())
 	}
 
 	return file
