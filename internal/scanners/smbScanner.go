@@ -17,9 +17,9 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
-	_, outFileName := fileNames(s.name, ipAddr, port, "")
+	txtFileName, outFileName := fileNames(s.name, ipAddr, port, "")
 
-	txtFile, err := os.Create("for/rel")
+	txtFile, err := os.Create(txtFileName)
 	if err != nil {
 		out.Error("%s: create file error: %s", s.name, err.Error())
 	}
