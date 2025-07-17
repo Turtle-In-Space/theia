@@ -46,5 +46,5 @@ func init() {
 		name:         "SMBScanner",
 	}
 
-	Register("smb", smbScanner)
+	register("smb", smbScanner)
 }

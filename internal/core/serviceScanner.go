@@ -18,7 +18,7 @@ type ServiceScanner interface {
 var serviceRegistry = make(map[string]ServiceScanner)
 
 // register the scanner to be used
-func Register(name string, scanner ServiceScanner) {
+func register(name string, scanner ServiceScanner) {
 	serviceRegistry[name] = scanner
 }
 
