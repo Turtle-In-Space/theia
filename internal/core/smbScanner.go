@@ -11,8 +11,8 @@ import (
 )
 
 type smbScanner struct {
-	aliases []string
-	name    string
+	serviceNames []string
+	name         string
 }
 
 // run the scan on a ipAddr for a port
@@ -32,7 +32,7 @@ func (s smbScanner) Run(ipAddr string, port int) {
 
 // get all aliases for service names
 func (s smbScanner) ServiceNames() (aliases []string) {
-	return s.aliases
+	return s.serviceNames
 }
 
 // get the name of this scanner
@@ -42,8 +42,8 @@ func (s smbScanner) Name() (name string) {
 
 func init() {
 	smbScanner := smbScanner{
-		aliases: []string{"microsoft-ds", "netbios-ssn"},
-		name:    "SMBScanner",
+		serviceNames: []string{"microsoft-ds", "netbios-ssn"},
+		name:         "SMBScanner",
 	}
 
 	Register("smb", smbScanner)
