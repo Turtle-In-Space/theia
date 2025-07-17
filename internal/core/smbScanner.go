@@ -17,11 +17,11 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
-	txtFileName, outFileName := fileNames(s.name, ipAddr, port, "")
-	txtFile := helpers.CreateFile(txtFileName)
+	resultFileName, outFileName := fileNames(s.name, ipAddr, port, ".txt", "")
+	resultFile := helpers.CreateFile(resultFileName)
 
 	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFileName)
-	cmd.Stdout = txtFile
+	cmd.Stdout = resultFile
 
 	out.Info("Running %s against %s", s.name, ipAddr)
 	err := cmd.Run()
@@ -31,7 +31,7 @@ func (s smbScanner) Run(ipAddr string, port int) {
 }
 
 // get all aliases for service names
-func (s smbScanner) ServiceNames() (aliases []string) {
+func (s smbScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
