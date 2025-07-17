@@ -8,18 +8,18 @@ import (
 )
 
 type TYPEScanner struct {
-	aliases []string
+	serviceNames []string
 	name    string
 }
 
 // run the scan on a ipAddr for a port
 func (s TYPEScanner) Run(ipAddr string, port int) {
-	out.Info("TYPEScanner - %s:%d", ipAddr, port)
+	out.Info("%s - %s:%d", s.name, ipAddr, port)
 }
 
-// get all aliases for service names
-func (s TYPEScanner) Aliases() (aliases []string) {
-	return s.aliases
+// get all serviceNames for service names
+func (s TYPEScanner) ServiceNames() (serviceNames []string) {
+	return s.serviceNames
 }
 
 // get the name of this scanner
@@ -29,9 +29,9 @@ func (s TYPEScanner) Name() (name string) {
 
 func init() {
 	typeScanner := TYPEScanner{
-		aliases: []string{"TYPE"},
+		serviceNames: []string{"service"},
 		name:    "TYPEScanner",
 	}
 
-	Register("type", smbScanner)
+	Register("type", typeScanner)
 }
