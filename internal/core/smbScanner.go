@@ -17,10 +17,10 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(ipAddr string, port int) {
-	resultFileName, outFileName := fileNames(s.name, ipAddr, port, ".txt", "")
+	resultFileName, dataFileName := fileNames(s.name, ipAddr, port, ".txt", "")
 	resultFile := helpers.CreateFile(resultFileName)
 
-	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", outFileName)
+	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", dataFileName)
 	cmd.Stdout = resultFile
 
 	out.Info("Running %s against %s", s.name, ipAddr)

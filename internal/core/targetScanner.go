@@ -42,7 +42,7 @@ type validScanner struct {
 // ----- Variables ----- //
 
 var (
-	xmlDir    string
+	dataDir   string
 	resultDir string
 )
 
@@ -74,10 +74,10 @@ func (t *target) addHosts(ip string) {
 // create a host and dirs for host
 func createHost(ip string) host {
 	// create dirs for host
-	xml := filepath.Join(xmlDir, ip)
+	data := filepath.Join(dataDir, ip)
 	results := filepath.Join(resultDir, ip)
 
-	helpers.CreateDir(xml)
+	helpers.CreateDir(data)
 	helpers.CreateDir(results)
 
 	return host{
@@ -91,27 +91,27 @@ func initProject(target target) {
 	os.Chdir(target.name)
 
 	// create dir structure
-	xmlDir = filepath.Clean("xml/")
+	dataDir = filepath.Clean("data/")
 	resultDir = filepath.Clean("results/")
 
-	helpers.CreateDir(xmlDir)
+	helpers.CreateDir(dataDir)
 	helpers.CreateDir(resultDir)
 
 	out.Info("created dirs")
 }
 
 func scanAllPorts(ip string) []service {
-	xmlOut := filepath.Join(xmlDir, "ports.xml")
+	dataOut := filepath.Join(dataDir, "ports.xml")
 	txtOut := filepath.Join(resultDir, "ports.txt")
 
-	cmd := exec.Command("nmap", ip, "-oX", xmlOut, "-oN", txtOut)
+	cmd := exec.Command("nmap", ip, "-oX", dataOut, "-oN", txtOut)
 	err := cmd.Run()
 
 	if err != nil {
 		out.Error("scanAllPorts: %s", err.Error())
 	}
 
-	portsFile := filepath.Join(xmlDir, "ports.xml")
+	portsFile := filepath.Join(dataDir, "ports.xml")
 	return GetServices(portsFile)
 }
 
