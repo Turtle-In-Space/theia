@@ -39,7 +39,7 @@ func fileNames(scanName string, ipAddr string, port int, resultExtension string,
 	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
 
 	resultFileName = filepath.Join("results", ipAddr, result)
-	dataFileName = filepath.Join("xml", ipAddr, data)
+	dataFileName = filepath.Join("data", ipAddr, data)
 
 	return
 }
