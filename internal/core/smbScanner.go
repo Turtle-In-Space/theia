@@ -31,7 +31,7 @@ func (s smbScanner) Run(ipAddr string, port int) {
 }
 
 // get all aliases for service names
-func (s smbScanner) Aliases() (aliases []string) {
+func (s smbScanner) ServiceNames() (aliases []string) {
 	return s.aliases
 }
 

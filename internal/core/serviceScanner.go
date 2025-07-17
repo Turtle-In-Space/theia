@@ -11,7 +11,7 @@ import (
 
 type ServiceScanner interface {
 	Run(target string, port int)
-	Aliases() []string
+	ServiceNames() []string
 	Name() string
 }
 
@@ -25,7 +25,7 @@ func Register(name string, scanner ServiceScanner) {
 // get the correct scanner from a service name
 func ScannerByServiceName(service string) (ServiceScanner, bool) {
 	for _, scanner := range serviceRegistry {
-		if slices.Contains(scanner.Aliases(), service) {
+		if slices.Contains(scanner.ServiceNames(), service) {
 			return scanner, true
 		}
 	}
