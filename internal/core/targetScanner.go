@@ -118,6 +118,9 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 
 	// find scan for each serivce
 	for _, host := range target.hosts {
+		// clear scanners per host
+		foundScanners = nil
+
 		for _, service := range host.services {
 			scan, ok := ScannerByServiceName(service.name)
 
