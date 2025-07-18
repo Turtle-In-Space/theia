@@ -46,6 +46,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 		return
 	}
 
+	out.Info("Running %s", scanner.Name())
 	resultFile := helpers.CreateFile(resultFileName)
 	cmd.Stdout = resultFile
 	err = cmd.Run()
@@ -56,12 +57,12 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 }
 
 // generate names for txt file and out file
-func fileNames(scanName string, ipAddr string, port int, resultExtension string, dataExtension string) (resultFileName string, dataFileName string) {
+func fileNames(host host, scanName, resultExtension, dataExtension string, port int) (resultFileName, dataFileName string) {
 	result := fmt.Sprintf("%d_%s%s", port, scanName, resultExtension)
 	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
 
-	resultFileName = filepath.Join("results", ipAddr, result)
-	dataFileName = filepath.Join("data", ipAddr, data)
+	resultFileName = filepath.Join(host.resultFolder, result)
+	dataFileName = filepath.Join(host.dataFolder, data)
 
 	return
 }

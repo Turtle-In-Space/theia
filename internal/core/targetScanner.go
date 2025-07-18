@@ -10,7 +10,7 @@ import (
 	"slices"
 	"sync"
 
-	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
+	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
@@ -52,7 +52,7 @@ var (
 // ----- Functions ----- //
 
 // begin the target scan
-func ScanTarget(ip string, targetName string) {
+func ScanTarget(ip, targetName string) {
 	target := createTarget(ip, targetName)
 	target.createTargetStructure()
 
