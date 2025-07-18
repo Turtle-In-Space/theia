@@ -61,7 +61,7 @@ func ScanTarget(ip string, targetName string) {
 }
 
 func createTarget(ip, name string) target {
-	dataOutPath := filepath.Join("nmap.xml") // := scanTarget(ip)
+	dataOutPath := filepath.Join("ports.xml") // := scanTarget(ip)
 	return GetTarget(dataOutPath, name)
 }
 

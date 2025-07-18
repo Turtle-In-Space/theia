@@ -5,9 +5,6 @@ package core
 
 import (
 	"os/exec"
-
-	"github.com/Turtle-In-Space/theia/pkg/helpers"
-	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 type smbScanner struct {
@@ -18,16 +15,9 @@ type smbScanner struct {
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(service service, host host) {
 	resultFileName, dataFileName := fileNames(s.name, host.ipAddr, service.port, ".txt", "")
-	resultFile := helpers.CreateFile(resultFileName)
 
 	cmd := exec.Command("enum4linux-ng", "-A", host.ipAddr, "-oJ", dataFileName)
-	cmd.Stdout = resultFile
-
-	out.Info("Running %s against %s", s.name, host.ipAddr)
-	err := cmd.Run()
-	if err != nil {
-		out.Error("%s: command error: %s", s.name, err.Error())
-	}
+	execute(s, cmd, resultFileName)
 }
 
 // get all aliases for service names
