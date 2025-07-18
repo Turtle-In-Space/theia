@@ -23,13 +23,15 @@ type target struct {
 }
 
 type host struct {
+	hostname string
 	ipAddr   string
 	services []service
 }
 
 type service struct {
-	name string
-	port int
+	name   string
+	ipAddr string
+	port   int
 }
 
 // TODO rename, add ipAddr
@@ -50,45 +52,21 @@ var (
 
 // begin the target scan
 func ScanTarget(ip string, targetName string) {
-	target := createTarget(targetName)
-	initProject(target)
-	target.addHosts(ip)
+	target := createTarget(ip, targetName)
+	target.createTargetStructure()
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
 }
 
-func createTarget(name string) target {
-
-	return target{
-		name:  name,
-		hosts: nil,
-	}
+func createTarget(ip, name string) target {
+	dataOutPath := scanTarget(ip)
+	return GetTarget(dataOutPath, name)
 }
 
-// add all hosts to target
-func (t *target) addHosts(ip string) {
-	t.hosts = []host{createHost(ip)}
-}
-
-// create a host and dirs for host
-func createHost(ip string) host {
-	// create dirs for host
-	data := filepath.Join(dataDir, ip)
-	results := filepath.Join(resultDir, ip)
-
-	helpers.CreateDir(data)
-	helpers.CreateDir(results)
-
-	return host{
-		ipAddr:   ip,
-		services: scanAllPorts(ip),
-	}
-}
-
-func initProject(target target) {
-	helpers.CreateDir(target.name)
-	os.Chdir(target.name)
+func (t *target) createTargetStructure() {
+	helpers.CreateDir(t.name)
+	os.Chdir(t.name)
 
 	// create dir structure
 	dataDir = filepath.Clean("data/")
@@ -98,10 +76,24 @@ func initProject(target target) {
 	helpers.CreateDir(resultDir)
 
 	out.Info("created dirs")
+
+	for _, host := range t.hosts {
+		createHost(host.ipAddr)
+	}
 }
 
-func scanAllPorts(ip string) []service {
-	dataOut := filepath.Join(dataDir, "ports.xml")
+// create a host and dirs for host
+func createHost(ip string) {
+	// create dirs for host
+	data := filepath.Join(dataDir, ip)
+	results := filepath.Join(resultDir, ip)
+
+	helpers.CreateDir(data)
+	helpers.CreateDir(results)
+}
+
+func scanTarget(ip string) (dataOut string) {
+	dataOut = filepath.Join(dataDir, "ports.xml")
 	txtOut := filepath.Join(resultDir, "ports.txt")
 
 	cmd := exec.Command("nmap", ip, "-oX", dataOut, "-oN", txtOut)
@@ -111,8 +103,7 @@ func scanAllPorts(ip string) []service {
 		out.Error("scanAllPorts: %s", err.Error())
 	}
 
-	portsFile := filepath.Join(dataDir, "ports.xml")
-	return GetServices(portsFile)
+	return
 }
 
 func queueScanners(target target) (servicesWithScan []validScanner) {

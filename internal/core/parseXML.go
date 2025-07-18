@@ -16,7 +16,21 @@ type nmapRun struct {
 }
 
 type xmlHost struct {
-	Ports xmlPorts `xml:"ports"`
+	Ports    xmlPorts     `xml:"ports"`
+	Address  xmlAddress   `xml:"address"`
+	Hostname xmlHostnames `xml:"hostnames"`
+}
+
+type xmlAddress struct {
+	Addr string `xml:"addr,attr"`
+}
+
+type xmlHostnames struct {
+	Hostnames []xmlHostname
+}
+
+type xmlHostname struct {
+	Name string `xml:"name,attr"`
 }
 
 type xmlPorts struct {
@@ -33,9 +47,7 @@ type xmlService struct {
 	Name string `xml:"name,attr"`
 }
 
-// Parse all servies in `xmlFilePath`
-// Returns map of [port]service
-func GetServices(xmlFilePath string) []service {
+func GetTarget(xmlFilePath, targetName string) target {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
@@ -44,24 +56,44 @@ func GetServices(xmlFilePath string) []service {
 	var results nmapRun
 	xml.Unmarshal(byteValue, &results)
 
-	return parseServices(results)
+	return parseTarget(results, targetName)
 }
 
 // Stores all services in a slice
-func parseServices(results nmapRun) (services []service) {
-	for _, host := range results.Hosts {
-		for _, port := range host.Ports.Ports {
-			serviceName := port.Service.Name
+func parseTarget(results nmapRun, name string) target {
+	return target{
+		name:  name,
+		hosts: parseHosts(results),
+	}
+}
 
-			if serviceName == "" {
-				serviceName = "unknown"
-			}
+// Stores all hosts in a slice
+func parseHosts(results nmapRun) (hosts []host) {
+	for _, newHost := range results.Hosts {
+		hosts = append(hosts, host{
+			hostname: newHost.Hostname.Hostnames[0].Name,
+			ipAddr:   newHost.Address.Addr,
+			services: parseServices(newHost),
+		})
+	}
 
-			services = append(services, service{
-				name: serviceName,
-				port: port.PortID,
-			})
+	return
+}
+
+// Stores all services in a slice
+func parseServices(newHost xmlHost) (services []service) {
+	for _, port := range newHost.Ports.Ports {
+		serviceName := port.Service.Name
+
+		if serviceName == "" {
+			serviceName = "unknown"
 		}
+
+		services = append(services, service{
+			name:   serviceName,
+			ipAddr: newHost.Address.Addr,
+			port:   port.PortID,
+		})
 	}
 
 	return
