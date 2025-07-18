@@ -70,8 +70,18 @@ func parseTarget(results nmapRun, name string) target {
 // Stores all hosts in a slice
 func parseHosts(results nmapRun) (hosts []host) {
 	for _, newHost := range results.Hosts {
+
+		//TODO: fix or explain this part
+		hostnames := newHost.Hostname.Hostnames
+		var name string
+		if len(hostnames) == 0 {
+			name = ""
+		} else {
+			name = hostnames[0].Name
+		}
+
 		hosts = append(hosts, host{
-			hostname: newHost.Hostname.Hostnames[0].Name,
+			hostname: name,
 			ipAddr:   newHost.Address.Addr,
 			services: parseServices(newHost),
 		})
