@@ -57,8 +57,8 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 }
 
 // generate names for txt file and out file
-func fileNames(host host, scanName, resultExtension, dataExtension string, port int) (resultFileName, dataFileName string) {
-	result := fmt.Sprintf("%d_%s%s", port, scanName, resultExtension)
+func fileNames(host host, scanName, dataExtension string, port int) (resultFileName, dataFileName string) {
+	result := fmt.Sprintf("%d_%s.txt", port, scanName)
 	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
 
 	resultFileName = filepath.Join(host.resultFolder, result)
