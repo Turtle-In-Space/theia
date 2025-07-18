@@ -78,8 +78,14 @@ func (t *target) createTargetStructure() {
 
 	out.Info("created dirs")
 
-	for _, host := range t.hosts {
-		host.addDirs()
+	if len(t.hosts) == 1 {
+		host := t.hosts[0]
+		host.dataFolder = dataDir
+		host.resultFolder = resultDir
+	} else {
+		for _, host := range t.hosts {
+			host.addDirs()
+		}
 	}
 }
 
