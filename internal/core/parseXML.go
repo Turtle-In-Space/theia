@@ -100,9 +100,8 @@ func parseServices(newHost xmlHost) (services []service) {
 		}
 
 		services = append(services, service{
-			name:   serviceName,
-			ipAddr: newHost.Address.Addr,
-			port:   port.PortID,
+			name: serviceName,
+			port: port.PortID,
 		})
 	}
 

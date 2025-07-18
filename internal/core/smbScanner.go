@@ -16,14 +16,14 @@ type smbScanner struct {
 }
 
 // run the scan on a ipAddr for a port
-func (s smbScanner) Run(ipAddr string, port int) {
-	resultFileName, dataFileName := fileNames(s.name, ipAddr, port, ".txt", "")
+func (s smbScanner) Run(service service, host host) {
+	resultFileName, dataFileName := fileNames(s.name, host.ipAddr, service.port, ".txt", "")
 	resultFile := helpers.CreateFile(resultFileName)
 
-	cmd := exec.Command("enum4linux-ng", "-A", ipAddr, "-oJ", dataFileName)
+	cmd := exec.Command("enum4linux-ng", "-A", host.ipAddr, "-oJ", dataFileName)
 	cmd.Stdout = resultFile
 
-	out.Info("Running %s against %s", s.name, ipAddr)
+	out.Info("Running %s against %s", s.name, host.ipAddr)
 	err := cmd.Run()
 	if err != nil {
 		out.Error("%s: command error: %s", s.name, err.Error())

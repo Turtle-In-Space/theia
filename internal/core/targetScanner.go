@@ -31,16 +31,15 @@ type host struct {
 }
 
 type service struct {
-	name   string
-	ipAddr string
-	port   int
+	name string
+	port int
 }
 
 // TODO rename, add ipAddr
 type validScanner struct {
 	scanner ServiceScanner
-	ipAddr  string
-	port    int
+	service service
+	host    host
 }
 
 // ----- Variables ----- //
@@ -122,8 +121,8 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 					servicesWithScan = append(servicesWithScan,
 						validScanner{
 							scanner: scan,
-							ipAddr:  host.ipAddr,
-							port:    service.port,
+							service: service,
+							host:    host,
 						})
 					foundScanners = append(foundScanners, scan.Name())
 				}
@@ -144,7 +143,7 @@ func runScanners(scannerQueue []validScanner) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			scanner.scanner.Run(scanner.ipAddr, scanner.port)
+			scanner.scanner.Run(scanner.service, scanner.host)
 		}()
 	}
 

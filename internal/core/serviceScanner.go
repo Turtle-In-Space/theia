@@ -10,7 +10,7 @@ import (
 )
 
 type ServiceScanner interface {
-	Run(target string, port int)
+	Run(service service, host host)
 	ServiceNames() []string
 	Name() string
 }
