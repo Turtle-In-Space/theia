@@ -23,9 +23,11 @@ type target struct {
 }
 
 type host struct {
-	hostname string
-	ipAddr   string
-	services []service
+	hostname     string
+	ipAddr       string
+	services     []service
+	dataFolder   string
+	resultFolder string
 }
 
 type service struct {
@@ -60,7 +62,7 @@ func ScanTarget(ip string, targetName string) {
 }
 
 func createTarget(ip, name string) target {
-	dataOutPath := scanTarget(ip)
+	dataOutPath := filepath.Join("nmap.xml") // := scanTarget(ip)
 	return GetTarget(dataOutPath, name)
 }
 
@@ -78,18 +80,18 @@ func (t *target) createTargetStructure() {
 	out.Info("created dirs")
 
 	for _, host := range t.hosts {
-		createHost(host.ipAddr)
+		host.addDirs()
 	}
 }
 
 // create a host and dirs for host
-func createHost(ip string) {
+func (h *host) addDirs() {
 	// create dirs for host
-	data := filepath.Join(dataDir, ip)
-	results := filepath.Join(resultDir, ip)
+	h.dataFolder = filepath.Join(dataDir, h.ipAddr)
+	h.resultFolder = filepath.Join(resultDir, h.ipAddr)
 
-	helpers.CreateDir(data)
-	helpers.CreateDir(results)
+	helpers.CreateDir(h.dataFolder)
+	helpers.CreateDir(h.resultFolder)
 }
 
 func scanTarget(ip string) (dataOut string) {
