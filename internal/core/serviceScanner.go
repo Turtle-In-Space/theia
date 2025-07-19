@@ -56,6 +56,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 
 	out.Info("Running %s", scanner.Name())
 	resultFile := helpers.CreateFile(resultFileName)
+	defer resultFile.Close()
 	cmd.Stdout = resultFile
 	// err = cmd.Run()
 	//
