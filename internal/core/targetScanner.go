@@ -84,8 +84,8 @@ func (t *target) addDirs() {
 		host.dataDir = dataDir
 		host.resultDir = resultDir
 	} else {
-		for _, host := range t.hosts {
-			host.addDirs()
+		for i := range t.hosts {
+			t.hosts[i].addDirs()
 		}
 	}
 }
