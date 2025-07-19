@@ -69,8 +69,8 @@ func fileNames(host host, scanName, dataExtension string, port int) (resultFileN
 	result := fmt.Sprintf("%d_%s.txt", port, scanName)
 	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
 
-	resultFileName = filepath.Join(host.resultFolder, result)
-	dataFileName = filepath.Join(host.dataFolder, data)
+	resultFileName = filepath.Join(host.resultDir, result)
+	dataFileName = filepath.Join(host.dataDir, data)
 
 	return
 }

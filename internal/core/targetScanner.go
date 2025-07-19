@@ -23,11 +23,11 @@ type target struct {
 }
 
 type host struct {
-	hostname     string
-	ipAddr       string
-	services     []service
-	dataFolder   string
-	resultFolder string
+	hostname  string
+	ipAddr    string
+	services  []service
+	dataDir   string
+	resultDir string
 }
 
 type service struct {
@@ -53,9 +53,10 @@ var (
 
 // begin the target scan
 func ScanTarget(ip, targetName string) {
-	dataOutPath := filepath.Join("ports.xml") // := scanTarget(ip)
+	createTargetStructure(targetName)
+	dataOutPath := filepath.Join("..", "ports.xml") // := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
-	target.createTargetStructure()
+	target.addDirs()
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
@@ -63,23 +64,25 @@ func ScanTarget(ip, targetName string) {
 
 // ----- Private Functions ----- //
 
-func (t *target) createTargetStructure() {
-	helpers.CreateDir(t.name)
-	os.Chdir(t.name)
+func createTargetStructure(name string) {
+	helpers.CreateDir(name)
+	os.Chdir(name)
 
-	// create dir structure
-	dataDir = filepath.Clean("data/")
-	resultDir = filepath.Clean("results/")
+	dataDir = filepath.Join("scans", "data/")
+	resultDir = filepath.Join("scans", "results/")
 
+	helpers.CreateDir("loot")
+	helpers.CreateDir("exploits")
+	helpers.CreateDir("scans")
 	helpers.CreateDir(dataDir)
 	helpers.CreateDir(resultDir)
+}
 
-	out.Info("created dirs")
-
+func (t *target) addDirs() {
 	if len(t.hosts) == 1 {
-		host := t.hosts[0]
-		host.dataFolder = dataDir
-		host.resultFolder = resultDir
+		host := &t.hosts[0]
+		host.dataDir = dataDir
+		host.resultDir = resultDir
 	} else {
 		for _, host := range t.hosts {
 			host.addDirs()
@@ -90,11 +93,11 @@ func (t *target) createTargetStructure() {
 // create a host and dirs for host
 func (h *host) addDirs() {
 	// create dirs for host
-	h.dataFolder = filepath.Join(dataDir, h.ipAddr)
-	h.resultFolder = filepath.Join(resultDir, h.ipAddr)
+	h.dataDir = filepath.Join(dataDir, h.ipAddr)
+	h.resultDir = filepath.Join(resultDir, h.ipAddr)
 
-	helpers.CreateDir(h.dataFolder)
-	helpers.CreateDir(h.resultFolder)
+	helpers.CreateDir(h.dataDir)
+	helpers.CreateDir(h.resultDir)
 }
 
 func scanTarget(ip string) (dataOut string) {
