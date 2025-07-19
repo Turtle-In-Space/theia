@@ -17,10 +17,9 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     msg.Usage,
-	Short:   msg.Short,
-	Long:    msg.Long,
-	Version: "v0.1.0",
+	Use:   msg.Usage,
+	Short: msg.Short,
+	Long:  msg.Long,
 
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
