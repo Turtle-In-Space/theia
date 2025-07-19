@@ -7,10 +7,14 @@ import (
 	"os/exec"
 )
 
+// ----- Structs ----- //
+
 type smbScanner struct {
 	serviceNames []string
 	name         string
 }
+
+// ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(service service, host host) {
@@ -29,6 +33,8 @@ func (s smbScanner) ServiceNames() []string {
 func (s smbScanner) Name() (name string) {
 	return s.name
 }
+
+// ----- Private Functions ----- //
 
 func init() {
 	smbScanner := smbScanner{

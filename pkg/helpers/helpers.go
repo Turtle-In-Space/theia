@@ -9,6 +9,8 @@ import (
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
+// ----- Public Functions ----- //
+
 // create a dir with the given name
 func CreateDir(name string) {
 	err := os.MkdirAll(name, 0766)

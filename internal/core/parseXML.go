@@ -7,10 +7,10 @@ import (
 	"encoding/xml"
 	"io"
 
-	helpers "github.com/Turtle-In-Space/theia/pkg/helpers"
+	"github.com/Turtle-In-Space/theia/pkg/helpers"
 )
 
-// ----- Define xml sections ----- //
+// ----- Structs ----- //
 type nmapRun struct {
 	Hosts []xmlHost `xml:"host"`
 }
@@ -47,6 +47,8 @@ type xmlService struct {
 	Name string `xml:"name,attr"`
 }
 
+// ----- Public Functions ----- //
+
 func GetTarget(xmlFilePath, targetName string) target {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
@@ -66,6 +68,8 @@ func parseTarget(results nmapRun, name string) target {
 		hosts: parseHosts(results),
 	}
 }
+
+// ----- Private Functions ----- //
 
 // Stores all hosts in a slice
 func parseHosts(results nmapRun) (hosts []host) {

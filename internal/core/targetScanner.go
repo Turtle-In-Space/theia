@@ -49,21 +49,19 @@ var (
 	resultDir string
 )
 
-// ----- Functions ----- //
+// ----- Public Functions ----- //
 
 // begin the target scan
 func ScanTarget(ip, targetName string) {
-	target := createTarget(ip, targetName)
+	dataOutPath := filepath.Join("ports.xml") // := scanTarget(ip)
+	target := GetTarget(dataOutPath, targetName)
 	target.createTargetStructure()
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
 }
 
-func createTarget(ip, name string) target {
-	dataOutPath := filepath.Join("ports.xml") // := scanTarget(ip)
-	return GetTarget(dataOutPath, name)
-}
+// ----- Private Functions ----- //
 
 func (t *target) createTargetStructure() {
 	helpers.CreateDir(t.name)

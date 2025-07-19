@@ -14,18 +14,19 @@ import (
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
+// ----- Interfaces ----- //
+
 type ServiceScanner interface {
 	Run(service service, host host)
 	ServiceNames() []string
 	Name() string
 }
 
+// ----- Variables ----- //
+
 var serviceRegistry = make(map[string]ServiceScanner)
 
-// register the scanner to be used
-func register(name string, scanner ServiceScanner) {
-	serviceRegistry[name] = scanner
-}
+// ----- Public Functions ----- //
 
 // get the correct scanner from a service name
 func ScannerByServiceName(service string) (ServiceScanner, bool) {
@@ -36,6 +37,13 @@ func ScannerByServiceName(service string) (ServiceScanner, bool) {
 	}
 
 	return nil, false
+}
+
+// ----- Private Functions ----- //
+
+// register the scanner to be used
+func register(name string, scanner ServiceScanner) {
+	serviceRegistry[name] = scanner
 }
 
 func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
@@ -49,11 +57,11 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	out.Info("Running %s", scanner.Name())
 	resultFile := helpers.CreateFile(resultFileName)
 	cmd.Stdout = resultFile
-	err = cmd.Run()
-
-	if err != nil {
-		out.Error("%s: command error: %s", scanner.Name(), err.Error())
-	}
+	// err = cmd.Run()
+	//
+	// if err != nil {
+	// 	out.Error("%s: command error: %s", scanner.Name(), err.Error())
+	// }
 }
 
 // generate names for txt file and out file
