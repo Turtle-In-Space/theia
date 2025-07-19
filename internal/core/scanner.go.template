@@ -4,34 +4,52 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package core
 
 import (
-	out "github.com/Turtle-In-Space/theia/pkg/output"
+	"fmt"
+	"os/exec"
+	"path/filepath"
 )
 
-type TYPEScanner struct {
+// ----- Structs ----- //
+
+type webDirScanner struct {
 	serviceNames []string
-	name    string
+	name         string
 }
+
+// ----- Variables ----- //
+
+var seclistPath string = filepath.Join("usr", "share", "seclists")
+
+// ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s TYPEScanner) Run(ipAddr string, port int) {
-	out.Info("%s - %s:%d", s.name, ipAddr, port)
+func (s webDirScanner) Run(service service, host host) {
+	resultFileName, dataFileName := fileNames(host, s.name, ".json", service.port)
+
+	url := fmt.Sprintf("http://%s:%d", host.ipAddr, service.port)
+	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
+
+	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-c", "-ach", "-o", dataFileName)
+	execute(s, cmd, resultFileName)
 }
 
-// get all serviceNames for service names
-func (s TYPEScanner) ServiceNames() (serviceNames []string) {
+// get all aliases for service names
+func (s webDirScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
 // get the name of this scanner
-func (s TYPEScanner) Name() (name string) {
+func (s webDirScanner) Name() (name string) {
 	return s.name
 }
 
+// ----- Private Functions ----- //
+
 func init() {
-	typeScanner := TYPEScanner{
-		serviceNames: []string{"service"},
-		name:    "TYPEScanner",
+	webDirScanner := webDirScanner{
+		serviceNames: []string{"http"},
+		name:         "WebDirScanner",
 	}
 
-	Register("type", typeScanner)
+	register("webDir", webDirScanner)
 }
