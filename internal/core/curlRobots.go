@@ -45,5 +45,5 @@ func init() {
 		name:         "curlRobotsScanner",
 	}
 
-	register("curlRobot", curlRobotScanner)
+	register("curlRobots", curlRobotScanner)
 }
