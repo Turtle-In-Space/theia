@@ -28,12 +28,16 @@ var serviceRegistry = make(map[string]ServiceScanner)
 
 // ----- Public Functions ----- //
 
-// get the correct scanner from a service name
-func ScannerByServiceName(service string) (ServiceScanner, bool) {
+// get scanners that target a service
+func ScannerByServiceName(service string) (scanners []ServiceScanner, ok bool) {
 	for _, scanner := range serviceRegistry {
 		if slices.Contains(scanner.ServiceNames(), service) {
-			return scanner, true
+			scanners = append(scanners, scanner)
 		}
+	}
+
+	if len(scanners) > 0 {
+		return scanners, true
 	}
 
 	return nil, false

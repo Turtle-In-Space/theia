@@ -54,7 +54,7 @@ var (
 // begin the target scan
 func ScanTarget(ip, targetName string) {
 	createTargetStructure(targetName)
-	dataOutPath := filepath.Join("..", "ports.xml") // := scanTarget(ip)
+	dataOutPath := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
 	target.addDirs()
 
@@ -123,18 +123,20 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 		foundScanners = nil
 
 		for _, service := range host.services {
-			scan, ok := ScannerByServiceName(service.name)
+			scanners, ok := ScannerByServiceName(service.name)
 
 			if ok {
-				out.Info("Found service %s on port %d - using scan %s", service.name, service.port, scan.Name())
-				if !slices.Contains(foundScanners, scan.Name()) {
-					servicesWithScan = append(servicesWithScan,
-						validScanner{
-							scanner: scan,
-							service: service,
-							host:    host,
-						})
-					foundScanners = append(foundScanners, scan.Name())
+				for _, scan := range scanners {
+					out.Info("Found service %s on port %d - using scan %s", service.name, service.port, scan.Name())
+					if !slices.Contains(foundScanners, scan.Name()) {
+						servicesWithScan = append(servicesWithScan,
+							validScanner{
+								scanner: scan,
+								service: service,
+								host:    host,
+							})
+						foundScanners = append(foundScanners, scan.Name())
+					}
 				}
 			} else {
 				out.Warn("Found service %s on port %d - found no scan", service.name, service.port)
