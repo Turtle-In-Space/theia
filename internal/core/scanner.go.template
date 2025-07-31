@@ -4,7 +4,6 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package core
 
 import (
-	"fmt"
 	"os/exec"
 	"path/filepath"
 )
@@ -16,17 +15,13 @@ type TYPEscanner struct {
 	name         string
 }
 
-// ----- Variables ----- //
-
-var seclistPath string = filepath.Join("usr", "share", "seclists")
-
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
 func (s TYPEscanner) Run(service service, host host) {
 	resultFileName, dataFileName := fileNames(host, s.name, "", service.port)
 
-	cmd := exec.Command("cmd", "args")
+	cmd := exec.Command("cmd", "-o", "dataFileName")
 	execute(s, cmd, resultFileName)
 }
 
@@ -43,7 +38,7 @@ func (s TYPEscanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	TYPEscanner := webDirScanner{
+	TYPEscanner := TYPEscanner{
 		serviceNames: []string{"service"},
 		name:         "TYPEscanner",
 	}
