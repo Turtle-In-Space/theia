@@ -16,13 +16,14 @@ type nmapRun struct {
 }
 
 type xmlHost struct {
-	Ports    xmlPorts     `xml:"ports"`
-	Address  xmlAddress   `xml:"address"`
-	Hostname xmlHostnames `xml:"hostnames"`
+	Ports     xmlPorts     `xml:"ports"`
+	Addresses []xmlAddress `xml:"address"`
+	Hostname  xmlHostnames `xml:"hostnames"`
 }
 
 type xmlAddress struct {
 	Addr string `xml:"addr,attr"`
+	Type string `xml:"addrtype,attr"`
 }
 
 type xmlHostnames struct {
@@ -74,19 +75,27 @@ func parseTarget(results nmapRun, name string) target {
 // Stores all hosts in a slice
 func parseHosts(results nmapRun) (hosts []host) {
 	for _, newHost := range results.Hosts {
+		var name, ipAddr string
 
 		//TODO: fix or explain this part
 		hostnames := newHost.Hostname.Hostnames
-		var name string
 		if len(hostnames) == 0 {
 			name = ""
 		} else {
 			name = hostnames[0].Name
 		}
 
+		//TODO: reurun mac, v4 and v6?
+		for _, addr := range newHost.Addresses {
+			if addr.Type == "ipv4" {
+				ipAddr = addr.Addr
+				break
+			}
+		}
+
 		hosts = append(hosts, host{
 			hostname: name,
-			ipAddr:   newHost.Address.Addr,
+			ipAddr:   ipAddr,
 			services: parseServices(newHost),
 		})
 	}
