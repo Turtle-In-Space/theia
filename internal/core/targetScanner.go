@@ -10,8 +10,8 @@ import (
 	"slices"
 	"sync"
 
-	models "github.com/Turtle-In-Space/theia/internal/models"
-	scanners "github.com/Turtle-In-Space/theia/internal/scanners"
+	"github.com/Turtle-In-Space/theia/internal/models"
+	"github.com/Turtle-In-Space/theia/internal/scanners"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )

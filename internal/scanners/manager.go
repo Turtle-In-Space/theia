@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	models "github.com/Turtle-In-Space/theia/internal/models"
+	"github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
