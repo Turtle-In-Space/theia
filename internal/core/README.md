@@ -1,3 +1,3 @@
 # What does this folder contain?
 
-This folder contains every type of scan `theia` will execute.
+This folder contains the core functionality for `theia`.
