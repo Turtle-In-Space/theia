@@ -1,7 +1,7 @@
 /*
 Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
-package core
+package scanners
 
 import (
 	"errors"
@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"slices"
 
+	models "github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
@@ -17,7 +18,7 @@ import (
 // ----- Interfaces ----- //
 
 type ServiceScanner interface {
-	Run(service service, host host)
+	Run(service models.Service, host models.Host)
 	ServiceNames() []string
 	Name() string
 }
@@ -74,12 +75,12 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 }
 
 // generate names for txt file and out file
-func fileNames(host host, scanName, dataExtension string, port int) (resultFileName, dataFileName string) {
+func fileNames(host models.Host, scanName, dataExtension string, port int) (resultFileName, dataFileName string) {
 	result := fmt.Sprintf("%d_%s.txt", port, scanName)
 	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
 
-	resultFileName = filepath.Join(host.resultDir, result)
-	dataFileName = filepath.Join(host.dataDir, data)
+	resultFileName = filepath.Join(host.ResultDir, result)
+	dataFileName = filepath.Join(host.DataDir, data)
 
 	return
 }

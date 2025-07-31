@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"io"
 
+	"github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
 )
 
@@ -51,7 +52,7 @@ type xmlService struct {
 // ----- Public Functions ----- //
 
 // parse the target from a nmap scan
-func GetTarget(xmlFilePath, targetName string) target {
+func GetTarget(xmlFilePath, targetName string) models.Target {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
@@ -66,15 +67,15 @@ func GetTarget(xmlFilePath, targetName string) target {
 // ----- Private Functions ----- //
 
 // begin parsing the target
-func parseTarget(results nmapRun, name string) target {
-	return target{
-		name:  name,
-		hosts: parseHosts(results),
+func parseTarget(results nmapRun, name string) models.Target {
+	return models.Target{
+		Name:  name,
+		Hosts: parseHosts(results),
 	}
 }
 
 // Stores all hosts in a slice
-func parseHosts(results nmapRun) (hosts []host) {
+func parseHosts(results nmapRun) (hosts []models.Host) {
 	for _, newHost := range results.Hosts {
 		var name, ipAddr string
 
@@ -94,10 +95,10 @@ func parseHosts(results nmapRun) (hosts []host) {
 			}
 		}
 
-		hosts = append(hosts, host{
-			hostname: name,
-			ipAddr:   ipAddr,
-			services: parseServices(newHost),
+		hosts = append(hosts, models.Host{
+			Hostname: name,
+			IPAddr:   ipAddr,
+			Services: parseServices(newHost),
 		})
 	}
 
@@ -105,7 +106,7 @@ func parseHosts(results nmapRun) (hosts []host) {
 }
 
 // Stores all services in a slice
-func parseServices(newHost xmlHost) (services []service) {
+func parseServices(newHost xmlHost) (services []models.Service) {
 	for _, port := range newHost.Ports.Ports {
 		serviceName := port.Service.Name
 
@@ -113,9 +114,9 @@ func parseServices(newHost xmlHost) (services []service) {
 			serviceName = "unknown"
 		}
 
-		services = append(services, service{
-			name: serviceName,
-			port: port.PortID,
+		services = append(services, models.Service{
+			Name: serviceName,
+			Port: port.PortID,
 		})
 	}
 

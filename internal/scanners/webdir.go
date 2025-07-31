@@ -1,12 +1,14 @@
 /*
 Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
-package core
+package scanners
 
 import (
 	"fmt"
 	"os/exec"
 	"path/filepath"
+
+	"github.com/Turtle-In-Space/theia/internal/models"
 )
 
 // ----- Structs ----- //
@@ -23,10 +25,10 @@ var seclistPath string = filepath.Join("usr", "share", "seclists")
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s webDirScanner) Run(service service, host host) {
-	resultFileName, dataFileName := fileNames(host, s.name, ".json", service.port)
+func (s webDirScanner) Run(service models.Service, host models.Host) {
+	resultFileName, dataFileName := fileNames(host, s.name, ".json", service.Port)
 
-	url := fmt.Sprintf("http://%s:%d", host.ipAddr, service.port)
+	url := fmt.Sprintf("http://%s:%d", host.IPAddr, service.Port)
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
 	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-c", "-ach", "-o", dataFileName)

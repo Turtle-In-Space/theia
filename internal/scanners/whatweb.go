@@ -1,11 +1,13 @@
 /*
 Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
-package core
+package scanners
 
 import (
 	"fmt"
 	"os/exec"
+
+	"github.com/Turtle-In-Space/theia/internal/models"
 )
 
 // ----- Structs ----- //
@@ -18,10 +20,10 @@ type WhatWebScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s WhatWebScanner) Run(service service, host host) {
-	resultFileName, _ := fileNames(host, s.name, "", service.port)
+func (s WhatWebScanner) Run(service models.Service, host models.Host) {
+	resultFileName, _ := fileNames(host, s.name, "", service.Port)
 
-	url := fmt.Sprintf("http://%s:%d", host.ipAddr, service.port)
+	url := fmt.Sprintf("http://%s:%d", host.IPAddr, service.Port)
 
 	cmd := exec.Command("whatweb", url, "-v")
 	execute(s, cmd, resultFileName)

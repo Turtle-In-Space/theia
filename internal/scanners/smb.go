@@ -1,10 +1,12 @@
 /*
 Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
-package core
+package scanners
 
 import (
 	"os/exec"
+
+	"github.com/Turtle-In-Space/theia/internal/models"
 )
 
 // ----- Structs ----- //
@@ -17,10 +19,10 @@ type smbScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s smbScanner) Run(service service, host host) {
-	resultFileName, dataFileName := fileNames(host, s.name, "", service.port)
+func (s smbScanner) Run(service models.Service, host models.Host) {
+	resultFileName, dataFileName := fileNames(host, s.name, "", service.Port)
 
-	cmd := exec.Command("enum4linux-ng", "-A", host.ipAddr, "-oJ", dataFileName)
+	cmd := exec.Command("enum4linux-ng", "-A", host.IPAddr, "-oJ", dataFileName)
 	execute(s, cmd, resultFileName)
 }
 

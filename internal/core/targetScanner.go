@@ -10,36 +10,17 @@ import (
 	"slices"
 	"sync"
 
+	models "github.com/Turtle-In-Space/theia/internal/models"
+	scanners "github.com/Turtle-In-Space/theia/internal/scanners"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
 	out "github.com/Turtle-In-Space/theia/pkg/output"
 )
 
-// ----- Structs ----- //
-
-// implemeted for future use
-type target struct {
-	name  string
-	hosts []host
-}
-
-type host struct {
-	hostname  string
-	ipAddr    string
-	services  []service
-	dataDir   string
-	resultDir string
-}
-
-type service struct {
-	name string
-	port int
-}
-
 // TODO rename, add ipAddr
 type validScanner struct {
-	scanner ServiceScanner
-	service service
-	host    host
+	scanner scanners.ServiceScanner
+	service models.Service
+	host    models.Host
 }
 
 // ----- Variables ----- //
@@ -56,7 +37,7 @@ func ScanTarget(ip, targetName string) {
 	createTargetStructure(targetName)
 	dataOutPath := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
-	target.addDirs()
+	target.AddDirs(dataDir, resultDir)
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
@@ -78,28 +59,6 @@ func createTargetStructure(name string) {
 	helpers.CreateDir(resultDir)
 }
 
-func (t *target) addDirs() {
-	if len(t.hosts) == 1 {
-		host := &t.hosts[0]
-		host.dataDir = dataDir
-		host.resultDir = resultDir
-	} else {
-		for i := range t.hosts {
-			t.hosts[i].addDirs()
-		}
-	}
-}
-
-// create a host and dirs for host
-func (h *host) addDirs() {
-	// create dirs for host
-	h.dataDir = filepath.Join(dataDir, h.ipAddr)
-	h.resultDir = filepath.Join(resultDir, h.ipAddr)
-
-	helpers.CreateDir(h.dataDir)
-	helpers.CreateDir(h.resultDir)
-}
-
 func scanTarget(ip string) (dataOut string) {
 	dataOut = filepath.Join(dataDir, "ports.xml")
 	txtOut := filepath.Join(resultDir, "ports.txt")
@@ -114,20 +73,20 @@ func scanTarget(ip string) (dataOut string) {
 	return
 }
 
-func queueScanners(target target) (servicesWithScan []validScanner) {
+func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 	var foundScanners []string
 
 	// find scan for each serivce
-	for _, host := range target.hosts {
+	for _, host := range target.Hosts {
 		// clear scanners per host
 		foundScanners = nil
 
-		for _, service := range host.services {
-			scanners, ok := ScannerByServiceName(service.name)
+		for _, service := range host.Services {
+			scanners, ok := scanners.ScannerByServiceName(service.Name)
 
 			if ok {
 				for _, scan := range scanners {
-					out.Info("Found service %s on port %d - using scan %s", service.name, service.port, scan.Name())
+					out.Info("Found service %s on port %d - using scan %s", service.Name, service.Port, scan.Name())
 					if !slices.Contains(foundScanners, scan.Name()) {
 						servicesWithScan = append(servicesWithScan,
 							validScanner{
@@ -139,7 +98,7 @@ func queueScanners(target target) (servicesWithScan []validScanner) {
 					}
 				}
 			} else {
-				out.Warn("Found service %s on port %d - found no scan", service.name, service.port)
+				out.Warn("Found service %s on port %d - found no scan", service.Name, service.Port)
 			}
 		}
 	}

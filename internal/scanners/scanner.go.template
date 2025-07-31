@@ -1,7 +1,7 @@
 /*
 Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
-package core
+package scanners
 
 import (
 	"os/exec"
