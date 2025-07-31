@@ -59,14 +59,18 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	}
 
 	out.Info("Running %s", scanner.Name())
-	resultFile := helpers.CreateFile(resultFileName)
-	defer resultFile.Close()
-	cmd.Stdout = resultFile
-	// err = cmd.Run()
-	//
-	// if err != nil {
-	// 	out.Error("%s: command error: %s", scanner.Name(), err.Error())
-	// }
+
+	if resultFileName != "" {
+		resultFile := helpers.CreateFile(resultFileName)
+		defer resultFile.Close()
+		cmd.Stdout = resultFile
+	}
+
+	err = cmd.Run()
+
+	if err != nil {
+		out.Error("%s: command error: %s", scanner.Name(), err.Error())
+	}
 }
 
 // generate names for txt file and out file

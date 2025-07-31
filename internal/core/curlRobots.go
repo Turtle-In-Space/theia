@@ -19,12 +19,12 @@ type curlRobotsScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s curlRobotsScanner) Run(service service, host host) {
-	resultFileName, dataFileName := fileNames(host, s.name, ".html", service.port)
+	resultFileName, _ := fileNames(host, s.name, ".html", service.port)
 
 	url := fmt.Sprintf("http://%s:%d/robots.txt", host.ipAddr, service.port)
 
 	cmd := exec.Command("curl", url, "--fail", "--styled-output", "--output", resultFileName)
-	execute(s, cmd, dataFileName)
+	execute(s, cmd, "")
 }
 
 // get all aliases for service names
