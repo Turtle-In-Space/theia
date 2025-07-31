@@ -21,6 +21,7 @@ func (s smbScanner) Run(service service, host host) {
 	resultFileName, dataFileName := fileNames(host, s.name, "", service.port)
 
 	cmd := exec.Command("enum4linux-ng", "-A", host.ipAddr, "-oJ", dataFileName)
+	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
 	execute(s, cmd, resultFileName)
 }
 
