@@ -50,6 +50,7 @@ type xmlService struct {
 
 // ----- Public Functions ----- //
 
+// parse the target from a nmap scan
 func GetTarget(xmlFilePath, targetName string) target {
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
@@ -62,7 +63,9 @@ func GetTarget(xmlFilePath, targetName string) target {
 	return parseTarget(results, targetName)
 }
 
-// Stores all services in a slice
+// ----- Private Functions ----- //
+
+// begin parsing the target
 func parseTarget(results nmapRun, name string) target {
 	return target{
 		name:  name,
@@ -70,14 +73,12 @@ func parseTarget(results nmapRun, name string) target {
 	}
 }
 
-// ----- Private Functions ----- //
-
 // Stores all hosts in a slice
 func parseHosts(results nmapRun) (hosts []host) {
 	for _, newHost := range results.Hosts {
 		var name, ipAddr string
 
-		//TODO: fix or explain this part
+		//TODO: sometimes multiple hostnames for sum reason, use first as all are the same?
 		hostnames := newHost.Hostname.Hostnames
 		if len(hostnames) == 0 {
 			name = ""
