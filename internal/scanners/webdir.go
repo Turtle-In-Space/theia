@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/Turtle-In-Space/theia/internal/models"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // ----- Structs ----- //
@@ -20,18 +21,19 @@ type webDirScanner struct {
 
 // ----- Variables ----- //
 
-var seclistPath string = filepath.Join("usr", "share", "seclists")
+var seclistPath string = filepath.Join("/usr", "share", "seclists")
 
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s webDirScanner) Run(service models.Service, host models.Host) {
-	resultFileName, dataFileName := fileNames(host, s.name, ".json", service.Port)
+func (s webDirScanner) Run(port models.Port, host models.Host) {
+	resultFileName, dataFileName := fileNames(s.name, ".json", port)
 
-	url := fmt.Sprintf("http://%s:%d", host.IPAddr, service.Port)
+	url := fmt.Sprintf("http://%s:%d/FUZZ", host.IPAddr, port.ID)
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
-	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-c", "-ach", "-o", dataFileName)
+	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-o", dataFileName)
+	output.Debug(cmd.String())
 	execute(s, cmd, resultFileName)
 }
 
