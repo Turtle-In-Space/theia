@@ -6,7 +6,6 @@ package scanners
 import (
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"slices"
@@ -69,11 +68,10 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	}
 
 	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
-	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 
 	if err != nil {
-		out.Error("%s: command error: %s", scanner.Name(), err.Error())
+		out.Warn("command: %s - error: %s", cmd.String(), err.Error())
 	}
 }
 
