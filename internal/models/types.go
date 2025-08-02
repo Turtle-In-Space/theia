@@ -27,7 +27,7 @@ type Host struct {
 }
 
 type Port struct {
-	ID       int
+	ID       string
 	Protocol string
 	State    string
 	Service  Service
@@ -68,5 +68,5 @@ func (h *Host) addDirs() {
 }
 
 func (p *Port) Name() string {
-	return fmt.Sprintf("%s/%d", p.Protocol, p.ID)
+	return fmt.Sprintf("%s/%s", p.Protocol, p.ID)
 }

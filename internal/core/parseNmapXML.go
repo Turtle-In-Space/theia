@@ -5,6 +5,7 @@ package core
 
 import (
 	"encoding/xml"
+	"fmt"
 	"io"
 
 	"github.com/Turtle-In-Space/theia/internal/models"
@@ -114,7 +115,7 @@ func parsePorts(newHost xmlHost) (ports []models.Port) {
 	for _, port := range newHost.Ports.Ports {
 
 		ports = append(ports, models.Port{
-			ID:       port.ID,
+			ID:       fmt.Sprintf("%d", port.ID),
 			Protocol: port.Protocol,
 			State:    port.State.State,
 			Service:  parseService(port),
