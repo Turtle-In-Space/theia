@@ -28,15 +28,15 @@ theia 127.0.0.1
 A standard scan call will produce the following folder structure
 
 ```
- target
-├──  exploits
-├──  loot
-└──  scans
-    ├──  data
-    │   └── 󰗀 nmap.xml
-    ├──  tcp
-    │   ├──  21
-    │   ├──  22
+target
+├── exploits/
+├── loot/
+└── scans/
+    ├── data/
+    │   └── nmap.xml
+    ├── tcp/
+    │   ├── 21/
+    │   ├── 22/
 ```
 
 # Usage
