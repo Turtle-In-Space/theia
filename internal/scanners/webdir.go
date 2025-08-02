@@ -48,10 +48,10 @@ func (s webDirScanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	webDirScanner := webDirScanner{
+	scanner := webDirScanner{
 		serviceNames: []string{"http"},
 		name:         "WebDirScanner",
 	}
 
-	register("webDir", webDirScanner)
+	register("webDir", scanner)
 }

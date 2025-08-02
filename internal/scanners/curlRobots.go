@@ -42,10 +42,10 @@ func (s curlRobotsScanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	curlRobotScanner := curlRobotsScanner{
+	scanner := curlRobotsScanner{
 		serviceNames: []string{"http", "https"},
 		name:         "curlRobotsScanner",
 	}
 
-	register("curlRobots", curlRobotScanner)
+	register("curlRobots", scanner)
 }

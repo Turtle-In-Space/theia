@@ -5,6 +5,8 @@ package scanners
 
 import (
 	"os/exec"
+
+	"github.com/Turtle-In-Space/theia/internal/models"
 )
 
 // ----- Structs ----- //
@@ -17,10 +19,10 @@ type TYPEscanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s TYPEscanner) Run(service service, host host) {
-	resultFileName, dataFileName := fileNames(host, s.name, "", service.port)
+func (s TYPEscanner) Run(service models.Service, host models.Host) {
+	resultFileName, dataFileName := fileNames(host, s.name, "", service.Port)
 
-	cmd := exec.Command("cmd", "-o", "dataFileName")
+	cmd := exec.Command("cmd", "-o", dataFileName)
 	execute(s, cmd, resultFileName)
 }
 
@@ -37,10 +39,10 @@ func (s TYPEscanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	TYPEscanner := TYPEscanner{
+	scanner := TYPEscanner{
 		serviceNames: []string{"service"},
 		name:         "TYPEscanner",
 	}
 
-	register("typeScanner", TYPEscanner)
+	register("typeScanner", scanner)
 }

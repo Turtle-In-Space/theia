@@ -39,10 +39,10 @@ func (s smbScanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	smbScanner := smbScanner{
+	scanner := smbScanner{
 		serviceNames: []string{"microsoft-ds", "netbios-ssn"},
 		name:         "SMBScanner",
 	}
 
-	register("smb", smbScanner)
+	register("smb", scanner)
 }

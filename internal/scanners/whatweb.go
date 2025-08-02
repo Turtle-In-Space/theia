@@ -42,10 +42,10 @@ func (s WhatWebScanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	whatwebScanner := WhatWebScanner{
+	scanner := WhatWebScanner{
 		serviceNames: []string{"http"},
 		name:         "WhatWebScanner",
 	}
 
-	register("whatwebScanner", whatwebScanner)
+	register("whatwebScanner", scanner)
 }
