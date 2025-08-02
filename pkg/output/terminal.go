@@ -8,16 +8,11 @@ import (
 	"github.com/pterm/pterm"
 )
 
+// ----- Variables ----- //
+
 var highlightedStyle *pterm.Style
 
-func init() {
-	highlightedStyle = pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
-
-	pterm.Info.Prefix = pterm.Prefix{Text: " INFO  ", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
-	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
-
-	pterm.EnableDebugMessages()
-}
+// ----- Public Functions ----- //
 
 func Info(msg string, args ...any) {
 	format, styledArgs := highlightArgs(msg, args...)
@@ -40,9 +35,27 @@ func Warn(msg string, args ...any) {
 	pterm.Warning.Println(fmt.Sprintf(format, styledArgs...))
 }
 
-func Error(msg string) {
-	pterm.Error.Println(msg)
+func Error(msg string, args ...any) {
+	pterm.Error.Println(fmt.Sprintf(msg, args...))
 	os.Exit(1)
+}
+
+func Debug(msg string, args ...any) {
+	format, styledArgs := highlightArgs(msg, args...)
+
+	// Print the final formatted message with styled args
+	pterm.Debug.Println(fmt.Sprintf(format, styledArgs...))
+}
+
+// ----- Private Functions ----- //
+
+func init() {
+	highlightedStyle = pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
+
+	pterm.Info.Prefix = pterm.Prefix{Text: " INFO  ", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
+	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
+
+	pterm.EnableDebugMessages()
 }
 
 func highlightArgs(msg string, args ...any) (string, []any) {
