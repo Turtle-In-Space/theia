@@ -58,4 +58,6 @@ Use "theia [command] --help" for more information about a command.
 ```
 
 # Trivia
-The name "theia" comes from the greek god of sight and jewlery   https://en.wikipedia.org/wiki/Theia
+The name "theia" comes from the greek god of sight and jewlery
+
+https://en.wikipedia.org/wiki/Theia
