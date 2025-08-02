@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"slices"
 	"sync"
 
 	"github.com/Turtle-In-Space/theia/internal/models"
@@ -60,7 +59,9 @@ func scanTarget(ip string) (dataOut string) {
 	dataOut = filepath.Join(dataDir, "nmap.xml")
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
-	cmd := exec.Command("nmap", ip, "-oX", dataOut, "-oN", txtOut)
+	cmd := exec.Command("nmap", "-sV", "-T4", "-Pn", ip,
+		"-oX", dataOut, "-oN", txtOut)
+
 	err := cmd.Run()
 
 	if err != nil {
@@ -81,18 +82,17 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 		for _, port := range host.Ports {
 			scanners, ok := scanners.ScannerByServiceName(port.Service.Name)
 
+			//TODO: work out a solution for smb having same service multiple ports
 			if ok {
 				for _, scan := range scanners {
 					out.Info("Found service %s on port %d - using scan %s", port.Service.Name, port.Name(), scan.Name())
-					if !slices.Contains(foundScanners, scan.Name()) {
-						servicesWithScan = append(servicesWithScan,
-							validScanner{
-								scanner: scan,
-								port:    port,
-								host:    host,
-							})
-						foundScanners = append(foundScanners, scan.Name())
-					}
+					servicesWithScan = append(servicesWithScan,
+						validScanner{
+							scanner: scan,
+							port:    port,
+							host:    host,
+						})
+					foundScanners = append(foundScanners, scan.Name())
 				}
 			} else {
 				out.Warn("Found service %s on port %d - found no scan", port.Service.Name, port.Name())
