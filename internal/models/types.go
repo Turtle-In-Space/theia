@@ -4,6 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package models
 
 import (
+	"fmt"
 	"path/filepath"
 
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
@@ -15,39 +16,57 @@ import (
 type Target struct {
 	Name  string
 	Hosts []Host
+	Dir   string
 }
 
 type Host struct {
-	Hostname  string
-	IPAddr    string
-	Services  []Service
-	DataDir   string
-	ResultDir string
+	Hostname string
+	IPAddr   string
+	Ports    []Port
+	Dir      string
+}
+
+type Port struct {
+	ID       int
+	Protocol string
+	State    string
+	Service  Service
+	Dir      string
+	DataDir  string
 }
 
 type Service struct {
 	Name string
-	Port int
 }
 
-func (t *Target) AddDirs(dataDir, resultDir string) {
+func (t *Target) AddDirs(scanDir string) {
+	t.Dir = scanDir
+
 	if len(t.Hosts) == 1 {
 		host := &t.Hosts[0]
-		host.DataDir = dataDir
-		host.ResultDir = resultDir
+		host.Dir = t.Dir
+		host.addDirs()
 	} else {
 		for i := range t.Hosts {
-			t.Hosts[i].addDirs(dataDir, resultDir)
+			host := &t.Hosts[i]
+			host.Dir = host.IPAddr
+			host.addDirs()
 		}
 	}
 }
 
-// create a host and dirs for host
-func (h *Host) addDirs(dataDir, resultDir string) {
-	// create dirs for host
-	h.DataDir = filepath.Join(dataDir, h.IPAddr)
-	h.ResultDir = filepath.Join(resultDir, h.IPAddr)
+func (h *Host) addDirs() {
+	for i := range h.Ports {
+		port := &h.Ports[i]
 
-	helpers.CreateDir(h.DataDir)
-	helpers.CreateDir(h.ResultDir)
+		port.Dir = filepath.Join(h.Dir, port.Name())
+		port.DataDir = filepath.Join(port.Dir, "data")
+
+		helpers.CreateDir(port.Dir)
+		helpers.CreateDir(port.DataDir)
+	}
+}
+
+func (p *Port) Name() string {
+	return fmt.Sprintf("%s/%d", p.Protocol, p.ID)
 }

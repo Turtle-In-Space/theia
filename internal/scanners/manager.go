@@ -6,6 +6,7 @@ package scanners
 import (
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"slices"
@@ -18,7 +19,7 @@ import (
 // ----- Interfaces ----- //
 
 type ServiceScanner interface {
-	Run(service models.Service, host models.Host)
+	Run(port models.Port, host models.Host)
 	ServiceNames() []string
 	Name() string
 }
@@ -67,6 +68,8 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 		cmd.Stdout = resultFile
 	}
 
+	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
+	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 
 	if err != nil {
@@ -75,12 +78,12 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 }
 
 // generate names for txt file and out file
-func fileNames(host models.Host, scanName, dataExtension string, port int) (resultFileName, dataFileName string) {
-	result := fmt.Sprintf("%d_%s.txt", port, scanName)
-	data := fmt.Sprintf("%d_%s%s", port, scanName, dataExtension)
+func fileNames(scanName, dataExtension string, port models.Port) (resultFileName, dataFileName string) {
+	result := fmt.Sprintf("%s.txt", scanName)
+	data := fmt.Sprintf("%s%s", scanName, dataExtension)
 
-	resultFileName = filepath.Join(host.ResultDir, result)
-	dataFileName = filepath.Join(host.DataDir, data)
+	resultFileName = filepath.Join(port.Dir, result)
+	dataFileName = filepath.Join(port.DataDir, data)
 
 	return
 }

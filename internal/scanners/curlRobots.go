@@ -20,10 +20,10 @@ type curlRobotsScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s curlRobotsScanner) Run(service models.Service, host models.Host) {
-	resultFileName, _ := fileNames(host, s.name, ".html", service.Port)
+func (s curlRobotsScanner) Run(port models.Port, host models.Host) {
+	resultFileName, _ := fileNames(s.name, ".html", port)
 
-	url := fmt.Sprintf("http://%s:%d/robots.txt", host.IPAddr, service.Port)
+	url := fmt.Sprintf("http://%s:%d/robots.txt", host.IPAddr, port.ID)
 
 	cmd := exec.Command("curl", url, "--fail", "--styled-output", "--output", resultFileName)
 	execute(s, cmd, "")

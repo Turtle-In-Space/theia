@@ -19,15 +19,13 @@ import (
 // TODO rename, add ipAddr
 type validScanner struct {
 	scanner scanners.ServiceScanner
-	service models.Service
+	port    models.Port
 	host    models.Host
 }
 
-// ----- Variables ----- //
-
 var (
-	dataDir   string
-	resultDir string
+	scanDir string
+	dataDir string
 )
 
 // ----- Public Functions ----- //
@@ -37,7 +35,7 @@ func ScanTarget(ip, targetName string) {
 	createTargetStructure(targetName)
 	dataOutPath := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
-	target.AddDirs(dataDir, resultDir)
+	target.AddDirs(scanDir)
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
@@ -49,19 +47,18 @@ func createTargetStructure(name string) {
 	helpers.CreateDir(name)
 	os.Chdir(name)
 
-	dataDir = filepath.Join("scans", "data/")
-	resultDir = filepath.Join("scans", "results/")
+	scanDir = "scans"
+	dataDir = filepath.Join(scanDir, "data")
 
 	helpers.CreateDir("loot")
 	helpers.CreateDir("exploits")
-	helpers.CreateDir("scans")
+	helpers.CreateDir(scanDir)
 	helpers.CreateDir(dataDir)
-	helpers.CreateDir(resultDir)
 }
 
 func scanTarget(ip string) (dataOut string) {
-	dataOut = filepath.Join(dataDir, "ports.xml")
-	txtOut := filepath.Join(resultDir, "ports.txt")
+	dataOut = filepath.Join(dataDir, "nmap.xml")
+	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
 	cmd := exec.Command("nmap", ip, "-oX", dataOut, "-oN", txtOut)
 	err := cmd.Run()
@@ -81,24 +78,24 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 		// clear scanners per host
 		foundScanners = nil
 
-		for _, service := range host.Services {
-			scanners, ok := scanners.ScannerByServiceName(service.Name)
+		for _, port := range host.Ports {
+			scanners, ok := scanners.ScannerByServiceName(port.Service.Name)
 
 			if ok {
 				for _, scan := range scanners {
-					out.Info("Found service %s on port %d - using scan %s", service.Name, service.Port, scan.Name())
+					out.Info("Found service %s on port %d - using scan %s", port.Service.Name, port.Name(), scan.Name())
 					if !slices.Contains(foundScanners, scan.Name()) {
 						servicesWithScan = append(servicesWithScan,
 							validScanner{
 								scanner: scan,
-								service: service,
+								port:    port,
 								host:    host,
 							})
 						foundScanners = append(foundScanners, scan.Name())
 					}
 				}
 			} else {
-				out.Warn("Found service %s on port %d - found no scan", service.Name, service.Port)
+				out.Warn("Found service %s on port %d - found no scan", port.Service.Name, port.Name())
 			}
 		}
 	}
@@ -114,7 +111,7 @@ func runScanners(scannerQueue []validScanner) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			scanner.scanner.Run(scanner.service, scanner.host)
+			scanner.scanner.Run(scanner.port, scanner.host)
 		}()
 	}
 

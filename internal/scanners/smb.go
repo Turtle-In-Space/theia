@@ -19,8 +19,8 @@ type smbScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s smbScanner) Run(service models.Service, host models.Host) {
-	resultFileName, dataFileName := fileNames(host, s.name, "", service.Port)
+func (s smbScanner) Run(port models.Port, host models.Host) {
+	resultFileName, dataFileName := fileNames(s.name, "", port)
 
 	cmd := exec.Command("enum4linux-ng", "-A", host.IPAddr, "-oJ", dataFileName)
 	execute(s, cmd, resultFileName)

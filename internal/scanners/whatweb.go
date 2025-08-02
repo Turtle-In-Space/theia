@@ -20,12 +20,12 @@ type WhatWebScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s WhatWebScanner) Run(service models.Service, host models.Host) {
-	resultFileName, _ := fileNames(host, s.name, "", service.Port)
+func (s WhatWebScanner) Run(port models.Port, host models.Host) {
+	resultFileName, _ := fileNames(s.name, "", port)
 
-	url := fmt.Sprintf("http://%s:%d", host.IPAddr, service.Port)
+	url := fmt.Sprintf("http://%s:%d", host.IPAddr, port.ID)
 
-	cmd := exec.Command("whatweb", url, "-v")
+	cmd := exec.Command("whatweb", url, "--color=never") // add -v
 	execute(s, cmd, resultFileName)
 }
 

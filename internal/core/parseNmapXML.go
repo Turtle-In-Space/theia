@@ -40,9 +40,14 @@ type xmlPorts struct {
 }
 
 type xmlPort struct {
+	ID       int        `xml:"portid,attr"`
 	Protocol string     `xml:"protocol,attr"`
-	PortID   int        `xml:"portid,attr"`
+	State    xmlState   `xml:"state"`
 	Service  xmlService `xml:"service"`
+}
+
+type xmlState struct {
+	State string `xml:"state,attr"`
 }
 
 type xmlService struct {
@@ -98,27 +103,35 @@ func parseHosts(results nmapRun) (hosts []models.Host) {
 		hosts = append(hosts, models.Host{
 			Hostname: name,
 			IPAddr:   ipAddr,
-			Services: parseServices(newHost),
+			Ports:    parsePorts(newHost),
 		})
 	}
 
 	return
 }
 
-// Stores all services in a slice
-func parseServices(newHost xmlHost) (services []models.Service) {
+func parsePorts(newHost xmlHost) (ports []models.Port) {
 	for _, port := range newHost.Ports.Ports {
-		serviceName := port.Service.Name
 
-		if serviceName == "" {
-			serviceName = "unknown"
-		}
-
-		services = append(services, models.Service{
-			Name: serviceName,
-			Port: port.PortID,
+		ports = append(ports, models.Port{
+			ID:       port.ID,
+			Protocol: port.Protocol,
+			State:    port.State.State,
+			Service:  parseService(port),
 		})
 	}
 
 	return
+}
+
+func parseService(port xmlPort) models.Service {
+	serviceName := port.Service.Name
+
+	if serviceName == "" {
+		serviceName = "unknown"
+	}
+
+	return models.Service{
+		Name: serviceName,
+	}
 }
