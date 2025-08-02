@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 
 	"github.com/Turtle-In-Space/theia/internal/models"
-	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // ----- Structs ----- //
@@ -33,7 +32,6 @@ func (s webDirScanner) Run(port models.Port, host models.Host) {
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
 	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-o", dataFileName)
-	output.Debug(cmd.String())
 	execute(s, cmd, resultFileName)
 }
 
