@@ -4,6 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package cmd
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Turtle-In-Space/theia/internal/core"
@@ -14,9 +15,7 @@ import (
 )
 
 var (
-	targetName string
-	ipAddr     string
-	startTime  time.Time
+	startTime time.Time
 )
 
 // scanCmd represents the scan command
@@ -44,7 +43,6 @@ var scanCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(scanCmd)
 
-	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
 }
 
 // store cmd args
@@ -54,6 +52,10 @@ func getArgs(args []string) {
 
 // run the actual scan
 func startScan() {
+	if targetName == "" {
+		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
+	}
+
 	core.ScanTarget(ipAddr, targetName)
 }
 

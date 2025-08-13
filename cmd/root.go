@@ -11,7 +11,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var cfgFile string
+var (
+	targetName string
+	ipAddr     string
+	cfgFile    string
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -35,6 +39,8 @@ func Execute() {
 }
 
 func init() {
+	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
+
 	// cobra.OnInitialize(initConfig)
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.theia.yaml)")
