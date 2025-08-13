@@ -42,7 +42,6 @@ var scanCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(scanCmd)
-
 }
 
 // store cmd args

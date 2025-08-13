@@ -35,6 +35,7 @@ func ScanTarget(ip, targetName string) {
 	dataOutPath := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
 	target.AddDirs(scanDir)
+	addEnvFiles(target)
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
@@ -117,4 +118,10 @@ func runScanners(scannerQueue []validScanner) {
 	}
 
 	wg.Wait()
+}
+
+func addEnvFiles(target models.Target) {
+	for _, host := range target.Hosts {
+		CreateEnvFile(host.IPAddr, host.Dir)
+	}
 }

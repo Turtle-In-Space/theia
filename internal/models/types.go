@@ -56,6 +56,8 @@ func (t *Target) AddDirs(scanDir string) {
 }
 
 func (h *Host) addDirs() {
+	helpers.CreateDir(h.Dir)
+
 	for i := range h.Ports {
 		port := &h.Ports[i]
 
