@@ -60,7 +60,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	}
 
 	output.Info(output.Verbose, "Running %s", scanner.Name())
-	output.Debug(output.Detailed, cmd.String())
+	output.Debug(cmd.String())
 
 	if resultFileName != "" {
 		resultFile := helpers.CreateFile(resultFileName)

@@ -23,7 +23,6 @@ const (
 
 var VerbosityThreshold VerbosityLevel
 var highlightedStyle *pterm.Style
-var noColor bool
 
 // ----- Public Functions ----- //
 
@@ -35,6 +34,10 @@ func SetThreshold(count int) {
 		VerbosityThreshold = Verbose
 	default:
 		VerbosityThreshold = Detailed
+	}
+
+	if VerbosityThreshold == Detailed {
+		pterm.EnableDebugMessages()
 	}
 }
 
@@ -76,10 +79,7 @@ func Error(msg string, args ...any) {
 	os.Exit(1)
 }
 
-func Debug(level VerbosityLevel, msg string, args ...any) {
-	if level > VerbosityThreshold {
-		return
-	}
+func Debug(msg string, args ...any) {
 
 	format, styledArgs := highlightArgs(msg, args...)
 
@@ -94,8 +94,6 @@ func init() {
 
 	pterm.Info.Prefix = pterm.Prefix{Text: " INFO  ", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
 	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
-
-	pterm.EnableDebugMessages()
 
 	if _, ok := os.LookupEnv("NO_COLOR"); ok {
 		disableColor()
