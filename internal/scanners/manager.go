@@ -12,7 +12,7 @@ import (
 
 	"github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
-	out "github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // ----- Interfaces ----- //
@@ -55,11 +55,12 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	_, err := exec.LookPath(cmd.Path)
 
 	if errors.Is(err, exec.ErrNotFound) {
-		out.Warn("executable %s not found in $PATH, not running %s", cmd.Path, scanner.Name())
+		output.Warn(output.Verbose, "executable %s not found in $PATH, not running %s", cmd.Path, scanner.Name())
 		return
 	}
 
-	out.Info("Running %s", scanner.Name())
+	output.Info(output.Verbose, "Running %s", scanner.Name())
+	output.Debug(output.Detailed, cmd.String())
 
 	if resultFileName != "" {
 		resultFile := helpers.CreateFile(resultFileName)
@@ -71,7 +72,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 	err = cmd.Run()
 
 	if err != nil {
-		out.Warn("command: %s - error: %s", cmd.String(), err.Error())
+		output.Warn(output.Verbose, "command: %s - error: %s", cmd.String(), err.Error())
 	}
 }
 

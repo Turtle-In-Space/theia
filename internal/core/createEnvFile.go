@@ -17,12 +17,13 @@ func CreateEnvFile(ipAddr, path string) {
 	writeLine(file, "# Created by theia")
 	writeLine(file, fmt.Sprintf("ip=%s", ipAddr))
 
+	output.Info(output.Verbose, "created env file for: %s", ipAddr)
 }
 
 func writeLine(file *os.File, msg string) {
 	_, err := file.WriteString(msg + "\n")
 
 	if err != nil {
-		output.Warn("failed writing to file: %s with error: %s", file.Name(), err.Error())
+		output.Warn(output.Normal, "failed writing to file: %s with error: %s", file.Name(), err.Error())
 	}
 }

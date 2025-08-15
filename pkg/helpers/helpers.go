@@ -6,7 +6,7 @@ package helpers
 import (
 	"os"
 
-	out "github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // ----- Public Functions ----- //
@@ -16,7 +16,7 @@ func CreateDir(name string) {
 	err := os.MkdirAll(name, 0766)
 
 	if err != nil {
-		out.Error("CreateDir: %s", err.Error())
+		output.Error("CreateDir: %s", err.Error())
 	}
 }
 
@@ -25,7 +25,7 @@ func OpenFile(filePath string) *os.File {
 	file, err := os.Open(filePath)
 
 	if err != nil {
-		out.Error("OpenFile: %s", err.Error())
+		output.Error("OpenFile: %s", err.Error())
 	}
 
 	return file
@@ -36,7 +36,7 @@ func CreateFile(filePath string) *os.File {
 	file, err := os.Create(filePath)
 
 	if err != nil {
-		out.Error("CreateFile: %s", err.Error())
+		output.Error("CreateFile: %s", err.Error())
 	}
 
 	return file

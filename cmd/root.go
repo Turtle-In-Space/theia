@@ -5,6 +5,7 @@ package cmd
 
 import (
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/root"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 
 	"os"
 
@@ -12,9 +13,9 @@ import (
 )
 
 var (
-	targetName string
-	ipAddr     string
-	cfgFile    string
+	ipAddr         string
+	cfgFile        string
+	verbosityCount int
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -24,9 +25,9 @@ var rootCmd = &cobra.Command{
 	Long:    msg.Long,
 	Version: "v0.2.0",
 
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		output.SetThreshold(verbosityCount)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -39,7 +40,7 @@ func Execute() {
 }
 
 func init() {
-	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
+	rootCmd.PersistentFlags().CountVarP(&verbosityCount, "verbose", "v", "Enable verbose output. Repeat for more verbosity.")
 
 	// cobra.OnInitialize(initConfig)
 

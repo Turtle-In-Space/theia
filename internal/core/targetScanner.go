@@ -12,7 +12,7 @@ import (
 	"github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/internal/scanners"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
-	out "github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // TODO rename, add ipAddr
@@ -67,7 +67,7 @@ func scanTarget(ip string) (dataOut string) {
 	err := cmd.Run()
 
 	if err != nil {
-		out.Error("scanAllPorts: %s", err.Error())
+		output.Error("scanAllPorts: %s", err.Error())
 	}
 
 	return
@@ -87,7 +87,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 			//TODO: work out a solution for smb having same service multiple ports
 			if ok {
 				for _, scan := range scanners {
-					out.Info("Found service %s on port %d - using scan %s", port.Service.Name, port.Name(), scan.Name())
+					output.Info(output.Normal, "Found service %s on port %d - using scan %s", port.Service.Name, port.Name(), scan.Name())
 					servicesWithScan = append(servicesWithScan,
 						validScanner{
 							scanner: scan,
@@ -97,7 +97,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 					foundScanners = append(foundScanners, scan.Name())
 				}
 			} else {
-				out.Warn("Found service %s on port %d - found no scan", port.Service.Name, port.Name())
+				output.Warn(output.Normal, "Found service %s on port %d - found no scan", port.Service.Name, port.Name())
 			}
 		}
 	}

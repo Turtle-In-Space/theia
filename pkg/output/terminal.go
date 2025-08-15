@@ -8,27 +8,62 @@ import (
 	"github.com/pterm/pterm"
 )
 
+// ----- Verbosity Level Enum ----- //
+
+type VerbosityLevel int
+
+const (
+	undefined VerbosityLevel = iota
+	Normal
+	Verbose
+	Detailed
+)
+
 // ----- Variables ----- //
 
+var VerbosityThreshold VerbosityLevel
 var highlightedStyle *pterm.Style
 
 // ----- Public Functions ----- //
 
-func Info(msg string, args ...any) {
+func SetThreshold(count int) {
+	switch count {
+	case 0:
+		VerbosityThreshold = Normal
+	case 1:
+		VerbosityThreshold = Verbose
+	default:
+		VerbosityThreshold = Detailed
+	}
+}
+
+func Info(level VerbosityLevel, msg string, args ...any) {
+	if level > VerbosityThreshold {
+		return
+	}
+
 	format, styledArgs := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
 	pterm.Info.Println(fmt.Sprintf(format, styledArgs...))
 }
 
-func Success(msg string, args ...any) {
+func Success(level VerbosityLevel, msg string, args ...any) {
+	if level > VerbosityThreshold {
+		return
+	}
+
 	format, styledArgs := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
 	pterm.Success.Println(fmt.Sprintf(format, styledArgs...))
 }
 
-func Warn(msg string, args ...any) {
+func Warn(level VerbosityLevel, msg string, args ...any) {
+	if level > VerbosityThreshold {
+		return
+	}
+
 	format, styledArgs := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args
@@ -40,7 +75,11 @@ func Error(msg string, args ...any) {
 	os.Exit(1)
 }
 
-func Debug(msg string, args ...any) {
+func Debug(level VerbosityLevel, msg string, args ...any) {
+	if level > VerbosityThreshold {
+		return
+	}
+
 	format, styledArgs := highlightArgs(msg, args...)
 
 	// Print the final formatted message with styled args

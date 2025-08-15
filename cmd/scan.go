@@ -9,13 +9,14 @@ import (
 
 	"github.com/Turtle-In-Space/theia/internal/core"
 	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
-	out "github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 
 	"github.com/spf13/cobra"
 )
 
 var (
-	startTime time.Time
+	targetName string
+	startTime  time.Time
 )
 
 // scanCmd represents the scan command
@@ -42,6 +43,7 @@ var scanCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(scanCmd)
+	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
 }
 
 // store cmd args
@@ -65,5 +67,5 @@ func startTimer() {
 func endTimer() {
 	elapsed := time.Since(startTime)
 
-	out.Success("Completed all scans in %s", elapsed.Round(time.Millisecond))
+	output.Success(output.Normal, "Completed all scans in %s", elapsed.Round(time.Millisecond))
 }
