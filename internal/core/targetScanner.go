@@ -68,7 +68,6 @@ func scanTarget(ip string) (dataOut string) {
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
-
 	if err != nil {
 		output.Error("scanTarget: %s", err.Error())
 	}
@@ -88,8 +87,6 @@ func printFoundPorts(target models.Target) {
 // for each port match a scan to the service
 func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 	for _, host := range target.Hosts {
-		// clear scanners per host
-
 		for _, port := range host.Ports {
 			scanners, ok := scanners.ScannersByServiceName(port.Service.Name)
 
