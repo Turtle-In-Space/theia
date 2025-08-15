@@ -30,7 +30,7 @@ var serviceRegistry = make(map[string]ServiceScanner)
 // ----- Public Functions ----- //
 
 // get scanners that target a service
-func ScannerByServiceName(service string) (scanners []ServiceScanner, ok bool) {
+func ScannersByServiceName(service string) (scanners []ServiceScanner, ok bool) {
 	for _, scanner := range serviceRegistry {
 		if slices.Contains(scanner.ServiceNames(), service) {
 			scanners = append(scanners, scanner)

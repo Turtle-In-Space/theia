@@ -15,7 +15,7 @@ import (
 	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
-// TODO rename, add ipAddr
+// TODO: rename,
 type validScanner struct {
 	scanner scanners.ServiceScanner
 	port    models.Port
@@ -23,35 +23,34 @@ type validScanner struct {
 }
 
 var (
-	scanDir string
-	dataDir string
+	scanDir string = "scans"
+	dataDir string = filepath.Join(scanDir, "data")
 )
 
 // ----- Public Functions ----- //
 
 // begin the target scan
-func ScanTarget(ip, targetName string) (scansRanCount int) {
-	createTargetStructure(targetName)
+func ScanTarget(ip, targetName string) (scanCount int) {
+	createFileStructure(targetName)
 	dataOutPath := scanTarget(ip)
+
 	target := GetTarget(dataOutPath, targetName)
 	target.AddDirs(scanDir)
 	addEnvFiles(target)
 	printFoundPorts(target)
 
 	scannerQueue := queueScanners(target)
-	runScanners(scannerQueue)
+	scanCount = runScanners(scannerQueue)
 
-	return len(scannerQueue)
+	return
 }
 
 // ----- Private Functions ----- //
 
-func createTargetStructure(name string) {
+// create the stucture
+func createFileStructure(name string) {
 	helpers.CreateDir(name)
 	os.Chdir(name)
-
-	scanDir = "scans"
-	dataDir = filepath.Join(scanDir, "data")
 
 	helpers.CreateDir("loot")
 	helpers.CreateDir("exploits")
@@ -59,56 +58,59 @@ func createTargetStructure(name string) {
 	helpers.CreateDir(dataDir)
 }
 
+// use nmap to scan the target
 func scanTarget(ip string) (dataOut string) {
 	dataOut = filepath.Join(dataDir, "nmap.xml")
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
 	//TODO: remove comment
-	cmd := exec.Command("nmap" /* "-sV", */, "-T4", "-Pn", ip,
+	cmd := exec.Command("nmap", "-sV", "-T4", "-Pn", ip,
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
 
 	if err != nil {
-		output.Error("scanAllPorts: %s", err.Error())
+		output.Error("scanTarget: %s", err.Error())
 	}
 
 	return
 }
 
+// print all found ports for the target
 func printFoundPorts(target models.Target) {
 	for _, host := range target.Hosts {
 		for _, port := range host.Ports {
-			output.Info(output.Normal, "Found open port %s on %s", port.Name(), host.IPAddr)
+			output.Info(output.Normal, "Found service %s on host %s port %s", port.Service.Name, host.IPAddr, port.Name())
 		}
 	}
 }
 
+// for each port match a scan to the service
 func queueScanners(target models.Target) (servicesWithScan []validScanner) {
-	var foundScanners []string
-
-	// find scan for each serivce
 	for _, host := range target.Hosts {
 		// clear scanners per host
-		foundScanners = nil
 
 		for _, port := range host.Ports {
-			scanners, ok := scanners.ScannerByServiceName(port.Service.Name)
+			scanners, ok := scanners.ScannersByServiceName(port.Service.Name)
 
-			//TODO: work out a solution for smb having same service multiple ports
+			//TODO: work out a solution for smb having same service multiple ports. Also http may exist on multiple ports same host
 			if ok {
-				for _, scan := range scanners {
-					output.Info(output.Verbose, "Found service %s on port %d - using scan: %s", port.Service.Name, port.Name(), scan.Name())
+				scannerNames := make([]string, len(scanners))
+
+				for i, scan := range scanners {
 					servicesWithScan = append(servicesWithScan,
 						validScanner{
 							scanner: scan,
 							port:    port,
 							host:    host,
 						})
-					foundScanners = append(foundScanners, scan.Name())
+					scannerNames[i] = scan.Name()
 				}
+				output.Info(output.Verbose, "For service %s on %s:%s - using following scans: %s",
+					port.Service.Name, host.IPAddr, port.Name(), scannerNames)
+
 			} else {
-				output.Warn(output.Verbose, "Found service %s on port %d - found no scan", port.Service.Name, port.Name())
+				output.Warn(output.Verbose, "For service %s on %s:%s - found no scan", port.Service.Name, host.IPAddr, port.Name())
 			}
 		}
 	}
@@ -117,7 +119,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 }
 
 // run all queued scanners and wait for them to finnish
-func runScanners(scannerQueue []validScanner) {
+func runScanners(scannerQueue []validScanner) (scanCount int) {
 	var wg sync.WaitGroup
 
 	for _, scanner := range scannerQueue {
@@ -129,8 +131,11 @@ func runScanners(scannerQueue []validScanner) {
 	}
 
 	wg.Wait()
+
+	return len(scannerQueue)
 }
 
+// create env files for each host in target
 func addEnvFiles(target models.Target) {
 	for _, host := range target.Hosts {
 		CreateEnvFile(host.IPAddr, host.Dir)
