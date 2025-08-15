@@ -17,7 +17,7 @@ func CreateEnvFile(ipAddr, path string) {
 	writeLine(file, "# Created by theia")
 	writeLine(file, fmt.Sprintf("ip=%s", ipAddr))
 
-	output.Info(output.Verbose, "created env file for: %s", ipAddr)
+	output.Debug("created env file for: %s", ipAddr)
 }
 
 func writeLine(file *os.File, msg string) {

@@ -36,6 +36,7 @@ func ScanTarget(ip, targetName string) {
 	target := GetTarget(dataOutPath, targetName)
 	target.AddDirs(scanDir)
 	addEnvFiles(target)
+	printFoundPorts(target)
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
@@ -73,6 +74,14 @@ func scanTarget(ip string) (dataOut string) {
 	return
 }
 
+func printFoundPorts(target models.Target) {
+	for _, host := range target.Hosts {
+		for _, port := range host.Ports {
+			output.Info(output.Normal, "Found open port %s on %s", port.Name(), host.IPAddr)
+		}
+	}
+}
+
 func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 	var foundScanners []string
 
@@ -87,7 +96,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 			//TODO: work out a solution for smb having same service multiple ports
 			if ok {
 				for _, scan := range scanners {
-					output.Info(output.Normal, "Found service %s on port %d - using scan %s", port.Service.Name, port.Name(), scan.Name())
+					output.Info(output.Verbose, "Found service %s on port %d - using scan: %s", port.Service.Name, port.Name(), scan.Name())
 					servicesWithScan = append(servicesWithScan,
 						validScanner{
 							scanner: scan,
@@ -97,7 +106,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 					foundScanners = append(foundScanners, scan.Name())
 				}
 			} else {
-				output.Warn(output.Normal, "Found service %s on port %d - found no scan", port.Service.Name, port.Name())
+				output.Warn(output.Verbose, "Found service %s on port %d - found no scan", port.Service.Name, port.Name())
 			}
 		}
 	}
