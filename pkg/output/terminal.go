@@ -23,6 +23,7 @@ const (
 
 var VerbosityThreshold VerbosityLevel
 var highlightedStyle *pterm.Style
+var noColor bool
 
 // ----- Public Functions ----- //
 
@@ -95,6 +96,10 @@ func init() {
 	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
 
 	pterm.EnableDebugMessages()
+
+	if _, ok := os.LookupEnv("NO_COLOR"); ok {
+		disableColor()
+	}
 }
 
 func highlightArgs(msg string, args ...any) (string, []any) {
@@ -109,4 +114,14 @@ func highlightArgs(msg string, args ...any) (string, []any) {
 	format := regEx.ReplaceAllString(msg, "%s")
 
 	return format, styledArgs
+}
+
+func disableColor() {
+	pterm.DisableColor()
+	pterm.Info.Prefix = pterm.Prefix{Text: "[*]"}
+	pterm.Success.Prefix = pterm.Prefix{Text: "[*]"}
+	pterm.Warning.Prefix = pterm.Prefix{Text: "[!]"}
+	pterm.Error.Prefix = pterm.Prefix{Text: "[!]"}
+	pterm.Debug.Prefix = pterm.Prefix{Text: "[DEBUG]"}
+
 }
