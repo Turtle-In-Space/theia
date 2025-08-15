@@ -14,9 +14,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ----- Variables ----- //
+
 var (
-	targetName string
-	startTime  time.Time
+	scansRanCount int
+	targetName    string
+	startTime     time.Time
 )
 
 // scanCmd represents the scan command
@@ -41,6 +44,8 @@ var scanCmd = &cobra.Command{
 	},
 }
 
+// ----- Private Functions ----- //
+
 func init() {
 	rootCmd.AddCommand(scanCmd)
 	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
@@ -57,7 +62,7 @@ func startScan() {
 		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
 	}
 
-	core.ScanTarget(ipAddr, targetName)
+	scansRanCount = core.ScanTarget(ipAddr, targetName)
 }
 
 func startTimer() {
@@ -67,5 +72,5 @@ func startTimer() {
 func endTimer() {
 	elapsed := time.Since(startTime)
 
-	output.Success(output.Normal, "Completed all scans in %s", elapsed.Round(time.Millisecond))
+	output.Success(output.Normal, "Completed %s scans in %s", scansRanCount, elapsed.Round(time.Millisecond))
 }

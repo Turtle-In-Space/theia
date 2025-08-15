@@ -30,7 +30,7 @@ var (
 // ----- Public Functions ----- //
 
 // begin the target scan
-func ScanTarget(ip, targetName string) {
+func ScanTarget(ip, targetName string) (scansRanCount int) {
 	createTargetStructure(targetName)
 	dataOutPath := scanTarget(ip)
 	target := GetTarget(dataOutPath, targetName)
@@ -40,6 +40,8 @@ func ScanTarget(ip, targetName string) {
 
 	scannerQueue := queueScanners(target)
 	runScanners(scannerQueue)
+
+	return len(scannerQueue)
 }
 
 // ----- Private Functions ----- //
