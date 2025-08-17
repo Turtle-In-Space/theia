@@ -115,7 +115,7 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 	return
 }
 
-// run all queued scanners and wait for them to finnish
+// run all queued scanners and wait for them to finish, return count of scanners
 func runScanners(scannerQueue []validScanner) (scanCount int) {
 	var wg sync.WaitGroup
 

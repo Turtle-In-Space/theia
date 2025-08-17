@@ -68,6 +68,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 		cmd.Stdout = resultFile
 	}
 
+	//TODO: move this to be cmd specific
 	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
 	err = cmd.Run()
 
