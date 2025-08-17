@@ -34,9 +34,6 @@ func SetThreshold(count int) {
 		VerbosityThreshold = Verbose
 	default:
 		VerbosityThreshold = Detailed
-	}
-
-	if VerbosityThreshold == Detailed {
 		pterm.EnableDebugMessages()
 	}
 }
@@ -48,7 +45,6 @@ func Info(level VerbosityLevel, msg string, args ...any) {
 
 	format, styledArgs := highlightArgs(msg, args...)
 
-	// Print the final formatted message with styled args
 	pterm.Info.Println(fmt.Sprintf(format, styledArgs...))
 }
 
@@ -59,7 +55,6 @@ func Success(level VerbosityLevel, msg string, args ...any) {
 
 	format, styledArgs := highlightArgs(msg, args...)
 
-	// Print the final formatted message with styled args
 	pterm.Success.Println(fmt.Sprintf(format, styledArgs...))
 }
 
@@ -70,7 +65,6 @@ func Warn(level VerbosityLevel, msg string, args ...any) {
 
 	format, styledArgs := highlightArgs(msg, args...)
 
-	// Print the final formatted message with styled args
 	pterm.Warning.Println(fmt.Sprintf(format, styledArgs...))
 }
 
@@ -80,10 +74,8 @@ func Error(msg string, args ...any) {
 }
 
 func Debug(msg string, args ...any) {
-
 	format, styledArgs := highlightArgs(msg, args...)
 
-	// Print the final formatted message with styled args
 	pterm.Debug.Println(fmt.Sprintf(format, styledArgs...))
 }
 
