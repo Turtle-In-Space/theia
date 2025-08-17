@@ -10,6 +10,7 @@ import (
 
 	"github.com/Turtle-In-Space/theia/internal/models"
 	"github.com/Turtle-In-Space/theia/pkg/helpers"
+	"github.com/Turtle-In-Space/theia/pkg/output"
 )
 
 // ----- Structs ----- //
@@ -59,6 +60,8 @@ type xmlService struct {
 
 // parse the target from a nmap scan
 func GetTarget(xmlFilePath, targetName string) models.Target {
+	output.Debug("Parsing nmap xml data...")
+
 	xmlFile := helpers.OpenFile(xmlFilePath)
 	defer xmlFile.Close()
 
@@ -85,7 +88,7 @@ func parseHosts(results nmapRun) (hosts []models.Host) {
 	for _, newHost := range results.Hosts {
 		var name, ipAddr string
 
-		//TODO: sometimes multiple hostnames for sum reason, use first as all are the same?
+		//TODO: sometimes multiple hostnames for some reason, use first as all are the same?
 		hostnames := newHost.Hostname.Hostnames
 		if len(hostnames) == 0 {
 			name = ""
@@ -93,7 +96,7 @@ func parseHosts(results nmapRun) (hosts []models.Host) {
 			name = hostnames[0].Name
 		}
 
-		//TODO: reurun mac, v4 and v6?
+		//TODO: return mac, v4 and v6?
 		for _, addr := range newHost.Addresses {
 			if addr.Type == "ipv4" {
 				ipAddr = addr.Addr

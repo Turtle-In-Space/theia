@@ -49,6 +49,7 @@ func ScanTarget(ip, targetName string) (scanCount int) {
 
 // create the stucture
 func createFileStructure(name string) {
+	output.Debug("Creating file stucture...")
 	helpers.CreateDir(name)
 	os.Chdir(name)
 
@@ -60,6 +61,8 @@ func createFileStructure(name string) {
 
 // use nmap to scan the target
 func scanTarget(ip string) (dataOut string) {
+	output.Info(output.Normal, "Scanning target...")
+
 	dataOut = filepath.Join(dataDir, "nmap.xml")
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
