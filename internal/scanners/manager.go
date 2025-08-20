@@ -21,7 +21,19 @@ type ServiceScanner interface {
 	Run(port models.Port, host models.Host)
 	ServiceNames() []string
 	Name() string
+	Intensity()
 }
+
+// ----- Intensity ----- //
+
+// set
+// get
+// access in core
+/*
+isValid()
+scan.Intensity > Intensity
+	false
+*/
 
 // ----- Variables ----- //
 
