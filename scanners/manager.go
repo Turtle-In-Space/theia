@@ -18,7 +18,7 @@ import (
 // ----- Interfaces ----- //
 
 type ServiceScanner interface {
-	Run(port models.Port, host models.Host)
+	Run(port models.Port, host models.Host) (err error)
 	ServiceNames() []string
 	Name() string
 }
@@ -48,11 +48,11 @@ func ScannersByServiceName(service string) (scanners []ServiceScanner, ok bool) 
 		}
 	}
 
-	if len(scanners) > 0 {
-		return scanners, true
+	if len(scanners) == 0 {
+		return nil, false
 	}
 
-	return nil, false
+	return scanners, true
 }
 
 // ----- Private Functions ----- //
@@ -65,9 +65,9 @@ func register(name string, scanner ServiceScanner) {
 func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) (exitCode int, err error) {
 	_, err = exec.LookPath(cmd.Path)
 
-	if errors.Is(err, exec.ErrNotFound) {
-		output.Warn(output.Verbose, "executable %s not found in $PATH, not running %s", cmd.Path, scanner.Name())
-		return 0, err
+	if err != nil {
+		// cmd not found
+		return -1, err
 	}
 
 	output.Info(output.Verbose, "Running %s", scanner.Name())
@@ -81,12 +81,12 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) (exit
 
 	//TODO: move this to be cmd specific
 	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
+
 	if err := cmd.Run(); err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {
 			return exitErr.ExitCode(), err
 		}
-		output.Warn(output.Verbose, "command: %s - error: %s", cmd.String(), err.Error())
 		return 0, err
 	}
 

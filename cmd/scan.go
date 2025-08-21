@@ -17,6 +17,7 @@ import (
 
 var (
 	scansRanCount int
+	scansErrCount int
 	targetName    string
 	startTime     time.Time
 )
@@ -61,7 +62,7 @@ func startScan() {
 		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
 	}
 
-	scansRanCount = core.ScanTarget(ipAddr, targetName)
+	scansRanCount, scansErrCount = core.ScanTarget(ipAddr, targetName)
 }
 
 func startTimer() {
@@ -70,6 +71,10 @@ func startTimer() {
 
 func endTimer() {
 	elapsed := time.Since(startTime)
+
+	if scansErrCount != 0 {
+		output.Warn(output.Normal, "Encountered %d error(s) while running scans", scansErrCount)
+	}
 
 	output.Success(output.Normal, "Completed %s scans in %s", scansRanCount, elapsed.Round(time.Millisecond))
 }

@@ -4,6 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
+	"fmt"
 	"os/exec"
 
 	"github.com/Turtle-In-Space/theia/models"
@@ -19,12 +20,18 @@ type NiktoScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s NiktoScanner) Run(port models.Port, host models.Host) {
+func (s NiktoScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, ".txt", port)
 
-	//FIX: sometimes returns error 1?
 	cmd := exec.Command("nikto", "-host", host.IPAddr, "-port", port.ID, "-o", resultFileName)
-	execute(s, cmd, "")
+
+	_, err = execute(s, cmd, "")
+	if err != nil {
+		//FIX: always returns error 1?
+		return fmt.Errorf("%s: %w", s.Name(), err)
+	}
+
+	return nil
 }
 
 // get all aliases for service names

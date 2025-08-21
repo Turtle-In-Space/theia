@@ -30,7 +30,7 @@ var (
 // ----- Public Functions ----- //
 
 // begin the target scan
-func ScanTarget(ip, targetName string) (scanCount int) {
+func ScanTarget(ip, targetName string) (scanCount, scanErrCount int) {
 	createFileStructure(targetName)
 	dataOutPath := scanTarget(ip)
 
@@ -40,7 +40,7 @@ func ScanTarget(ip, targetName string) (scanCount int) {
 	printFoundPorts(target)
 
 	scannerQueue := queueScanners(target)
-	scanCount = runScanners(scannerQueue)
+	scanCount, scanErrCount = runScanners(scannerQueue)
 
 	return
 }
@@ -119,20 +119,26 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 }
 
 // run all queued scanners and wait for them to finish, return count of scanners
-func runScanners(scannerQueue []validScanner) (scanCount int) {
+func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
 	var wg sync.WaitGroup
 
 	for _, scanner := range scannerQueue {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			scanner.scanner.Run(scanner.port, scanner.host)
+
+			err := scanner.scanner.Run(scanner.port, scanner.host)
+			if err != nil {
+				scanErrCount++
+
+				output.Warn(output.Verbose, err.Error())
+			}
 		}()
 	}
 
 	wg.Wait()
 
-	return len(scannerQueue)
+	return len(scannerQueue), scanErrCount
 }
 
 // create env files for each host in target

@@ -20,13 +20,19 @@ type WhatWebScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s WhatWebScanner) Run(port models.Port, host models.Host) {
+func (s WhatWebScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 
 	url := fmt.Sprintf("http://%s:%s", host.IPAddr, port.ID)
 
 	cmd := exec.Command("whatweb", url, "--color=never") // add -v
-	execute(s, cmd, resultFileName)
+
+	_, err = execute(s, cmd, resultFileName)
+	if err != nil {
+		return fmt.Errorf("%s: %w", s.Name(), err)
+	}
+
+	return nil
 }
 
 // get all aliases for service names

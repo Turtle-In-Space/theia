@@ -25,14 +25,20 @@ var seclistPath string = filepath.Join("/usr", "share", "seclists")
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s webDirScanner) Run(port models.Port, host models.Host) {
+func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, dataFileName := fileNames(s.name, ".json", port)
 
 	url := fmt.Sprintf("http://%s:%s/FUZZ", host.IPAddr, port.ID)
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
 	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-o", dataFileName)
-	execute(s, cmd, resultFileName)
+
+	_, err = execute(s, cmd, resultFileName)
+	if err != nil {
+		return fmt.Errorf("%s: %w", s.Name(), err)
+	}
+
+	return nil
 }
 
 // get all aliases for service names

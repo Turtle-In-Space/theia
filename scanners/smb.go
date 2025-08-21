@@ -4,6 +4,8 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
+	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/Turtle-In-Space/theia/models"
@@ -19,11 +21,18 @@ type smbScanner struct {
 // ----- Public Functions ----- //
 
 // run the scan on a ipAddr for a port
-func (s smbScanner) Run(port models.Port, host models.Host) {
-	resultFileName, dataFileName := fileNames(s.name, "", port)
+func (s smbScanner) Run(port models.Port, host models.Host) (err error) {
+	_, dataFileName := fileNames(s.name, "", port)
 
 	cmd := exec.Command("enum4linux-ng", "-A", host.IPAddr, "-oJ", dataFileName)
-	execute(s, cmd, resultFileName)
+	cmd.Stderr = os.Stderr
+
+	_, err = execute(s, cmd, "")
+	if err != nil {
+		return fmt.Errorf("%s: %w", s.Name(), err)
+	}
+
+	return nil
 }
 
 // get all aliases for service names

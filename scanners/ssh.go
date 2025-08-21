@@ -4,6 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package scanners
 
 import (
+	"fmt"
 	"os/exec"
 
 	"github.com/Turtle-In-Space/theia/models"
@@ -18,7 +19,7 @@ type SSHScanner struct {
 
 // ----- Public Functions ----- //
 
-func (s SSHScanner) Run(port models.Port, host models.Host) {
+func (s SSHScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, dataFileName := fileNames(s.name, ".xml", port)
 
 	cmd := exec.Command(
@@ -26,7 +27,12 @@ func (s SSHScanner) Run(port models.Port, host models.Host) {
 		"-oN", resultFileName, "-oX", dataFileName,
 		host.IPAddr)
 
-	execute(s, cmd, "")
+	_, err = execute(s, cmd, "")
+	if err != nil {
+		return fmt.Errorf("%s: %w", s.Name(), err)
+	}
+
+	return nil
 }
 
 // get all aliases for service names
