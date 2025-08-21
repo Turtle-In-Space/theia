@@ -32,7 +32,6 @@ func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
 	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-o", dataFileName)
-	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
 
 	_, err = execute(s, cmd, resultFileName)
 	if err != nil {
