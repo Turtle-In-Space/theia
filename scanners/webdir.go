@@ -31,7 +31,7 @@ func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	url := fmt.Sprintf("http://%s:%s/FUZZ", host.IPAddr, port.ID)
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
-	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-o", dataFileName)
+	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-v", "-o", dataFileName)
 
 	_, err = execute(s, cmd, resultFileName)
 	if err != nil {
