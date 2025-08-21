@@ -21,25 +21,25 @@ const (
 
 // ----- Variables ----- //
 
-var VerbosityThreshold VerbosityLevel
-var highlightedStyle *pterm.Style
+var verbosityThreshold VerbosityLevel
+var highlightedStyle *pterm.Style = pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
 
 // ----- Public Functions ----- //
 
 func SetThreshold(count int) {
 	switch count {
 	case 0:
-		VerbosityThreshold = Normal
+		verbosityThreshold = Normal
 	case 1:
-		VerbosityThreshold = Verbose
+		verbosityThreshold = Verbose
 	default:
-		VerbosityThreshold = Detailed
+		verbosityThreshold = Detailed
 		pterm.EnableDebugMessages()
 	}
 }
 
 func Info(level VerbosityLevel, msg string, args ...any) {
-	if level > VerbosityThreshold {
+	if level > verbosityThreshold {
 		return
 	}
 
@@ -49,7 +49,7 @@ func Info(level VerbosityLevel, msg string, args ...any) {
 }
 
 func Success(level VerbosityLevel, msg string, args ...any) {
-	if level > VerbosityThreshold {
+	if level > verbosityThreshold {
 		return
 	}
 
@@ -59,7 +59,7 @@ func Success(level VerbosityLevel, msg string, args ...any) {
 }
 
 func Warn(level VerbosityLevel, msg string, args ...any) {
-	if level > VerbosityThreshold {
+	if level > verbosityThreshold {
 		return
 	}
 
@@ -82,8 +82,6 @@ func Debug(msg string, args ...any) {
 // ----- Private Functions ----- //
 
 func init() {
-	highlightedStyle = pterm.NewStyle(pterm.BgYellow, pterm.FgBlack, pterm.Bold)
-
 	pterm.Info.Prefix = pterm.Prefix{Text: " INFO  ", Style: pterm.NewStyle(pterm.BgBlue, pterm.FgBlack)}
 	pterm.Info.MessageStyle = pterm.NewStyle(pterm.FgBlue)
 
