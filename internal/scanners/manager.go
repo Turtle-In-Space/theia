@@ -51,12 +51,12 @@ func register(name string, scanner ServiceScanner) {
 	serviceRegistry[name] = scanner
 }
 
-func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
-	_, err := exec.LookPath(cmd.Path)
+func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) (exitCode int, err error) {
+	_, err = exec.LookPath(cmd.Path)
 
 	if errors.Is(err, exec.ErrNotFound) {
 		output.Warn(output.Verbose, "executable %s not found in $PATH, not running %s", cmd.Path, scanner.Name())
-		return
+		return 0, err
 	}
 
 	output.Info(output.Verbose, "Running %s", scanner.Name())
@@ -70,11 +70,16 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) {
 
 	//TODO: move this to be cmd specific
 	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
-	err = cmd.Run()
-
-	if err != nil {
+	if err := cmd.Run(); err != nil {
+		var exitErr *exec.ExitError
+		if errors.As(err, &exitErr) {
+			return exitErr.ExitCode(), err
+		}
 		output.Warn(output.Verbose, "command: %s - error: %s", cmd.String(), err.Error())
+		return 0, err
 	}
+
+	return 0, nil
 }
 
 // generate names for txt file and out file
