@@ -7,9 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Turtle-In-Space/theia/internal/core"
-	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/scan"
-	"github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/core"
+	"github.com/Turtle-In-Space/theia/output"
 
 	"github.com/spf13/cobra"
 )
@@ -24,9 +23,9 @@ var (
 
 // scanCmd represents the scan command
 var scanCmd = &cobra.Command{
-	Use:   msg.Usage,
-	Short: msg.Short,
-	Long:  msg.Long,
+	Use:   "scan [IP]",
+	Short: "scan a target",
+	Long:  "scan a target",
 	Args:  cobra.ExactArgs(1),
 
 	PreRun: func(_ *cobra.Command, _ []string) {

@@ -4,8 +4,7 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 package cmd
 
 import (
-	msg "github.com/Turtle-In-Space/theia/internal/text/cmd/root"
-	"github.com/Turtle-In-Space/theia/pkg/output"
+	"github.com/Turtle-In-Space/theia/output"
 
 	"os"
 
@@ -20,9 +19,19 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     msg.Usage,
-	Short:   msg.Short,
-	Long:    msg.Long,
+	Use:   "theia",
+	Short: "A network scanner",
+	Long: `
+ ______  __ __    ___  ____   ____ 
+|      ||  |  |  /  _]|    | /    |
+|      ||  |  | /  [_  |  | |  o  |
+|_|  |_||  _  ||    _] |  | |     |
+  |  |  |  |  ||   [_  |  | |  _  |
+  |  |  |  |  ||     | |  | |  |  |
+  |__|  |__|__||_____||____||__|__|
+                                   
+A network scanner. It will scan given targets and then enumerate discovered services.`,
+
 	Version: "v0.2.0",
 
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
