@@ -5,7 +5,6 @@ package scanners
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 
 	"github.com/Turtle-In-Space/theia/models"
@@ -22,12 +21,12 @@ type smbScanner struct {
 
 // run the scan on a ipAddr for a port
 func (s smbScanner) Run(port models.Port, host models.Host) (err error) {
-	_, dataFileName := fileNames(s.name, "", port)
+	resultFileName, dataFileName := fileNames(s.name, "", port)
 
 	cmd := exec.Command("enum4linux-ng", "-A", host.IPAddr, "-oJ", dataFileName)
-	cmd.Stderr = os.Stderr
+	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
 
-	_, err = execute(s, cmd, "")
+	_, err = execute(s, cmd, resultFileName)
 	if err != nil {
 		return fmt.Errorf("%s: %w", s.Name(), err)
 	}
