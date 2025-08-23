@@ -75,7 +75,6 @@ func GetTarget(xmlFilePath, targetName string) models.Target {
 
 // ----- Private Functions ----- //
 
-// begin parsing the target
 func parseTarget(results nmapRun, name string) models.Target {
 	return models.Target{
 		Name:  name,
@@ -83,7 +82,6 @@ func parseTarget(results nmapRun, name string) models.Target {
 	}
 }
 
-// Stores all hosts in a slice
 func parseHosts(results nmapRun) (hosts []models.Host) {
 	for _, newHost := range results.Hosts {
 		var name, ipAddr string

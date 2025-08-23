@@ -19,7 +19,6 @@ type smbScanner struct {
 
 // ----- Public Functions ----- //
 
-// run the scan on a ipAddr for a port
 func (s smbScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, dataFileName := fileNames(s.name, "", port)
 
@@ -34,12 +33,10 @@ func (s smbScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s smbScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s smbScanner) Name() (name string) {
 	return s.name
 }

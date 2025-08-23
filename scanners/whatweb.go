@@ -19,7 +19,6 @@ type WhatWebScanner struct {
 
 // ----- Public Functions ----- //
 
-// run the scan on a ipAddr for a port
 func (s WhatWebScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 
@@ -35,12 +34,10 @@ func (s WhatWebScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s WhatWebScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s WhatWebScanner) Name() (name string) {
 	return s.name
 }

@@ -40,7 +40,6 @@ var serviceRegistry = make(map[string]ServiceScanner)
 
 // ----- Public Functions ----- //
 
-// get scanners that target a service
 func ScannersByServiceName(service string) (scanners []ServiceScanner, ok bool) {
 	for _, scanner := range serviceRegistry {
 		if slices.Contains(scanner.ServiceNames(), service) {
@@ -57,7 +56,6 @@ func ScannersByServiceName(service string) (scanners []ServiceScanner, ok bool) 
 
 // ----- Private Functions ----- //
 
-// register the scanner to be used
 func register(name string, scanner ServiceScanner) {
 	serviceRegistry[name] = scanner
 }

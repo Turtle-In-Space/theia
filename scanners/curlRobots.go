@@ -20,7 +20,6 @@ type curlRobotsScanner struct {
 
 // ----- Public Functions ----- //
 
-// run the scan on a ipAddr for a port
 func (s curlRobotsScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, ".html", port)
 
@@ -43,12 +42,10 @@ func (s curlRobotsScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s curlRobotsScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s curlRobotsScanner) Name() (name string) {
 	return s.name
 }

@@ -24,7 +24,6 @@ var seclistPath string = filepath.Join("/usr", "share", "seclists")
 
 // ----- Public Functions ----- //
 
-// run the scan on a ipAddr for a port
 func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, dataFileName := fileNames(s.name, ".json", port)
 
@@ -41,12 +40,10 @@ func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s webDirScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s webDirScanner) Name() (name string) {
 	return s.name
 }

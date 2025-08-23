@@ -19,7 +19,6 @@ type NiktoScanner struct {
 
 // ----- Public Functions ----- //
 
-// run the scan on a ipAddr for a port
 func (s NiktoScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, ".txt", port)
 
@@ -34,12 +33,10 @@ func (s NiktoScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s NiktoScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s NiktoScanner) Name() (name string) {
 	return s.name
 }

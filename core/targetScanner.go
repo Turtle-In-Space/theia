@@ -29,7 +29,6 @@ var (
 
 // ----- Public Functions ----- //
 
-// begin the target scan
 func ScanTarget(ip, targetName string) (scanCount, scanErrCount int) {
 	createFileStructure(targetName)
 	dataOutPath := scanTarget(ip)
@@ -47,7 +46,6 @@ func ScanTarget(ip, targetName string) (scanCount, scanErrCount int) {
 
 // ----- Private Functions ----- //
 
-// create the stucture
 func createFileStructure(name string) {
 	output.Debug("Creating file stucture...")
 	helpers.CreateDir(name)
@@ -59,7 +57,7 @@ func createFileStructure(name string) {
 	helpers.CreateDir(dataDir)
 }
 
-// use nmap to scan the target
+// use nmap to scan the target for open ports
 func scanTarget(ip string) (dataOut string) {
 	output.Info(output.Normal, "Scanning target...")
 
@@ -78,7 +76,6 @@ func scanTarget(ip string) (dataOut string) {
 	return
 }
 
-// print all found ports for the target
 func printFoundPorts(target models.Target) {
 	for _, host := range target.Hosts {
 		for _, port := range host.Ports {
@@ -118,7 +115,6 @@ func queueScanners(target models.Target) (servicesWithScan []validScanner) {
 	return
 }
 
-// run all queued scanners and wait for them to finish, return count of scanners
 func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
 	var wg sync.WaitGroup
 
@@ -141,7 +137,6 @@ func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
 	return len(scannerQueue), scanErrCount
 }
 
-// create env files for each host in target
 func addEnvFiles(target models.Target) {
 	for _, host := range target.Hosts {
 		CreateEnvFile(host.IPAddr, host.Dir)

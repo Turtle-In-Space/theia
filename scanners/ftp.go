@@ -35,12 +35,10 @@ func (s FTPScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s FTPScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s FTPScanner) Name() (name string) {
 	return s.name
 }

@@ -35,12 +35,10 @@ func (s SSHScanner) Run(port models.Port, host models.Host) (err error) {
 	return nil
 }
 
-// get all aliases for service names
 func (s SSHScanner) ServiceNames() []string {
 	return s.serviceNames
 }
 
-// get the name of this scanner
 func (s SSHScanner) Name() (name string) {
 	return s.name
 }
