@@ -12,7 +12,6 @@ import (
 )
 
 var (
-	ipAddr string
 	// cfgFile        string
 	verbosityCount int
 )

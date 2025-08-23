@@ -35,8 +35,7 @@ var scanCmd = &cobra.Command{
 
 	// Store args then start scan
 	Run: func(cmd *cobra.Command, args []string) {
-		getArgs(args)
-		startScan()
+		startScan(args)
 	},
 
 	PostRun: func(_ *cobra.Command, _ []string) {
@@ -51,13 +50,10 @@ func init() {
 	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
 }
 
-// store cmd args
-func getArgs(args []string) {
-	ipAddr = args[0]
-}
-
 // run the actual scan
-func startScan() {
+func startScan(args []string) {
+	ipAddr := args[0]
+
 	if targetName == "" {
 		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
 	}
