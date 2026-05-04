@@ -12,16 +12,10 @@ import (
 
 // ----- Structs ----- //
 
-// implemeted for future use
-type Target struct {
-	Name  string
-	Hosts []Host
-	Dir   string
-}
-
 type Host struct {
+	Name     string
 	Hostname string
-	IPAddr   string
+	IpAddr   string
 	Ports    []Port
 	Dir      string
 }
@@ -39,24 +33,9 @@ type Service struct {
 	Name string
 }
 
-func (t *Target) AddDirs(scanDir string) {
-	t.Dir = scanDir
+func (h *Host) AddDirs(dir string) {
+	h.Dir = dir
 
-	if len(t.Hosts) == 1 {
-		host := &t.Hosts[0]
-		host.Dir = t.Dir
-		host.addDirs()
-	} else {
-		for i := range t.Hosts {
-			host := &t.Hosts[i]
-			host.Dir = host.IPAddr
-			helpers.CreateDir(host.Dir)
-			host.addDirs()
-		}
-	}
-}
-
-func (h *Host) addDirs() {
 	for i := range h.Ports {
 		port := &h.Ports[i]
 

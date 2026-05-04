@@ -59,7 +59,7 @@ type xmlService struct {
 // ----- Public Functions ----- //
 
 // parse the target from a nmap scan
-func GetTarget(xmlFilePath, targetName string) models.Target {
+func ParseNmapResult(xmlFilePath string, host *models.Host) {
 	output.Debug("Parsing nmap xml data...")
 
 	xmlFile := helpers.OpenFile(xmlFilePath)
@@ -69,49 +69,10 @@ func GetTarget(xmlFilePath, targetName string) models.Target {
 
 	var results nmapRun
 	xml.Unmarshal(byteValue, &results)
-
-	return parseTarget(results, targetName)
+	host.Ports = parsePorts(results.Hosts[0])
 }
 
 // ----- Private Functions ----- //
-
-func parseTarget(results nmapRun, name string) models.Target {
-	return models.Target{
-		Name:  name,
-		Hosts: parseHosts(results),
-	}
-}
-
-func parseHosts(results nmapRun) (hosts []models.Host) {
-	for _, newHost := range results.Hosts {
-		var name, ipAddr string
-
-		//TODO: sometimes multiple hostnames for some reason, use first as all are the same?
-		hostnames := newHost.Hostname.Hostnames
-		if len(hostnames) == 0 {
-			name = ""
-		} else {
-			name = hostnames[0].Name
-		}
-
-		//TODO: return mac, v4 and v6?
-		for _, addr := range newHost.Addresses {
-			if addr.Type == "ipv4" {
-				ipAddr = addr.Addr
-				break
-			}
-		}
-
-		hosts = append(hosts, models.Host{
-			Hostname: name,
-			IPAddr:   ipAddr,
-			Ports:    parsePorts(newHost),
-		})
-	}
-
-	return
-}
-
 func parsePorts(newHost xmlHost) (ports []models.Port) {
 	for _, port := range newHost.Ports.Ports {
 

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Turtle-In-Space/theia/core"
+	"github.com/Turtle-In-Space/theia/models"
 	"github.com/Turtle-In-Space/theia/output"
 
 	"github.com/spf13/cobra"
@@ -19,6 +20,7 @@ var (
 	scansRanCount int
 	scansErrCount int
 	targetName    string
+	hostname      string
 	startTime     time.Time
 )
 
@@ -47,7 +49,8 @@ var scanCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(scanCmd)
-	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target")
+	scanCmd.Flags().StringVarP(&targetName, "name", "n", "", "Name of the target (used for folders)")
+	scanCmd.Flags().StringVar(&hostname, "host", "", "Hostname of the target")
 }
 
 // run the actual scan
@@ -58,7 +61,7 @@ func startScan(args []string) {
 		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
 	}
 
-	scansRanCount, scansErrCount = core.ScanTarget(ipAddr, targetName)
+	scansRanCount, scansErrCount = core.ScanTarget(models.Host{Name: targetName, IpAddr: ipAddr, Hostname: hostname})
 }
 
 func startTimer() {

@@ -29,16 +29,16 @@ var (
 
 // ----- Public Functions ----- //
 
-func ScanTarget(ip, targetName string) (scanCount, scanErrCount int) {
-	createFileStructure(targetName)
-	dataOutPath := scanTarget(ip)
+func ScanTarget(host models.Host) (scanCount, scanErrCount int) {
+	createFileStructure(host.Name)
+	dataOutPath := scanTarget(host.IpAddr)
 
-	target := GetTarget(dataOutPath, targetName)
-	target.AddDirs(scanDir)
-	addEnvFiles(target)
-	printFoundPorts(target)
+	ParseNmapResult(dataOutPath, &host)
+	host.AddDirs(scanDir)
+	CreateEnvFile(host)
+	printFoundPorts(host)
 
-	scannerQueue := queueScanners(target)
+	scannerQueue := queueScanners(host)
 	scanCount, scanErrCount = runScanners(scannerQueue)
 
 	return
@@ -76,39 +76,35 @@ func scanTarget(ip string) (dataOut string) {
 	return
 }
 
-func printFoundPorts(target models.Target) {
-	for _, host := range target.Hosts {
-		for _, port := range host.Ports {
-			output.Info(output.Normal, "Found service %s on host %s port %s", port.Service.Name, host.IPAddr, port.Name())
-		}
+func printFoundPorts(host models.Host) {
+	for _, port := range host.Ports {
+		output.Info(output.Normal, "Found service %s on host %s port %s", port.Service.Name, host.IpAddr, port.Name())
 	}
 }
 
 // for each port match a scan to the service
-func queueScanners(target models.Target) (servicesWithScan []validScanner) {
-	for _, host := range target.Hosts {
-		for _, port := range host.Ports {
-			scanners, ok := scanners.ScannersByServiceName(port.Service.Name)
+func queueScanners(host models.Host) (servicesWithScan []validScanner) {
+	for _, port := range host.Ports {
+		scanners, ok := scanners.ScannersByServiceName(port.Service.Name)
 
-			//TODO: work out a solution for smb having same service multiple ports. Also http may exist on multiple ports same host
-			if ok {
-				scannerNames := make([]string, len(scanners))
+		//TODO: work out a solution for smb having same service multiple ports. Also http may exist on multiple ports same host
+		if ok {
+			scannerNames := make([]string, len(scanners))
 
-				for i, scan := range scanners {
-					servicesWithScan = append(servicesWithScan,
-						validScanner{
-							scanner: scan,
-							port:    port,
-							host:    host,
-						})
-					scannerNames[i] = scan.Name()
-				}
-				output.Info(output.Verbose, "For service %s on %s:%s - using following scans: %s",
-					port.Service.Name, host.IPAddr, port.Name(), scannerNames)
-
-			} else {
-				output.Warn(output.Verbose, "For service %s on %s:%s - found no scan", port.Service.Name, host.IPAddr, port.Name())
+			for i, scan := range scanners {
+				servicesWithScan = append(servicesWithScan,
+					validScanner{
+						scanner: scan,
+						port:    port,
+						host:    host,
+					})
+				scannerNames[i] = scan.Name()
 			}
+			output.Info(output.Verbose, "For service %s on %s:%s - using following scans: %s",
+				port.Service.Name, host.IpAddr, port.Name(), scannerNames)
+
+		} else {
+			output.Warn(output.Verbose, "For service %s on %s:%s - found no scan", port.Service.Name, host.IpAddr, port.Name())
 		}
 	}
 
@@ -135,10 +131,4 @@ func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
 	wg.Wait()
 
 	return len(scannerQueue), scanErrCount
-}
-
-func addEnvFiles(target models.Target) {
-	for _, host := range target.Hosts {
-		CreateEnvFile(host.IPAddr, host.Dir)
-	}
 }

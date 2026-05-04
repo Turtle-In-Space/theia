@@ -6,18 +6,19 @@ import (
 	"path/filepath"
 
 	"github.com/Turtle-In-Space/theia/helpers"
+	"github.com/Turtle-In-Space/theia/models"
 	"github.com/Turtle-In-Space/theia/output"
 )
 
-func CreateEnvFile(ipAddr, path string) {
-	fileName := filepath.Join(path, fmt.Sprintf("%s.env", ipAddr))
+func CreateEnvFile(host models.Host) {
+	fileName := filepath.Join(host.Dir, fmt.Sprintf("%s.env", host.IpAddr))
 	file := helpers.CreateFile(fileName)
 	defer file.Close()
 
 	writeLine(file, "# Created by theia")
-	writeLine(file, fmt.Sprintf("ip=%s", ipAddr))
+	writeLine(file, fmt.Sprintf("ip=%s", host.IpAddr))
 
-	output.Debug("created env file for: %s", ipAddr)
+	output.Debug("created env file for: %s", host.IpAddr)
 }
 
 func writeLine(file *os.File, msg string) {

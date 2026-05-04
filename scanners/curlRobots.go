@@ -23,7 +23,7 @@ type curlRobotsScanner struct {
 func (s curlRobotsScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, ".html", port)
 
-	url := fmt.Sprintf("http://%s:%s/robots.txt", host.IPAddr, port.ID)
+	url := fmt.Sprintf("http://%s:%s/robots.txt", host.IpAddr, port.ID)
 
 	cmd := exec.Command("curl", url, "--fail", "--styled-output", "--output", resultFileName)
 

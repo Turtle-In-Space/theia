@@ -22,7 +22,7 @@ type WhatWebScanner struct {
 func (s WhatWebScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 
-	url := fmt.Sprintf("http://%s:%s", host.IPAddr, port.ID)
+	url := fmt.Sprintf("http://%s:%s", host.IpAddr, port.ID)
 
 	cmd := exec.Command("whatweb", url, "--color=never") // add -v
 

@@ -25,7 +25,7 @@ func (s SSHScanner) Run(port models.Port, host models.Host) (err error) {
 	cmd := exec.Command(
 		"nmap", "-Pn", "-T4", "-sV", "-p", port.ID,
 		"-oN", resultFileName, "-oX", dataFileName,
-		host.IPAddr)
+		host.IpAddr)
 
 	_, err = execute(s, cmd, "")
 	if err != nil {
