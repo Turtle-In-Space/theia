@@ -61,7 +61,11 @@ func startScan(args []string) {
 		targetName = fmt.Sprintf("theia-scan_%s", time.Now().Format(time.RFC3339))
 	}
 
-	scansRanCount, scansErrCount = core.ScanTarget(models.Host{Name: targetName, IpAddr: ipAddr, Hostname: hostname})
+	scansRanCount, scansErrCount = core.ScanTarget(
+		models.Host{
+			Name:     targetName,
+			IpAddr:   ipAddr,
+			Hostname: hostname})
 }
 
 func startTimer() {

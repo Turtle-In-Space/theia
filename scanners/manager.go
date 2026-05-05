@@ -89,6 +89,7 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) (exit
 }
 
 // generate names for txt file and out file
+// TODO: impove this func
 func fileNames(scanName, dataExtension string, port models.Port) (resultFileName, dataFileName string) {
 	result := fmt.Sprintf("%s.txt", scanName)
 	data := fmt.Sprintf("%s%s", scanName, dataExtension)
