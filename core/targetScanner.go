@@ -65,7 +65,7 @@ func scanTarget(ip string) (dataOut string) {
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
 	//TODO: remove comment
-	cmd := exec.Command("nmap" /*,  "-sV" */, "-T4", "-Pn", ip,
+	cmd := exec.Command("nmap" /*, "-sV" */, "-T4", "-Pn", "-n", ip,
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
@@ -78,7 +78,7 @@ func scanTarget(ip string) (dataOut string) {
 
 func printFoundPorts(host models.Host) {
 	for _, port := range host.Ports {
-		output.Info(output.Normal, "Found service %s on host %s port %s", port.Service.Name, host.IpAddr, port.Name())
+		output.Info(output.Normal, "Found service %s on host %s port %s", port.Service.Name, host.Address(), port.Name())
 	}
 }
 
@@ -101,10 +101,10 @@ func queueScanners(host models.Host) (servicesWithScan []validScanner) {
 				scannerNames[i] = scan.Name()
 			}
 			output.Info(output.Verbose, "For service %s on %s:%s - using following scans: %s",
-				port.Service.Name, host.IpAddr, port.Name(), scannerNames)
+				port.Service.Name, host.Address(), port.Name(), scannerNames)
 
 		} else {
-			output.Warn(output.Verbose, "For service %s on %s:%s - found no scan", port.Service.Name, host.IpAddr, port.Name())
+			output.Warn(output.Verbose, "For service %s on %s:%s - found no scan", port.Service.Name, host.Address(), port.Name())
 		}
 	}
 

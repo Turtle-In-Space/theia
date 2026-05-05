@@ -11,7 +11,7 @@ import (
 )
 
 func CreateEnvFile(host models.Host) {
-	fileName := filepath.Join(host.Dir, fmt.Sprintf("%s.env", host.IpAddr))
+	fileName := filepath.Join(host.Dir, fmt.Sprintf("%s.env", host.Address()))
 	file := helpers.CreateFile(fileName)
 	defer file.Close()
 
@@ -24,7 +24,7 @@ func CreateEnvFile(host models.Host) {
 		writeLine(file, fmt.Sprintf("urls=https://%s", host.Hostname))
 	}
 
-	output.Debug("created env file for: %s", host.IpAddr)
+	output.Debug("created env file for: %s", host.Address())
 }
 
 func writeLine(file *os.File, msg string) {
