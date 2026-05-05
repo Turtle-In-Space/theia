@@ -21,20 +21,11 @@ type nmapRun struct {
 type xmlHost struct {
 	Ports     xmlPorts     `xml:"ports"`
 	Addresses []xmlAddress `xml:"address"`
-	Hostname  xmlHostnames `xml:"hostnames"`
 }
 
 type xmlAddress struct {
 	Addr string `xml:"addr,attr"`
 	Type string `xml:"addrtype,attr"`
-}
-
-type xmlHostnames struct {
-	Hostnames []xmlHostname
-}
-
-type xmlHostname struct {
-	Name string `xml:"name,attr"`
 }
 
 type xmlPorts struct {
