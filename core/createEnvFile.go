@@ -18,6 +18,12 @@ func CreateEnvFile(host models.Host) {
 	writeLine(file, "# Created by theia")
 	writeLine(file, fmt.Sprintf("ip=%s", host.IpAddr))
 
+	if host.Hostname != "" {
+		writeLine(file, fmt.Sprintf("host=%s", host.Hostname))
+		writeLine(file, fmt.Sprintf("url=http://%s", host.Hostname))
+		writeLine(file, fmt.Sprintf("urls=https://%s", host.Hostname))
+	}
+
 	output.Debug("created env file for: %s", host.IpAddr)
 }
 
