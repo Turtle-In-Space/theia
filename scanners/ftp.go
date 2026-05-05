@@ -25,7 +25,7 @@ func (s FTPScanner) Run(port models.Port, host models.Host) (err error) {
 	cmd := exec.Command(
 		"nmap", "-Pn", "-T4", "-sV", "-sC", "-p", port.ID,
 		"-oN", resultFileName, "-oX", dataFileName,
-		host.IpAddr)
+		host.Address())
 
 	_, err = execute(s, cmd, "")
 	if err != nil {

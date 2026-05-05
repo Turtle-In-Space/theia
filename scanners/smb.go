@@ -22,7 +22,7 @@ type smbScanner struct {
 func (s smbScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, dataFileName := fileNames(s.name, "", port)
 
-	cmd := exec.Command("enum4linux-ng", "-A", host.IpAddr, "-oJ", dataFileName)
+	cmd := exec.Command("enum4linux-ng", "-A", host.Address(), "-oJ", dataFileName)
 	cmd.Env = append(cmd.Environ(), "NO_COLOR=1")
 
 	_, err = execute(s, cmd, resultFileName)

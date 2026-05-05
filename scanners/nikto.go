@@ -22,7 +22,7 @@ type NiktoScanner struct {
 func (s NiktoScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, ".txt", port)
 
-	cmd := exec.Command("nikto", "-host", host.IpAddr, "-port", port.ID, "-o", resultFileName)
+	cmd := exec.Command("nikto", "-host", host.Address(), "-port", port.ID, "-o", resultFileName)
 
 	_, err = execute(s, cmd, "")
 	if err != nil {

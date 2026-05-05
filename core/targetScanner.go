@@ -31,7 +31,7 @@ var (
 
 func ScanTarget(host models.Host) (scanCount, scanErrCount int) {
 	createFileStructure(host.Name)
-	dataOutPath := scanTarget(host.IpAddr)
+	dataOutPath := scanTarget(host.Address())
 
 	ParseNmapResult(dataOutPath, &host)
 	host.AddDirs(scanDir)

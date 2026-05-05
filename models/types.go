@@ -47,6 +47,16 @@ func (h *Host) AddDirs(dir string) {
 	}
 }
 
+func (h *Host) Address() (addr string) {
+	if h.Hostname != "" {
+		addr = h.Hostname
+	} else {
+		addr = h.IpAddr
+	}
+
+	return
+}
+
 func (p *Port) Name() string {
 	return fmt.Sprintf("%s/%s", p.Protocol, p.ID)
 }
