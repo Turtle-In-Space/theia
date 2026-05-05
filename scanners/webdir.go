@@ -20,19 +20,20 @@ type webDirScanner struct {
 
 // ----- Variables ----- //
 
-var seclistPath string = filepath.Join("/usr", "share", "seclists")
+var seclistPath string = filepath.Join("/usr", "share", "SecLists")
 
 // ----- Public Functions ----- //
 
 func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
-	resultFileName, dataFileName := fileNames(s.name, ".json", port)
+	_, dataFileName := fileNames(s.name, ".html", port)
 
 	url := fmt.Sprintf("http://%s:%s/FUZZ", host.Address(), port.ID)
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
-	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-ac", "-v", "-o", dataFileName)
+	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive",
+		"-ac", "-v", "-of", "html", "-o", dataFileName)
 
-	_, err = execute(s, cmd, resultFileName)
+	_, err = execute(s, cmd, "")
 	if err != nil {
 		return fmt.Errorf("%s: %w", s.Name(), err)
 	}
