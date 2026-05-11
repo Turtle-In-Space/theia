@@ -30,7 +30,7 @@ var (
 
 // ----- Public Functions ----- //
 
-func ScanTarget(host models.Host) (scanCount int, scanErrCount atomic.Int32) {
+func ScanTarget(host models.Host) (scanCount int, scanErrCount int) {
 	createFileStructure(host.Name)
 	dataOutPath := scanTarget(host.Address())
 
@@ -111,8 +111,9 @@ func queueScanners(host models.Host) (servicesWithScan []validScanner) {
 	return
 }
 
-func runScanners(scannerQueue []validScanner) (scanCount int, scanErrCount atomic.Int32) {
+func runScanners(scannerQueue []validScanner) (int, int) {
 	var wg sync.WaitGroup
+	var errCount atomic.Int32
 
 	for _, scanner := range scannerQueue {
 		wg.Add(1)
@@ -121,7 +122,7 @@ func runScanners(scannerQueue []validScanner) (scanCount int, scanErrCount atomi
 
 			err := scanner.scanner.Run(scanner.port, scanner.host)
 			if err != nil {
-				scanErrCount.Add(1)
+				errCount.Add(1)
 
 				output.Warn(output.Verbose, err.Error())
 			}
@@ -130,5 +131,5 @@ func runScanners(scannerQueue []validScanner) (scanCount int, scanErrCount atomi
 
 	wg.Wait()
 
-	return len(scannerQueue), scanErrCount
+	return len(scannerQueue), int(errCount.Load())
 }
