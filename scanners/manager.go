@@ -77,6 +77,8 @@ func execute(scanner ServiceScanner, cmd *exec.Cmd, resultFileName string) (exit
 		cmd.Stdout = resultFile
 	}
 
+	cmd.Stdin = nil
+
 	if err := cmd.Run(); err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {

@@ -44,10 +44,10 @@ func (s NiktoScanner) Name() (name string) {
 // ----- Private Functions ----- //
 
 func init() {
-	scanner := NiktoScanner{
-		serviceNames: []string{"http"},
-		name:         "NiktoScanner",
-	}
-
-	register("niktoSccanner", scanner)
+	// scanner := NiktoScanner{
+	// 	serviceNames: []string{"http"},
+	// 	name:         "NiktoScanner",
+	// }
+	//
+	// register("niktoSccanner", scanner)
 }

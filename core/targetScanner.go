@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sync"
+	"sync/atomic"
 
 	"github.com/Turtle-In-Space/theia/helpers"
 	"github.com/Turtle-In-Space/theia/models"
@@ -29,7 +30,7 @@ var (
 
 // ----- Public Functions ----- //
 
-func ScanTarget(host models.Host) (scanCount, scanErrCount int) {
+func ScanTarget(host models.Host) (scanCount int, scanErrCount atomic.Int32) {
 	createFileStructure(host.Name)
 	dataOutPath := scanTarget(host.Address())
 
@@ -64,8 +65,7 @@ func scanTarget(ip string) (dataOut string) {
 	dataOut = filepath.Join(dataDir, "nmap.xml")
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
-	//TODO: remove comment
-	cmd := exec.Command("nmap" /*, "-sV", "-sC"*/, "-T4", "-Pn", "-n", ip,
+	cmd := exec.Command("nmap", "-sV", "-sC", "-T4", "-Pn", "-n", ip,
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
@@ -111,7 +111,7 @@ func queueScanners(host models.Host) (servicesWithScan []validScanner) {
 	return
 }
 
-func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
+func runScanners(scannerQueue []validScanner) (scanCount int, scanErrCount atomic.Int32) {
 	var wg sync.WaitGroup
 
 	for _, scanner := range scannerQueue {
@@ -121,7 +121,7 @@ func runScanners(scannerQueue []validScanner) (scanCount, scanErrCount int) {
 
 			err := scanner.scanner.Run(scanner.port, scanner.host)
 			if err != nil {
-				scanErrCount++
+				scanErrCount.Add(1)
 
 				output.Warn(output.Verbose, err.Error())
 			}

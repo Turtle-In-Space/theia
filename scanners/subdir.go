@@ -29,9 +29,9 @@ func (s subDirScanner) Run(port models.Port, host models.Host) (err error) {
 
 	url := fmt.Sprintf("http://%s:%s", host.Address(), port.ID)
 	wordlist := filepath.Join(seclistPath, "Discovery", "DNS", "subdomains-top1million-110000.txt")
-	hostFuzz := fmt.Sprintf("\"HOST: FUZZ.%s\"", host.Hostname)
+	hostFuzz := fmt.Sprintf("HOST: FUZZ.%s", host.Hostname)
 
-	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive",
+	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive", "-t=100",
 		"-H", hostFuzz, "-ac", "-v", "-of", "html", "-o", dataFileName)
 
 	_, err = execute(s, cmd, "")

@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"sync/atomic"
 	"time"
 
 	"github.com/Turtle-In-Space/theia/core"
@@ -18,7 +19,7 @@ import (
 
 var (
 	scansRanCount int
-	scansErrCount int
+	scansErrCount atomic.Int32
 	targetName    string
 	hostname      string
 	startTime     time.Time
@@ -75,8 +76,8 @@ func startTimer() {
 func endTimer() {
 	elapsed := time.Since(startTime)
 
-	if scansErrCount != 0 {
-		output.Warn(output.Normal, "Encountered %d error(s) while running scans", scansErrCount)
+	if scansErrCount.Load() != 0 {
+		output.Warn(output.Normal, "Encountered %d error(s) while running scans", scansErrCount.Load())
 	}
 
 	output.Success(output.Normal, "Completed %s scans in %s", scansRanCount, elapsed.Round(time.Millisecond))
