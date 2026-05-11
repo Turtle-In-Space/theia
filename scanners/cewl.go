@@ -23,8 +23,7 @@ func (s CewlScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 	resultEmailFileName, _ := fileNames(fmt.Sprintf("%s-email", s.name), "", port)
 
-	url := fmt.Sprintf("http://%s:%s", host.Address(), port.ID)
-
+	url := createURL(host, port)
 	cmd := exec.Command("cewl", url, "--depth=3", "--with-numbers", "--email", "-w", resultFileName, "--email_file", resultEmailFileName)
 
 	_, err = execute(s, cmd, resultFileName)
@@ -47,7 +46,7 @@ func (s CewlScanner) Name() (name string) {
 
 func init() {
 	scanner := CewlScanner{
-		serviceNames: []string{"http"},
+		serviceNames: []string{"http", "https"},
 		name:         "CewlScanner",
 	}
 

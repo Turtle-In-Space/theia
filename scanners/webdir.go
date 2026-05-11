@@ -27,7 +27,7 @@ var seclistPath string = filepath.Join("/usr", "share", "wordlists", "seclists")
 func (s webDirScanner) Run(port models.Port, host models.Host) (err error) {
 	_, dataFileName := fileNames(s.name, ".html", port)
 
-	url := fmt.Sprintf("http://%s:%s/FUZZ", host.Address(), port.ID)
+	url := fmt.Sprintf("%s/FUZZ", createURL(host, port))
 	wordlist := filepath.Join(seclistPath, "Discovery", "Web-Content", "big.txt")
 
 	cmd := exec.Command("ffuf", "-u", url, "-w", wordlist, "-ic", "-noninteractive",

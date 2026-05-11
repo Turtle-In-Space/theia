@@ -22,8 +22,7 @@ type WhatWebScanner struct {
 func (s WhatWebScanner) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 
-	url := fmt.Sprintf("http://%s:%s", host.Address(), port.ID)
-
+	url := createURL(host, port)
 	cmd := exec.Command("whatweb", url, "--color=never") // add -v
 
 	_, err = execute(s, cmd, resultFileName)
@@ -46,7 +45,7 @@ func (s WhatWebScanner) Name() (name string) {
 
 func init() {
 	scanner := WhatWebScanner{
-		serviceNames: []string{"http"},
+		serviceNames: []string{"http", "https"},
 		name:         "WhatWebScanner",
 	}
 

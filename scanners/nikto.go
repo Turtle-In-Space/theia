@@ -45,7 +45,7 @@ func (s NiktoScanner) Name() (name string) {
 
 func init() {
 	// scanner := NiktoScanner{
-	// 	serviceNames: []string{"http"},
+	// 	serviceNames: []string{"http", "https"},
 	// 	name:         "NiktoScanner",
 	// }
 	//

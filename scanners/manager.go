@@ -101,3 +101,7 @@ func fileNames(scanName, dataExtension string, port models.Port) (resultFileName
 
 	return
 }
+
+func createURL(host models.Host, port models.Port) string {
+	return fmt.Sprintf("%s://%s:%s", port.Service.Name, host.Address(), port.ID)
+}

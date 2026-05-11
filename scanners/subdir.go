@@ -27,7 +27,7 @@ func (s subDirScanner) Run(port models.Port, host models.Host) (err error) {
 
 	_, dataFileName := fileNames(s.name, ".html", port)
 
-	url := fmt.Sprintf("http://%s:%s", host.Address(), port.ID)
+	url := createURL(host, port)
 	wordlist := filepath.Join(seclistPath, "Discovery", "DNS", "subdomains-top1million-110000.txt")
 	hostFuzz := fmt.Sprintf("HOST: FUZZ.%s", host.Hostname)
 
@@ -54,7 +54,7 @@ func (s subDirScanner) Name() (name string) {
 
 func init() {
 	scanner := subDirScanner{
-		serviceNames: []string{"http"},
+		serviceNames: []string{"http", "https"},
 		name:         "SubDirScanner",
 	}
 
