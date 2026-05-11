@@ -11,7 +11,14 @@ import (
 )
 
 func CreateEnvFile(host models.Host) {
-	fileName := filepath.Join(host.Dir, fmt.Sprintf("%s.env", host.Address()))
+	var folderName string
+	if host.Name != "" {
+		folderName = host.Name
+	} else {
+		folderName = host.Address()
+	}
+
+	fileName := filepath.Join(host.Dir, fmt.Sprintf("../%s.env", folderName)) // bad fix?
 	file := helpers.CreateFile(fileName)
 	defer file.Close()
 
@@ -20,9 +27,10 @@ func CreateEnvFile(host models.Host) {
 
 	if host.Hostname != "" {
 		writeLine(file, fmt.Sprintf("host=%s", host.Hostname))
-		writeLine(file, fmt.Sprintf("url=http://%s", host.Hostname))
-		writeLine(file, fmt.Sprintf("urls=https://%s", host.Hostname))
 	}
+
+	writeLine(file, fmt.Sprintf("url=http://%s", host.Address()))
+	writeLine(file, fmt.Sprintf("urls=https://%s", host.Address()))
 
 	output.Debug("created env file for: %s", host.Address())
 }
