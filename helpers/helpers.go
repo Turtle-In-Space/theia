@@ -11,6 +11,8 @@ import (
 
 // ----- Public Functions ----- //
 
+//TODO: Handle errors better
+
 // create a dir with the given name
 func CreateDir(name string) {
 	err := os.MkdirAll(name, 0766)
@@ -40,4 +42,12 @@ func CreateFile(filePath string) *os.File {
 	}
 
 	return file
+}
+
+func WriteLine(file *os.File, msg string) {
+	_, err := file.WriteString(msg + "\n")
+
+	if err != nil {
+		output.Warn(output.Normal, "failed writing to file: %s with error: %s", file.Name(), err.Error())
+	}
 }
