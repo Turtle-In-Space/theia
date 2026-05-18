@@ -11,7 +11,7 @@ import (
 )
 
 func CreateMsfFile(host models.Host, nmap_data string) {
-	fileName := filepath.Join(host.Dir, fmt.Sprint("../start.rc")) // bad fix?
+	fileName := filepath.Join(host.Dir, "../start.rc") // bad fix?
 	file := helpers.CreateFile(fileName)
 	defer file.Close()
 
