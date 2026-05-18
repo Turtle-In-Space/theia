@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/Turtle-In-Space/theia/helpers"
@@ -22,23 +21,15 @@ func CreateEnvFile(host models.Host) {
 	file := helpers.CreateFile(fileName)
 	defer file.Close()
 
-	writeLine(file, "# Created by theia")
-	writeLine(file, fmt.Sprintf("ip=%s", host.IpAddr))
+	helpers.WriteLine(file, "# Created by theia")
+	helpers.WriteLine(file, fmt.Sprintf("ip=%s", host.IpAddr))
 
 	if host.Hostname != "" {
-		writeLine(file, fmt.Sprintf("host=%s", host.Hostname))
+		helpers.WriteLine(file, fmt.Sprintf("host=%s", host.Hostname))
 	}
 
-	writeLine(file, fmt.Sprintf("url=http://%s", host.Address()))
-	writeLine(file, fmt.Sprintf("urls=https://%s", host.Address()))
+	helpers.WriteLine(file, fmt.Sprintf("url=http://%s", host.Address()))
+	helpers.WriteLine(file, fmt.Sprintf("urls=https://%s", host.Address()))
 
 	output.Debug("created env file for: %s", host.Address())
-}
-
-func writeLine(file *os.File, msg string) {
-	_, err := file.WriteString(msg + "\n")
-
-	if err != nil {
-		output.Warn(output.Normal, "failed writing to file: %s with error: %s", file.Name(), err.Error())
-	}
 }
