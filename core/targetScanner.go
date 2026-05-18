@@ -65,7 +65,7 @@ func scanTarget(ip string) (dataOut string) {
 	dataOut = filepath.Join(dataDir, "nmap.xml")
 	txtOut := filepath.Join(scanDir, "_nmap.txt")
 
-	cmd := exec.Command("nmap", "-sV", "-sC", "-T4", "-Pn", "-n", ip,
+	cmd := exec.Command("nmap", "-sV", "-sC", "-T4", "-Pn", "-p-", "-n", ip,
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
