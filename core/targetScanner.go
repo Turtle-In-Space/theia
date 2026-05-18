@@ -30,7 +30,7 @@ var (
 
 // ----- Public Functions ----- //
 
-func ScanTarget(host models.Host) (scanCount int, scanErrCount int) {
+func ScanTarget(host models.Host) (int, int) {
 	createFileStructure(host.Name)
 	dataOutPath := scanTarget(host.Address())
 
@@ -40,15 +40,14 @@ func ScanTarget(host models.Host) (scanCount int, scanErrCount int) {
 	printFoundPorts(host)
 
 	scannerQueue := queueScanners(host)
-	scanCount, scanErrCount = runScanners(scannerQueue)
 
-	return
+	return runScanners(scannerQueue)
 }
 
 // ----- Private Functions ----- //
 
 func createFileStructure(name string) {
-	output.Debug("Creating file stucture...")
+	output.Debug("Creating file structure...")
 	helpers.CreateDir(name)
 	os.Chdir(name)
 
@@ -59,13 +58,13 @@ func createFileStructure(name string) {
 }
 
 // use nmap to scan the target for open ports
-func scanTarget(ip string) (dataOut string) {
+func scanTarget(hostAddr string) (dataOut string) {
 	output.Info(output.Normal, "Scanning target...")
 
 	dataOut = filepath.Join(dataDir, "nmap.xml")
-	txtOut := filepath.Join(scanDir, "_nmap.txt")
+	txtOut := filepath.Join(scanDir, "_nmap.txt") // _ to list last
 
-	cmd := exec.Command("nmap", "-sV", "-sC", "-T4", "-Pn", "-n", ip,
+	cmd := exec.Command("nmap", "-sV", "-sC", "-T4", "-Pn", "-n", hostAddr,
 		"-oX", dataOut, "-oN", txtOut)
 
 	err := cmd.Run()
