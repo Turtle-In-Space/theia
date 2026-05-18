@@ -37,6 +37,7 @@ func ScanTarget(host models.Host) (int, int) {
 	ParseNmapResult(dataOutPath, &host)
 	host.AddDirs(scanDir)
 	CreateEnvFile(host)
+	CreateMsfFile(host, dataOutPath)
 	printFoundPorts(host)
 
 	scannerQueue := queueScanners(host)
