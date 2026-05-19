@@ -19,6 +19,7 @@ func CreateMsfFile(host models.Host, nmap_data string) {
 	helpers.WriteLine(file, fmt.Sprintf("workspace -a %s", host.Name))
 	helpers.WriteLine(file, fmt.Sprintf("db_import %s", nmap_data))
 	helpers.WriteLine(file, fmt.Sprintf("setg lhost %s", getTun0IP())) // hardcode tun0?
+	helpers.WriteLine(file, fmt.Sprintf("setg rhosts %s", host.IpAddr))
 
 	output.Debug("created msf file for: %s", host.Name)
 }
