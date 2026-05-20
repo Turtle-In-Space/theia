@@ -28,6 +28,7 @@ func CreateEnvFile(host models.Host) {
 		helpers.WriteLine(file, fmt.Sprintf("host=%s", host.Hostname))
 	}
 
+	//TODO: add url for each runniing http port?
 	helpers.WriteLine(file, fmt.Sprintf("url=http://%s", host.Address()))
 	helpers.WriteLine(file, fmt.Sprintf("urls=https://%s", host.Address()))
 

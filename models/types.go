@@ -23,7 +23,7 @@ type Host struct {
 type Port struct {
 	ID       string
 	Protocol string
-	State    string
+	State    string //TODO: use this?
 	Service  Service
 	Dir      string
 	DataDir  string

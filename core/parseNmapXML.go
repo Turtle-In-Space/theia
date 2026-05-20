@@ -78,6 +78,7 @@ func parsePorts(newHost xmlHost) (ports []models.Port) {
 	return
 }
 
+// TODO: add SSL/TLS/HTTPS support
 func parseService(port xmlPort) models.Service {
 	serviceName := port.Service.Name
 

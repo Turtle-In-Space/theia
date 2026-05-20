@@ -19,7 +19,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "theia",
-	Short: "A network scanner",
+	Short: "Automated host scanner",
 	Long: `
  ______  __ __    ___  ____   ____ 
 |      ||  |  |  /  _]|    | /    |
@@ -29,7 +29,7 @@ var rootCmd = &cobra.Command{
   |  |  |  |  ||     | |  | |  |  |
   |__|  |__|__||_____||____||__|__|
                                    
-A network scanner. It will scan given targets and then enumerate discovered services.`,
+An automated host scanner. It will scan given targets and then enumerate discovered services.`,
 
 	Version: "v0.2.0",
 
