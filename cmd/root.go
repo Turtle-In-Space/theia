@@ -48,7 +48,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().CountVarP(&verbosityCount, "verbose", "v", "Enable verbose output. Repeat for more verbosity.")
+	rootCmd.PersistentFlags().CountVarP(&verbosityCount, "verbose", "v", "Enable verbose output. Repeat for more verbosity. (max -vv)")
 
 	// cobra.OnInitialize(initConfig)
 
