@@ -44,7 +44,8 @@ type xmlState struct {
 }
 
 type xmlService struct {
-	Name string `xml:"name,attr"`
+	Name   string `xml:"name,attr"`
+	Tunnel string `xml:tunnel,attr`
 }
 
 // ----- Public Functions ----- //
@@ -70,7 +71,6 @@ func parsePorts(newHost xmlHost) (ports []models.Port) {
 		ports = append(ports, models.Port{
 			ID:       fmt.Sprintf("%d", port.ID),
 			Protocol: port.Protocol,
-			State:    port.State.State,
 			Service:  parseService(port),
 		})
 	}
@@ -78,12 +78,15 @@ func parsePorts(newHost xmlHost) (ports []models.Port) {
 	return
 }
 
-// TODO: add SSL/TLS/HTTPS support
 func parseService(port xmlPort) models.Service {
 	serviceName := port.Service.Name
 
 	if serviceName == "" {
 		serviceName = "unknown"
+	}
+
+	if serviceName == "http" && port.Service.Tunnel == "ssl" {
+		serviceName = "https"
 	}
 
 	return models.Service{

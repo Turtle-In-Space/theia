@@ -53,7 +53,7 @@ func (s webDirScanner) Name() (name string) {
 
 func init() {
 	scanner := webDirScanner{
-		serviceNames: []string{"http"},
+		serviceNames: []string{"http", "https"},
 		name:         "WebDirScanner",
 	}
 
