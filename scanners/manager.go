@@ -54,6 +54,10 @@ func ScannersByServiceName(service string) (scanners []ServiceScanner, ok bool) 
 	return scanners, true
 }
 
+func PrintPostCmds() {
+
+}
+
 // ----- Private Functions ----- //
 
 func register(name string, scanner ServiceScanner) {

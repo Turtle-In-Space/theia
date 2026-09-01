@@ -16,7 +16,7 @@ const (
 	undefined VerbosityLevel = iota
 	Normal
 	Verbose
-	Detailed
+	Detailed //TODO debug? also include output of cmds?
 )
 
 // ----- Variables ----- //

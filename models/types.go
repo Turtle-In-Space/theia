@@ -23,7 +23,6 @@ type Host struct {
 type Port struct {
 	ID       string
 	Protocol string
-	State    string //TODO: use this?
 	Service  Service
 	Dir      string
 	DataDir  string
@@ -40,7 +39,7 @@ func (h *Host) AddDirs(dir string) {
 		port := &h.Ports[i]
 
 		port.Dir = filepath.Join(h.Dir, port.Name())
-		port.DataDir = filepath.Join(port.Dir, "data")
+		port.DataDir = filepath.Join(port.Dir, "data") //TODO use var for data-dir?
 
 		helpers.CreateDir(port.Dir)
 		helpers.CreateDir(port.DataDir)

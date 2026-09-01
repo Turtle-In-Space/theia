@@ -38,6 +38,7 @@ func (s subDirScanner) Run(port models.Port, host models.Host) (err error) {
 	if err != nil {
 		return fmt.Errorf("%s: %w", s.Name(), err)
 	}
+	
 
 	return nil
 }

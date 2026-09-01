@@ -30,7 +30,7 @@ var (
 
 // ----- Public Functions ----- //
 
-func ScanTarget(host models.Host) (int, int) {
+func ScanTarget(host models.Host) (nr_scanners int, nr_errors int) {
 	createFileStructure(host.Name)
 	dataOutPath := scanTarget(host.Address())
 
@@ -41,8 +41,9 @@ func ScanTarget(host models.Host) (int, int) {
 	printFoundPorts(host)
 
 	scannerQueue := queueScanners(host)
+	nr_scanners, nr_errors = runScanners(scannerQueue)
 
-	return runScanners(scannerQueue)
+	return
 }
 
 // ----- Private Functions ----- //
@@ -111,7 +112,7 @@ func queueScanners(host models.Host) (servicesWithScan []validScanner) {
 	return
 }
 
-func runScanners(scannerQueue []validScanner) (int, int) {
+func runScanners(scannerQueue []validScanner) (nr_scanners int, nr_errors int) {
 	var wg sync.WaitGroup
 	var errCount atomic.Int32
 

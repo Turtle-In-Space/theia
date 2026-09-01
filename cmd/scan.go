@@ -3,6 +3,8 @@ Copyright © 2025 Elias Svensson <elias.svensson63@gmail.com>
 */
 package cmd
 
+//TODO remove scan cmd? just have root maybe
+
 import (
 	"fmt"
 	"time"
