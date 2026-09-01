@@ -48,7 +48,7 @@ func (s WPScan) Name() (name string) {
 func init() {
 	scanner := WPScan{
 		serviceNames: []string{"http", "https"},
-		name:         "WhatWebScanner",
+		name:         "WPScanner",
 	}
 
 	register("wpScanner", scanner)
