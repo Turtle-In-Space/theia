@@ -18,14 +18,12 @@ type WPScan struct {
 }
 
 // ----- Public Functions ----- //
-// --no-banner
-// --url --output --format
 
 func (s WPScan) Run(port models.Port, host models.Host) (err error) {
 	resultFileName, _ := fileNames(s.name, "", port)
 
 	url := createURL(host, port)
-	cmd := exec.Command("wpscan", "--url", url)
+	cmd := exec.Command("wpscan", "--url", url, "--no-banner")
 
 	_, err = execute(s, cmd, resultFileName)
 	if err != nil {
