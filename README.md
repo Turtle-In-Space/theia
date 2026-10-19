@@ -8,14 +8,21 @@
   |__|  |__|__||_____||____||__|__|
 ```
 # Theia
-A network scanner. It will scan given targets and then enumerate discovered services.`
+A network scanner. It will scan given targets and then enumerate discovered services.
 
 # Feautres
 Lots
 
 # Install
-``` terminal
-TBA
+``` bash
+git clone https://github.com/Turtle-In-Space/theia.git && \
+cd theia && \
+go install
+```
+
+# Uninstall
+``` bash
+rm $(go env GOBIN)/theia
 ```
 
 # Example usage
@@ -48,11 +55,11 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   scan        scan a target
-  set         A brief description of your command
 
 Flags:
-  -h, --help      help for theia
-  -v, --version   version for theia
+  -h, --help            help for theia
+  -v, --verbose count   Enable verbose output. Repeat for more verbosity. (max -vv)
+      --version         version for theia
 
 Use "theia [command] --help" for more information about a command.
 ```
